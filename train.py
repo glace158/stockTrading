@@ -8,17 +8,18 @@ import numpy as np
 
 from PPO import PPO
 from environment import GymEnvironment
-from fileManager import Config
+from fileManager import Config, File
 
 print("============================================================================================")
 path = str(os.path.dirname(__file__)) + "/" 
-config = Config.load_config(path + "/Config/" + "Hyperparameters.yaml")
+config = Config.load_config(path + "/config/" + "Hyperparameters.yaml")
 print("Run Directory : " + path)
 
 class RichDog:
     def __init__(self):
         self.init_parameters()
-        
+        self.print_parameters()
+
     def init_parameters(self):
         print("============================================================================================")
         ####### initialize environment hyperparameters ######
@@ -59,63 +60,20 @@ class RichDog:
         self.random_seed = config.random_seed         # set random seed if required (0 = no random seed) (랜덤 시드)
         #####################################################
 
-    ################################### Training ###################################
-    def train(self):
-        
-
-        print("training environment name : " + self.env_name)
-
-        env = GymEnvironment(env_name=self.env_name)
+        self.env = GymEnvironment(env_name=self.env_name)
 
         # state space dimension
-        state_dim = env.getObservation().shape[0]
+        self.state_dim = self.env.getObservation().shape[0]
         # action space dimension
         if self.has_continuous_action_space:
-            action_dim = env.getActon().shape[0]
+            self.action_dim = self.env.getActon().shape[0]
         else:
-            action_dim = env.getActon().n
-
-        ###################### logging ######################
-
-        #### log files for multiple runs are NOT overwritten
-        log_dir = path + "PPO_logs"
-        if not os.path.exists(log_dir):
-            os.makedirs(log_dir)
-
-        log_dir = log_dir + '/' + self.env_name + '/'
-        if not os.path.exists(log_dir):
-            os.makedirs(log_dir)
-
-        #### get number of log files in log directory
-        run_num = 0
-        current_num_files = next(os.walk(log_dir))[2]
-        run_num = len(current_num_files)
-
-        #### create new log file for each run
-        log_f_name = log_dir + '/PPO_' + self.env_name + "_log_" + str(run_num) + ".csv"
-
-        print("current logging run number for " + self.env_name + " : ", run_num)
-        print("logging at : " + log_f_name)
-        #####################################################
-
-        ################### checkpointing ###################
-        run_num_pretrained = 0      #### change this to prevent overwriting weights in same env_name folder
-
-        directory = path + "PPO_preTrained"
-        if not os.path.exists(directory):
-            os.makedirs(directory)
-
-        directory = directory + '/' + self.env_name + '/'
-        if not os.path.exists(directory):
-            os.makedirs(directory)
+            self.action_dim = self.env.getActon().n
 
 
-        checkpoint_path = directory + "PPO_{}_{}_{}.pth".format(self.env_name, self.random_seed, run_num_pretrained)
-        print("save checkpoint path : " + checkpoint_path)
-        #####################################################
-
-
+    def print_parameters(self):
         ############# print all hyperparameters #############
+        print("training environment name : " + self.env_name)
         print("--------------------------------------------------------------------------------------------")
         print("max training timesteps : ", self.max_training_timesteps)
         print("max timesteps per episode : ", self.max_ep_len)
@@ -123,8 +81,8 @@ class RichDog:
         print("log frequency : " + str(self.log_freq) + " timesteps")
         print("printing average reward over episodes in last : " + str(self.print_freq) + " timesteps")
         print("--------------------------------------------------------------------------------------------")
-        print("state space dimension : ", state_dim)
-        print("action space dimension : ", action_dim)
+        print("state space dimension : ", self.state_dim)
+        print("action space dimension : ", self.action_dim)
         print("--------------------------------------------------------------------------------------------")
         if self.has_continuous_action_space:
             print("Initializing a continuous action space policy")
@@ -149,16 +107,39 @@ class RichDog:
             print("--------------------------------------------------------------------------------------------")
             print("setting random seed to ", self.random_seed)
             torch.manual_seed(self.random_seed)
-            env.seed(self.random_seed)
+            self.env.seed(self.random_seed)
             np.random.seed(self.random_seed)
         #####################################################
 
         print("============================================================================================")
 
+    def init_files(self):
+        ###################### logging ######################
+        #### log files for multiple runs are NOT overwritten
+        cur_time = str(datetime.now().strftime("%Y%m%d_%H%M%S"))
+        log_file_name = 'PPO_' + self.env_name + "_log_" + cur_time + ".csv"
+        self.log_file = File(path + "PPO_logs/" + self.env_name + '/', log_file_name)
+
+        print("current logging run number for " + self.env_name + " : ", cur_time)
+        print("logging at : " + self.log_file.get_file_path())
+        #####################################################
+
+        ################### checkpointing ###################
+        checkpoint_file_name = "PPO_{}_{}_{}.pth".format(self.env_name, self.random_seed, cur_time)
+        self.checkpoint_file = File(path + "PPO_preTrained/" + self.env_name + '/', checkpoint_file_name)
+
+        print("save checkpoint path : " + self.checkpoint_file.get_file_path())
+        #####################################################
+
+    ################################### Training ###################################
+    def train(self):
+
         ################# training procedure ################
 
         # initialize a PPO agent
-        ppo_agent = PPO(state_dim, action_dim, self.lr_actor, self.lr_critic, self.gamma, self.K_epochs, self.eps_clip, self.has_continuous_action_space, self.action_std,self. value_loss_coef, self.entropy_coef,self.lamda, self.minibatchsize)
+        ppo_agent = PPO(self.state_dim, self.action_dim, self.lr_actor, self.lr_critic, 
+                        self.gamma, self.K_epochs, self.eps_clip, self.has_continuous_action_space, 
+                        self.action_std,self. value_loss_coef, self.entropy_coef,self.lamda, self.minibatchsize)
 
         # track total training time
         start_time = datetime.now().replace(microsecond=0)
@@ -167,8 +148,9 @@ class RichDog:
         print("============================================================================================")
 
         # logging file
-        log_f = open(log_f_name,"w+")
-        log_f.write('episode,timestep,reward\n')
+        self.log_file.write('episode,timestep,reward\n')
+        #log_f = open(log_f_name,"w+")
+        #log_f.write('episode,timestep,reward\n')
 
         # printing and logging variables
         print_running_reward = 0
@@ -183,7 +165,7 @@ class RichDog:
         # training loop
         while time_step <= self.max_training_timesteps:
 
-            state, _ = env.reset()
+            state, _ = self.env.reset()
             current_ep_reward = 0
             next_state = state
 
@@ -191,7 +173,7 @@ class RichDog:
 
                 # select action with policy
                 action, action_logprob, state_val = ppo_agent.select_action(state)
-                next_state, reward, done, _, info = env.step(action)
+                next_state, reward, done, _, info = self.env.step(action)
 
                 # saving buffer
                 ppo_agent.buffer.rewards.append(reward)
@@ -216,8 +198,10 @@ class RichDog:
                     log_avg_reward = log_running_reward / log_running_episodes
                     log_avg_reward = round(log_avg_reward, 4)
 
-                    log_f.write('{},{},{}\n'.format(i_episode, time_step, log_avg_reward))
-                    log_f.flush()
+
+                    self.log_file.write_flush('{},{},{}\n'.format(i_episode, time_step, log_avg_reward))
+                    #log_f.write('{},{},{}\n'.format(i_episode, time_step, log_avg_reward))
+                    #log_f.flush()
 
                     log_running_reward = 0
                     log_running_episodes = 0
@@ -237,8 +221,8 @@ class RichDog:
                 # save model weights
                 if time_step % self.save_model_freq == 0:
                     print("--------------------------------------------------------------------------------------------")
-                    print("saving model at : " + checkpoint_path)
-                    ppo_agent.save(checkpoint_path)
+                    print("saving model at : " + self.checkpoint_file.get_file_path())
+                    ppo_agent.save(self.checkpoint_file.get_file_path())
                     print("model saved")
                     print("Elapsed Time  : ", datetime.now().replace(microsecond=0) - start_time)
                     print("--------------------------------------------------------------------------------------------")
@@ -255,8 +239,8 @@ class RichDog:
 
             i_episode += 1
 
-        log_f.close()
-        env.close()
+        self.log_file.close()
+        self.env.close()
 
         # print total training time
         print("============================================================================================")

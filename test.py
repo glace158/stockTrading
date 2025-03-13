@@ -57,11 +57,11 @@ def test():
 
     # preTrained weights directory
 
-    random_seed = 0             #### set this to load a particular checkpoint trained on random seed
-    run_num_pretrained = 0      #### set this to load a particular checkpoint num
 
     directory = path + "PPO_preTrained" + '/' + env_name + '/'
-    checkpoint_path = directory + "PPO_{}_{}_{}.pth".format(env_name, random_seed, run_num_pretrained)
+    checkpoint_file_list = next(os.walk(directory))[2]
+    checkpoint_path = directory + checkpoint_file_list[-1]
+    
     print("loading network from : " + checkpoint_path)
 
     ppo_agent.load(checkpoint_path)
@@ -75,7 +75,7 @@ def test():
         state, _ = env.reset()
 
         for t in range(1, max_ep_len+1):
-            action = ppo_agent.select_action(state)
+            action, action_logprob, state_val = ppo_agent.select_action(state)
             state, reward, done, _, info = env.step(action)
             ep_reward += reward
 

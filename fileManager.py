@@ -3,6 +3,32 @@ import yaml
 from typing import Dict, Any
 from types import SimpleNamespace
 
+class File:
+    def __init__(self, dir_path, filename):
+        self.dir_path = dir_path
+
+        if not os.path.exists(dir_path):
+            os.makedirs(dir_path)
+
+        self.filename = self.dir_path + filename
+        self.file = open(self.filename,"w+")
+
+    def get_file_path(self):
+        return self.filename
+    
+    def write_flush(self, write_data):
+        self.file.write(write_data)
+        self.file.flush()
+    
+    def write(self, write_data):
+        self.file.write(write_data)
+
+    def close(self):
+        self.file.close()
+    
+    def __del__(self):
+        self.close()
+
 class Config:
     """Configuration class to load, save and update configuration"""
 
@@ -16,7 +42,6 @@ class Config:
             else:
                 setattr(namespace, key, value)
         return namespace
-
 
     @staticmethod
     def _convert_obj_to_dict(ns: SimpleNamespace) -> Dict:
