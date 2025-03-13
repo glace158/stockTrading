@@ -1,0 +1,35 @@
+####### initialize environment hyperparameters ######
+env_name : "MountainCarContinuous-v0"
+
+has_continuous_action_space : True  # continuous action space; else discrete (연속 환경 유무)
+
+max_ep_len : 1000                   # max timesteps in one episode (에피소드 당 최대 타임 스텝)
+max_training_timesteps : 1.0e+6   # break training loop if timeteps > max_training_timesteps (총 학습 타임스텝)
+
+## Note : print/log frequencies should be > than max_ep_len
+print_freq : 10000        # (Defult : max_ep_len * 10)print avg reward in the interval (in num timesteps) (출력 주기)
+log_freq : 2000           # (Defult : max_ep_len * 2)log avg reward in the interval (in num timesteps) (로그 파일 생성 주기)
+save_model_freq : 1.0e+5          # save model frequency (in num timesteps) (모델 저장 주기)
+
+action_std : 0.6                    # starting std for action distribution (Multivariate Normal) (행동 표준 편차)
+action_std_decay_rate : 0.05        # linearly decay action_std (action_std : action_std - action_std_decay_rate) (행동 표준 편차 감소 값)
+min_action_std : 0.1                # minimum action_std (stop decay after action_std <: min_action_std) (0.05 ~ 0.1) (최소 행동 표준 편차 값)
+action_std_decay_freq : 2.5e+5  # action_std decay frequency (in num timesteps) (표준 편차 감소 주기)
+#####################################################
+
+################ PPO hyperparameters ################
+update_timestep : 4000      # (Defult : max_ep_len * 4) update policy every n timesteps (정책 업데이트 주기)
+K_epochs : 10               # update policy for K epochs in one PPO update (최적화 횟수)
+
+eps_clip : 0.2          # clip parameter for PPO (클리핑)
+gamma : 0.99            # discount factor (감가율)
+lamda : 0.95              # 어드벤티지 감가율
+minibatchsize : 32
+
+lr_actor : 0.0003       # learning rate for actor network (액터의 학습률)
+lr_critic : 0.001       # learning rate for critic network (크리틱 학습률)
+
+value_loss_coef : 0.5     # 가치 손실 계수
+entropy_coef : 0.01       # 엔트로피 계수
+
+random_seed : 0         # set random seed if required (0 : no random seed) (랜덤 시드)
