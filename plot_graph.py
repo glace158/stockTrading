@@ -1,13 +1,11 @@
 import os
 import pandas as pd
 import matplotlib.pyplot as plt
+from fileManager import Config, File
 
 
 def save_graph():
     print("============================================================================================")
-    # env_name = 'CartPole-v1'
-    # env_name = 'LunarLander-v2'
-    # env_name = 'BipedalWalker-v2'
     env_name = 'MountainCarContinuous-v0'
 
     fig_num = 0     #### change this to prevent overwriting figures in same env_name folder
@@ -28,37 +26,27 @@ def save_graph():
 
     colors = ['red', 'blue', 'green', 'orange', 'purple', 'olive', 'brown', 'magenta', 'cyan', 'crimson','gray', 'black']
 
-    # make directory for saving figures
-    figures_dir = "PPO_figs"
-    if not os.path.exists(figures_dir):
-        os.makedirs(figures_dir)
-
-    # make environment directory for saving figures
-    figures_dir = figures_dir + '/' + env_name + '/'
-    if not os.path.exists(figures_dir):
-        os.makedirs(figures_dir)
-
-    fig_save_path = figures_dir + '/PPO_' + env_name + '_fig_' + str(fig_num) + '.png'
+    path = str(os.path.dirname(__file__)) + "/" 
 
     # get number of log files in directory
-    log_dir = "PPO_logs" + '/' + env_name + '/'
+    log_directory = path + "PPO_logs" + '/' + env_name + '/'
+    log_file_list = next(os.walk(log_directory))[2]
+    log_path = log_directory + log_file_list[-1]
 
-    current_num_files = next(os.walk(log_dir))[2]
-    num_runs = len(current_num_files)
+    fig_num = log_file_list[-1].split('_')[-1]
+
+    fig_directory = path + "PPO_figs" + '/' + env_name + '/'
+
+    fig_save_path =  '/PPO_' + env_name + '_fig_' + str(fig_num[:-4]) + '.png'
+    fig_file = File(fig_directory ,fig_save_path)
 
     all_runs = []
-
-    for run_num in range(num_runs):
-
-        log_f_name = log_dir + '/PPO_' + env_name + "_log_" + str(run_num) + ".csv"
-        print("loading data from : " + log_f_name)
-        data = pd.read_csv(log_f_name)
-        data = pd.DataFrame(data)
-
-        print("data shape : ", data.shape)
-
-        all_runs.append(data)
-        print("--------------------------------------------------------------------------------------------")
+    print("loading data from : " + log_path)
+    data = pd.read_csv(log_path)
+    data = pd.DataFrame(data)
+    print("data shape : ", data.shape)
+    all_runs.append(data)
+    print("--------------------------------------------------------------------------------------------")
 
     ax = plt.gca()
 
@@ -113,8 +101,8 @@ def save_graph():
     fig.set_size_inches(fig_width, fig_height)
 
     print("============================================================================================")
-    plt.savefig(fig_save_path)
-    print("figure saved at : ", fig_save_path)
+    plt.savefig(fig_file.get_file_path())
+    print("figure saved at : ", fig_file.get_file_path())
     print("============================================================================================")
     
     plt.show()

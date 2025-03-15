@@ -116,7 +116,7 @@ class RichDog:
     def init_files(self):
         ###################### logging ######################
         #### log files for multiple runs are NOT overwritten
-        cur_time = str(datetime.now().strftime("%Y%m%d_%H%M%S"))
+        cur_time = str(datetime.now().strftime("%Y%m%d-%H%M%S"))
         log_file_name = 'PPO_' + self.env_name + "_log_" + cur_time + ".csv"
         self.log_file = File(path + "PPO_logs/" + self.env_name + '/', log_file_name)
 
@@ -135,7 +135,6 @@ class RichDog:
     def train(self):
 
         ################# training procedure ################
-
         # initialize a PPO agent
         ppo_agent = PPO(self.state_dim, self.action_dim, self.lr_actor, self.lr_critic, 
                         self.gamma, self.K_epochs, self.eps_clip, self.has_continuous_action_space, 
@@ -149,8 +148,6 @@ class RichDog:
 
         # logging file
         self.log_file.write('episode,timestep,reward\n')
-        #log_f = open(log_f_name,"w+")
-        #log_f.write('episode,timestep,reward\n')
 
         # printing and logging variables
         print_running_reward = 0
@@ -200,9 +197,7 @@ class RichDog:
 
 
                     self.log_file.write_flush('{},{},{}\n'.format(i_episode, time_step, log_avg_reward))
-                    #log_f.write('{},{},{}\n'.format(i_episode, time_step, log_avg_reward))
-                    #log_f.flush()
-
+                    
                     log_running_reward = 0
                     log_running_episodes = 0
 
