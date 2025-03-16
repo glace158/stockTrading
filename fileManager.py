@@ -58,7 +58,7 @@ class Config:
     @staticmethod
     def load_config(config_path: str) -> Dict[str, Any]:
         """Load configuration from YAML file"""
-        with open(config_path, 'r') as f:
+        with open(config_path, 'r', encoding='UTF8') as f:
             config_dict = yaml.safe_load(f)
         return Config._convert_dict_to_obj(config_dict)
 

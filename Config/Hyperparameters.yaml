@@ -33,3 +33,9 @@ value_loss_coef : 0.5     # 가치 손실 계수
 entropy_coef : 0.01       # 엔트로피 계수
 
 random_seed : 0         # set random seed if required (0 : no random seed) (랜덤 시드)
+#####################################################
+
+################ Model Test hyperparameters ################
+render : True
+frame_delay : 0
+total_test_episodes : 1 

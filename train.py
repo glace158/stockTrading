@@ -16,9 +16,6 @@ config = Config.load_config(path + "/config/" + "Hyperparameters.yaml")
 print("Run Directory : " + path)
 
 class RichDog:
-    def __init__(self):
-        self.init_parameters()
-        self.print_parameters()
 
     def init_parameters(self):
         print("============================================================================================")
@@ -133,7 +130,9 @@ class RichDog:
 
     ################################### Training ###################################
     def train(self):
-
+        self.init_parameters()
+        self.print_parameters()
+        
         ################# training procedure ################
         # initialize a PPO agent
         ppo_agent = PPO(self.state_dim, self.action_dim, self.lr_actor, self.lr_critic, 
@@ -142,10 +141,11 @@ class RichDog:
 
         # track total training time
         start_time = datetime.now().replace(microsecond=0)
+        self.init_files()
         print("Started training at (GMT) : ", start_time)
 
         print("============================================================================================")
-
+        
         # logging file
         self.log_file.write('episode,timestep,reward\n')
 
@@ -245,10 +245,86 @@ class RichDog:
         print("Total training time  : ", end_time - start_time)
         print("============================================================================================")
 
+    #################################### Testing ###################################
+    def test(self):
+        print("============================================================================================")
+
+        ################## hyperparameters ##################
+        self.init_parameters()
+        render = config.render              # render environment on screen
+        frame_delay = config.frame_delay   # if required; add delay b/w frames
+
+        total_test_episodes = config.total_test_episodes    # total num of testing episodes
+        self.action_std = config.min_action_std
+        self.print_parameters()
+        #####################################################
+
+        self.env = GymEnvironment(env_name=self.env_name, render_mode="human")
+
+        # state space dimension
+        self.state_dim = self.env.getObservation().shape[0]
+        # action space dimension
+        if self.has_continuous_action_space:
+            self.action_dim = self.env.getActon().shape[0]
+        else:
+            self.action_dim = self.env.getActon().n
+
+        # initialize a PPO agent
+        ppo_agent = PPO(self.state_dim, self.action_dim, self.lr_actor, self.lr_critic, 
+                    self.gamma, self.K_epochs, self.eps_clip, self.has_continuous_action_space, 
+                    self.action_std,self. value_loss_coef, self.entropy_coef,self.lamda, self.minibatchsize)
+        # preTrained weights directory
+
+
+        directory = path + "PPO_preTrained" + '/' + self.env_name + '/'
+        checkpoint_file_list = next(os.walk(directory))[2]
+        checkpoint_path = directory + checkpoint_file_list[-1]
+        
+        print("loading network from : " + checkpoint_path)
+
+        ppo_agent.load(checkpoint_path)
+
+        print("--------------------------------------------------------------------------------------------")
+
+        test_running_reward = 0
+
+        for ep in range(1, total_test_episodes+1):
+            ep_reward = 0
+            state, _ = self.env.reset()
+
+            for t in range(1, self.max_ep_len+1):
+                action, action_logprob, state_val = ppo_agent.select_action(state)
+                state, reward, done, _, info = self.env.step(action)
+                ep_reward += reward
+
+                if render:
+                    self.env.render()
+                    time.sleep(frame_delay)
+
+                if done:
+                    break
+
+            # clear buffer
+            ppo_agent.buffer.clear()
+
+            test_running_reward +=  ep_reward
+            print('Episode: {} \t\t Reward: {}'.format(ep, round(ep_reward, 2)))
+            ep_reward = 0
+
+        self.env.close()
+
+        print("============================================================================================")
+
+        avg_test_reward = test_running_reward / total_test_episodes
+        avg_test_reward = round(avg_test_reward, 2)
+        print("average test reward : " + str(avg_test_reward))
+
+        print("============================================================================================")
 
 if __name__ == '__main__':
 
     RichDog().train()
+    #RichDog().test()
     
     
     

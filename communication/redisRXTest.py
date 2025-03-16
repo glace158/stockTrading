@@ -25,9 +25,9 @@ data = {
     "company": 'Redis',
     "age": 29
 }
-r.hset('user-session:123', mapping=data)
+r.hset('user-session', mapping=data)
 
-print(r.hgetall('user-session:123'))
+print(r.hgetall('user-session'))
 
 # 트랜잭션 (명령어 한번에 실행)
 with r.pipeline() as pipe:
