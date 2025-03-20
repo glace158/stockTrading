@@ -16,7 +16,7 @@ class Stock:
     def datetime_sub(self, inqr_strt_dt, days):  # 날짜 빼기
         return (datetime.datetime.strptime(inqr_strt_dt, "%Y%m%d") - datetime.timedelta(days=days)).strftime("%Y%m%d")
 
-    def fetch_data(self, fetch_function, **kwargs):
+    def _fetch_data(self, fetch_function, **kwargs):
         """
         데이터 가져오기
         """
@@ -33,11 +33,11 @@ class Stock:
         return rt_data
     
 
-    def fetch_complete_data(self, fetch_function, inqr_strt_dt, count, **kwargs):
+    def _fetch_complete_data(self, fetch_function, inqr_strt_dt, count, **kwargs):
         """
         데이터 부족 시 데이터 채우기
         """
-        rt_data = self.fetch_data(fetch_function, **kwargs, inqr_strt_dt=inqr_strt_dt)
+        rt_data = self._fetch_data(fetch_function, **kwargs, inqr_strt_dt=inqr_strt_dt)
         inqr_end_dt = rt_data.iat[0, 0]
         
         while rt_data.shape[0] < count:
@@ -66,6 +66,7 @@ class Stock:
 
     def get_daily_stock_info(self, itm_no="005930", inqr_strt_dt=None, count=30):
         '''
+        주식 정보
         [국내주식] 기본시세 > 국내주식기간별시세(일/주/월/년)
         실전계좌/모의계좌의 경우, 한 번의 호출에 최대 100건까지 확인 가능합니다.
         '''
@@ -73,21 +74,22 @@ class Stock:
         inqr_end_dt = inqr_strt_dt
         inqr_strt_dt = self.datetime_sub(inqr_strt_dt, count) # 마지막 일자 계산
 
-        return self.fetch_complete_data(
+        return self._fetch_complete_data(
             fetch_function=kb.get_inquire_daily_itemchartprice,
             itm_no=itm_no,
             output_dv="2",
             count=count,
             inqr_strt_dt=inqr_strt_dt,
             inqr_end_dt=inqr_end_dt
-        )[["stck_bsop_date", "stck_clpr", "stck_hgpr", "stck_lwpr", "acml_vol", "prdy_vrss"]]
+        )[["stck_bsop_date", "stck_clpr", "stck_hgpr", "stck_lwpr", "acml_vol", "prdy_vrss"]] # 필요한 정보 필터링
 
     def get_daily_investor(self, inqr_strt_dt=None, count=30):
         """
+        투자자 동향
         [국내주식] 시세분석 > 시장별 투자자매매동향 (일별)
         """
 
-        return self.fetch_complete_data(
+        return self._fetch_complete_data(
             fetch_function=kb.get_daily_inquire_investor,
             count=count,
             inqr_strt_dt=inqr_strt_dt
@@ -95,19 +97,21 @@ class Stock:
 
     def get_daily_index_price(self, itm_no="0001", inqr_strt_dt=None, count=30):
         """
+        코스피, 코스닥
         [국내주식] 업종/기타 > 국내업종 일자별지수
         한 번의 조회에 100건까지 확인 가능합니다.
         코스피(0001), 코스닥(1001), 코스피200(2001)
         """
-        return self.fetch_complete_data(
+        return self._fetch_complete_data(
             fetch_function=kb.get_inquire_index_daily_price,
             itm_no=itm_no,
             count=count,
             inqr_strt_dt=inqr_strt_dt
-        )[["stck_bsop_date", "bstp_nmix_prpr", "bstp_nmix_prdy_vrss", "bstp_nmix_prdy_ctrt"]]
+        )[["stck_bsop_date", "bstp_nmix_prpr", "bstp_nmix_prdy_vrss", "bstp_nmix_prdy_ctrt"]] # 필요한 정보 필터링
 
     def get_daily_chartprice(self, itm_no="COMP", inqr_strt_dt=None, count=30):
         '''
+        나스닥, S&P
         [해외주식] 기본시세 > 해외주식 종목/지수/환율기간별시세(일/주/월/년)
         해당 API로 미국주식 조회 시, 다우30, 나스닥100, S&P500 종목만 조회 가능합니다.
         종목코드 다우30(.DJI), 나스닥100(COMP), S&P500(SPX)
@@ -115,26 +119,23 @@ class Stock:
         inqr_end_dt = inqr_strt_dt
         inqr_strt_dt = self.datetime_sub(inqr_strt_dt, count) # 마지막 일자 계산
 
-        return self.fetch_complete_data(
+        return self._fetch_complete_data(
             fetch_function=kb.get_inquire_daily_chartprice,
             itm_no=itm_no,
             count=count,
             inqr_strt_dt=inqr_strt_dt,
             inqr_end_dt=inqr_end_dt
-        )[["stck_bsop_date", "ovrs_nmix_prpr", "ovrs_nmix_hgpr", "ovrs_nmix_lwpr"]]
+        )[["stck_bsop_date", "ovrs_nmix_prpr", "ovrs_nmix_hgpr", "ovrs_nmix_lwpr"]]# 필요한 정보 필터링
 
-    def get_moving_average_line(self, itm_no="005930", stock_data : pd.DataFrame = None, moving_days = [5,20,60]):
+    def get_moving_average_line(self, stock_data : pd.DataFrame = None, count=0, moving_days = [5,20,60]):
         '''
         이동 평균선 데이터 구하기
-        [국내주식] 기본시세 > 국내주식기간별시세(일/주/월/년)
         '''
-        extra_data = s.get_daily_stock_info(count=max(moving_days), inqr_strt_dt=stock_data.iat[0, 0])
-
-        rt_data = pd.concat([extra_data[["stck_clpr"]], stock_data[["stck_clpr"]]], ignore_index=True) # 추가로 가져온 데이터와 주식데이터 합치기
+        rt_data = stock_data[["stck_clpr"]]
 
         moving_average_data = pd.DataFrame(columns=moving_days) # 이동평균선 저장할 데이터프레임 생성
         
-        for i in range(stock_data.shape[0]): # 이동평균선 구하기 작업
+        for i in range(count): # 이동평균선 구하기 작업
             temp_list = []
             for days in moving_days: # 각 일별로 평균구하기 5일, 20일 60일
                 datas = rt_data.loc[(max(moving_days) - days) + i + 1:max(moving_days) + i].astype(float) # 일별로 데이터 슬라이싱
@@ -143,35 +144,34 @@ class Stock:
             moving_average_data.loc[i] = temp_list # 데이터 넣기
         
         # 데이터프레임 앞에 날짜 넣어주기
-        moving_average_data = pd.concat([stock_data[["stck_bsop_date"]], moving_average_data],axis=1)
+        moving_average_data.insert(loc=0, column='stck_bsop_date', value=stock_data["stck_bsop_date"].values[stock_data.shape[0] - count:])
 
         return moving_average_data
         
-    def get_rsi(self, itm_no="005930", stock_data : pd.DataFrame = None,days=14, is_extra=True):
+    def get_rsi(self, stock_data : pd.DataFrame = None, count=0, days=14):
         '''
         RSI 구하기
-        [국내주식] 기본시세 > 국내주식기간별시세(일/주/월/년)
         '''
-        if is_extra:# 추가로 데이터를 가져와야한다면
-            extra_data = s.get_daily_stock_info(count=days, inqr_strt_dt=stock_data.iat[0, 0])
-            rt_data = pd.concat([extra_data[["stck_clpr"]], stock_data[["stck_clpr"]]], ignore_index=True) # 추가로 가져온 데이터와 주식데이터 합치기
-        else:
-            rt_data = stock_data
+        rt_data = stock_data[["stck_clpr"]]
 
         rsi_data = pd.DataFrame(columns=["rsi"]) # RSI 저장할 데이터프레임 생성
 
-        for i in range(stock_data.shape[0]): # RSI 구하기 작업
-            strt = days + i # 시작 인덱스
+        strt_index = stock_data.shape[0] - count # 시작 인덱스
+
+        for i in range(count): # RSI 구하기 작업
+            index = strt_index + i # 현재 인덱스
+            
             u = []
             d = []
+
             for j in range(days):
-                today_clpr = rt_data.loc[strt - j].astype(float)[0] # 당일 종가
-                pre_clpr = rt_data.loc[(strt - 1) - j].astype(float)[0] # 전일 종가
-                
+                today_clpr = rt_data.loc[index - j].astype(float)[0] # 당일 종가
+                pre_clpr = rt_data.loc[(index - 1) - j].astype(float)[0] # 전일 종가
+
                 difference = today_clpr - pre_clpr # 당일과 전일의 차이 계산
                 u.append(difference if difference > 0 else 0) # 전일대비 상승했으면 
                 d.append(-difference if difference < 0 else 0) # 전일대비 하강했으면
-    
+            
             # 평균구하기
             a_u = np.mean(u)
             a_d = np.mean(d)
@@ -185,26 +185,27 @@ class Stock:
             rsi_data.loc[i] = rsi # 구한 RSI 넣기
 
         # 데이터프레임 앞에 날짜 넣어주기
-        rsi_data = pd.concat([stock_data[["stck_bsop_date"]], rsi_data],axis=1)
+        rsi_data.insert(loc=0, column='stck_bsop_date', value=stock_data["stck_bsop_date"].values[stock_data.shape[0] - count:])
         
         return rsi_data
-
+        
 if __name__ == '__main__':
     s = Stock()
     count = 30
+    moving_days = [5,20,60]
     start = time.time()
-    stock_data = s.get_daily_stock_info(count=count, inqr_strt_dt="20190226")
+    stock_data = s.get_daily_stock_info(itm_no="005930", count=count+ max(moving_days), inqr_strt_dt="20190226")
     print("======================주식정보===============================")
     print(stock_data)
 
-    move_line_data = s.get_moving_average_line(stock_data=stock_data, moving_days=[5,20,60])
+    move_line_data = s.get_moving_average_line(stock_data=stock_data, count=count, moving_days=moving_days)
     print("======================이동평균선===============================")
     print(move_line_data)
 
-    rsi_data = s.get_rsi(stock_data=stock_data, days=14, is_extra=True)
+    rsi_data = s.get_rsi(stock_data=stock_data, count=count,days=14)
     print("======================RSI===============================")
     print(rsi_data)
-    """
+    
     investor_data = s.get_daily_investor(count=count, inqr_strt_dt="20190226")
     print("======================투자자정보==============================")
     print(investor_data)
