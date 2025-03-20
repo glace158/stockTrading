@@ -1,134 +1,110 @@
 import API.kis_auth as ka
 import API.kis_domstk as kb
 import datetime
+import time
 import pandas as pd
 import numpy as np
-
+    
 class Stock:
     def __init__(self, svr="vps"):
-        ka.auth(svr) # 토큰발급
+        ka.auth(svr)  # 토큰발급
+        self.delay_time = 0.2
 
-    def datetime_add(self, inqr_strt_dt, days):# 날짜 더하기
-        return (datetime.datetime.strptime(inqr_strt_dt,"%Y%m%d") + datetime.timedelta(days=days)).strftime("%Y%m%d")
+    def datetime_add(self, inqr_strt_dt, days):  # 날짜 더하기
+        return (datetime.datetime.strptime(inqr_strt_dt, "%Y%m%d") + datetime.timedelta(days=days)).strftime("%Y%m%d")
     
-    def datetime_sub(self, inqr_strt_dt, days):# 날짜 빼기
-        return (datetime.datetime.strptime(inqr_strt_dt,"%Y%m%d") - datetime.timedelta(days=days)).strftime("%Y%m%d")
+    def datetime_sub(self, inqr_strt_dt, days):  # 날짜 빼기
+        return (datetime.datetime.strptime(inqr_strt_dt, "%Y%m%d") - datetime.timedelta(days=days)).strftime("%Y%m%d")
+
+    def fetch_data(self, fetch_function, **kwargs):
+        """
+        데이터 가져오기
+        """
+        rt_data = pd.DataFrame()
+        while True:
+            try:
+                rt_data = fetch_function(**kwargs).loc[::-1]
+                rt_data.index = np.arange(len(rt_data.index)) # 인덱스 재정렬
+                break
+            except AttributeError:
+                print("wait..")
+                time.sleep(self.delay_time)
+                continue
+        return rt_data
     
-    def get_daily_stock_info(self, itm_no="005930", inqr_strt_dt=None,count=30):
+
+    def fetch_complete_data(self, fetch_function, inqr_strt_dt, count, **kwargs):
+        """
+        데이터 부족 시 데이터 채우기
+        """
+        rt_data = self.fetch_data(fetch_function, **kwargs, inqr_strt_dt=inqr_strt_dt)
+        inqr_end_dt = rt_data.iat[0, 0]
+        
+        while rt_data.shape[0] < count:
+            try:
+                if kwargs.get("inqr_end_dt"):
+                    kwargs["inqr_end_dt"] = self.datetime_sub(inqr_end_dt,1) 
+                    temp_end_dt = self.datetime_sub(kwargs["inqr_end_dt"], count // 2) 
+                else:
+                    temp_end_dt = self.datetime_sub(inqr_end_dt, 1)
+
+
+                extra_data = fetch_function(**kwargs, inqr_strt_dt=temp_end_dt).loc[::-1]
+                
+                rt_data = pd.concat([extra_data, rt_data], ignore_index=True)
+                
+                inqr_end_dt = rt_data.iat[0, 0]
+            except AttributeError:
+                print("wait..")
+                time.sleep(self.delay_time)
+                continue
+
+        if rt_data.shape[0] > count:
+            rt_data = rt_data.loc[rt_data.shape[0] - count:]
+            rt_data.index = np.arange(len(rt_data.index))
+        return rt_data
+
+    def get_daily_stock_info(self, itm_no="005930", inqr_strt_dt=None, count=30):
         '''
         [국내주식] 기본시세 > 국내주식기간별시세(일/주/월/년)
         실전계좌/모의계좌의 경우, 한 번의 호출에 최대 100건까지 확인 가능합니다.
         '''
-        rt_data = pd.DataFrame()
-        
-        inqr_end_dt = self.datetime_sub(inqr_strt_dt, count) # 마지막 일자 계산
-        
-        while True:
-            try:# 데이터 가져오기
-                rt_data = kb.get_inquire_daily_itemchartprice(output_dv="2", itm_no=itm_no, inqr_strt_dt=inqr_end_dt, inqr_end_dt=inqr_strt_dt).loc[::-1]
-                break
-            except AttributeError:
-                print("wait..")
-                continue
 
-        inqr_strt_dt = rt_data.iat[0,0]
-        while rt_data.shape[0] < count:# 만약 가져온 데이터가 부족하면
-            try:
-                # 마지막 일자 다시 계산
-                temp_strt_dt = self.datetime_sub(inqr_strt_dt,1) 
-                inqr_end_dt = self.datetime_sub(temp_strt_dt, count // 2) 
-                
-                # 추가로 가져온데이터 추가하기
-                extra_data = kb.get_inquire_daily_itemchartprice(output_dv="2", itm_no=itm_no, inqr_strt_dt=inqr_end_dt, inqr_end_dt=temp_strt_dt).loc[::-1]
+        inqr_end_dt = inqr_strt_dt
+        inqr_strt_dt = self.datetime_sub(inqr_strt_dt, count) # 마지막 일자 계산
 
-                rt_data = pd.concat([extra_data, rt_data], ignore_index=True)
+        return self.fetch_complete_data(
+            fetch_function=kb.get_inquire_daily_itemchartprice,
+            itm_no=itm_no,
+            output_dv="2",
+            count=count,
+            inqr_strt_dt=inqr_strt_dt,
+            inqr_end_dt=inqr_end_dt
+        )[["stck_bsop_date", "stck_clpr", "stck_hgpr", "stck_lwpr", "acml_vol", "prdy_vrss"]]
 
-                inqr_strt_dt = rt_data.iat[0,0]
-                
-            except AttributeError:
-                print("wait..")
-                continue
-        
-        if rt_data.shape[0] > count:
-            rt_data = rt_data.loc[rt_data.shape[0] - count:] # 필요한 데이터 개수만큼 슬라이싱
-            rt_data.index = np.arange(count)
-        return rt_data
-    
-    def get_daily_investor(self, inqr_strt_dt=None,count=30):
+    def get_daily_investor(self, inqr_strt_dt=None, count=30):
         """
         [국내주식] 시세분석 > 시장별 투자자매매동향 (일별)
         """
-        rt_data = pd.DataFrame()
 
-        while True:
-            try:# 데이터 가져오기
-                rt_data = kb.get_daily_inquire_investor(inqr_strt_dt=inqr_strt_dt).loc[::-1] # 가져온 데이터 반대로 뒤집기
-                rt_data.index = rt_data.index[::-1] # 인덱스 재정렬
-                #print(rt_data)
-                break
-            except AttributeError:
-                print("wait..")
-                continue
-            
-        inqr_end_dt = rt_data.iat[0,0]
-        while rt_data.shape[0] < count:# 만약 가져온 데이터가 부족하면
-            try:
+        return self.fetch_complete_data(
+            fetch_function=kb.get_daily_inquire_investor,
+            count=count,
+            inqr_strt_dt=inqr_strt_dt
+        )
 
-                # 마지막 일자 다시 계산
-                temp_end_dt = self.datetime_sub(inqr_end_dt,1) 
-            
-                # 추가로 가져온데이터 추가하기
-                extra_data = kb.get_daily_inquire_investor(inqr_strt_dt=temp_end_dt).loc[::-1]
-                rt_data = pd.concat([extra_data, rt_data], ignore_index=True)
-
-                inqr_end_dt = rt_data.iat[0,0]
-                
-            except AttributeError:
-                print("wait..")
-                continue
-        
-        if rt_data.shape[0] > count:
-            rt_data = rt_data.loc[:count-1] # 필요한 데이터 개수만큼 슬라이싱
-        return rt_data
-    
-    def get_daily_index_price(self, itm_no="0001", inqr_strt_dt=None,count=30):
+    def get_daily_index_price(self, itm_no="0001", inqr_strt_dt=None, count=30):
         """
         [국내주식] 업종/기타 > 국내업종 일자별지수
         한 번의 조회에 100건까지 확인 가능합니다.
         코스피(0001), 코스닥(1001), 코스피200(2001)
         """
-        rt_data = pd.DataFrame()
-
-        while True:
-            try:# 데이터 가져오기
-                rt_data = kb.get_inquire_index_daily_price(itm_no=itm_no, inqr_strt_dt=inqr_strt_dt).loc[::-1] # 가져온 데이터 반대로 뒤집기
-                rt_data.index = rt_data.index[::-1] # 인덱스 재정렬
-                #print(rt_data)
-                break
-            except AttributeError:
-                print("wait..")
-                continue
-
-        inqr_end_dt = rt_data.iat[0,0]
-        while rt_data.shape[0] < count:# 만약 가져온 데이터가 부족하면
-            try:
-                # 마지막 일자 다시 계산
-                temp_end_dt = self.datetime_sub(inqr_end_dt,1) 
-                
-                # 추가로 가져온데이터 추가하기
-                extra_data = kb.get_inquire_index_daily_price(itm_no=itm_no, inqr_strt_dt=temp_end_dt).loc[::-1]
-                rt_data = pd.concat([extra_data, rt_data], ignore_index=True)
-
-                inqr_end_dt = rt_data.iat[0,0]
-                
-            except AttributeError:
-                print("wait..")
-                continue
-        
-        if rt_data.shape[0] > count:
-            rt_data = rt_data.loc[rt_data.shape[0] - count:] # 필요한 데이터 개수만큼 슬라이싱
-            rt_data.index = np.arange(count)
-        return rt_data
+        return self.fetch_complete_data(
+            fetch_function=kb.get_inquire_index_daily_price,
+            itm_no=itm_no,
+            count=count,
+            inqr_strt_dt=inqr_strt_dt
+        )[["stck_bsop_date", "bstp_nmix_prpr", "bstp_nmix_prdy_vrss", "bstp_nmix_prdy_ctrt"]]
 
     def get_daily_chartprice(self, itm_no="COMP", inqr_strt_dt=None, count=30):
         '''
@@ -136,62 +112,118 @@ class Stock:
         해당 API로 미국주식 조회 시, 다우30, 나스닥100, S&P500 종목만 조회 가능합니다.
         종목코드 다우30(.DJI), 나스닥100(COMP), S&P500(SPX)
         '''
-        rt_data = pd.DataFrame()
-        
-        inqr_end_dt = self.datetime_sub(inqr_strt_dt, count) # 마지막 일자 계산
-        
-        while True:
-            try:# 데이터 가져오기
-                rt_data = kb.get_inquire_daily_chartprice(itm_no=itm_no, inqr_strt_dt=inqr_end_dt, inqr_end_dt=inqr_strt_dt).loc[::-1]
-                break
-            except AttributeError:
-                print("wait..")
-                continue
+        inqr_end_dt = inqr_strt_dt
+        inqr_strt_dt = self.datetime_sub(inqr_strt_dt, count) # 마지막 일자 계산
 
-        inqr_strt_dt = rt_data.iat[0,0]
-        while rt_data.shape[0] < count:# 만약 가져온 데이터가 부족하면
-            try:
-                # 마지막 일자 다시 계산
-                temp_strt_dt = self.datetime_sub(inqr_strt_dt,1) 
-                inqr_end_dt = self.datetime_sub(temp_strt_dt, count // 2) 
+        return self.fetch_complete_data(
+            fetch_function=kb.get_inquire_daily_chartprice,
+            itm_no=itm_no,
+            count=count,
+            inqr_strt_dt=inqr_strt_dt,
+            inqr_end_dt=inqr_end_dt
+        )[["stck_bsop_date", "ovrs_nmix_prpr", "ovrs_nmix_hgpr", "ovrs_nmix_lwpr"]]
+
+    def get_moving_average_line(self, itm_no="005930", stock_data : pd.DataFrame = None, moving_days = [5,20,60]):
+        '''
+        이동 평균선 데이터 구하기
+        [국내주식] 기본시세 > 국내주식기간별시세(일/주/월/년)
+        '''
+        extra_data = s.get_daily_stock_info(count=max(moving_days), inqr_strt_dt=stock_data.iat[0, 0])
+
+        rt_data = pd.concat([extra_data[["stck_clpr"]], stock_data[["stck_clpr"]]], ignore_index=True) # 추가로 가져온 데이터와 주식데이터 합치기
+
+        moving_average_data = pd.DataFrame(columns=moving_days) # 이동평균선 저장할 데이터프레임 생성
+        
+        for i in range(stock_data.shape[0]): # 이동평균선 구하기 작업
+            temp_list = []
+            for days in moving_days: # 각 일별로 평균구하기 5일, 20일 60일
+                datas = rt_data.loc[(max(moving_days) - days) + i + 1:max(moving_days) + i].astype(float) # 일별로 데이터 슬라이싱
+                temp_list.append(datas.mean()[0]) # 평균 구하기
+            
+            moving_average_data.loc[i] = temp_list # 데이터 넣기
+        
+        # 데이터프레임 앞에 날짜 넣어주기
+        moving_average_data = pd.concat([stock_data[["stck_bsop_date"]], moving_average_data],axis=1)
+
+        return moving_average_data
+        
+    def get_rsi(self, itm_no="005930", stock_data : pd.DataFrame = None,days=14, is_extra=True):
+        '''
+        RSI 구하기
+        [국내주식] 기본시세 > 국내주식기간별시세(일/주/월/년)
+        '''
+        if is_extra:# 추가로 데이터를 가져와야한다면
+            extra_data = s.get_daily_stock_info(count=days, inqr_strt_dt=stock_data.iat[0, 0])
+            rt_data = pd.concat([extra_data[["stck_clpr"]], stock_data[["stck_clpr"]]], ignore_index=True) # 추가로 가져온 데이터와 주식데이터 합치기
+        else:
+            rt_data = stock_data
+
+        rsi_data = pd.DataFrame(columns=["rsi"]) # RSI 저장할 데이터프레임 생성
+
+        for i in range(stock_data.shape[0]): # RSI 구하기 작업
+            strt = days + i # 시작 인덱스
+            u = []
+            d = []
+            for j in range(days):
+                today_clpr = rt_data.loc[strt - j].astype(float)[0] # 당일 종가
+                pre_clpr = rt_data.loc[(strt - 1) - j].astype(float)[0] # 전일 종가
                 
-                # 추가로 가져온데이터 추가하기
-                extra_data = kb.get_inquire_daily_chartprice(itm_no=itm_no, inqr_strt_dt=inqr_end_dt, inqr_end_dt=temp_strt_dt).loc[::-1]
-
-                rt_data = pd.concat([extra_data, rt_data], ignore_index=True)
-
-                inqr_strt_dt = rt_data.iat[0,0]
-                
-            except AttributeError:
-                print("wait..")
-                continue
-        
-        if rt_data.shape[0] > count:
-            rt_data = rt_data.loc[rt_data.shape[0] - count:] # 필요한 데이터 개수만큼 슬라이싱
-            rt_data.index = np.arange(count)
-        return rt_data
-
+                difference = today_clpr - pre_clpr # 당일과 전일의 차이 계산
+                u.append(difference if difference > 0 else 0) # 전일대비 상승했으면 
+                d.append(-difference if difference < 0 else 0) # 전일대비 하강했으면
     
+            # 평균구하기
+            a_u = np.mean(u)
+            a_d = np.mean(d)
+            
+            if a_d != 0: 
+                rs = a_u / a_d # RS 구하기
+            else:# 0으로 나누는 문제 방지
+                rs = 0
+
+            rsi = rs / (1 + rs) * 100 # RSI 구하기
+            rsi_data.loc[i] = rsi # 구한 RSI 넣기
+
+        # 데이터프레임 앞에 날짜 넣어주기
+        rsi_data = pd.concat([stock_data[["stck_bsop_date"]], rsi_data],axis=1)
+        
+        return rsi_data
+
 if __name__ == '__main__':
     s = Stock()
-    stock_data = s.get_daily_stock_info(count=30, inqr_strt_dt="20190226")
-
-    investor_data = s.get_daily_investor(count=30, inqr_strt_dt="20190226")
-    kospi_data = s.get_daily_index_price(itm_no="0001", count=30, inqr_strt_dt="20190226")
-    kosdaq_data = s.get_daily_index_price(itm_no="1001", count=30, inqr_strt_dt="20190226")
-    nasdaq_data = s.get_daily_chartprice(itm_no="COMP", count=30, inqr_strt_dt="20190226")
-    spx_data = s.get_daily_chartprice(itm_no="SPX", count=30, inqr_strt_dt="20190226")
-    
-
+    count = 30
+    start = time.time()
+    stock_data = s.get_daily_stock_info(count=count, inqr_strt_dt="20190226")
     print("======================주식정보===============================")
     print(stock_data)
+
+    move_line_data = s.get_moving_average_line(stock_data=stock_data, moving_days=[5,20,60])
+    print("======================이동평균선===============================")
+    print(move_line_data)
+
+    rsi_data = s.get_rsi(stock_data=stock_data, days=14, is_extra=True)
+    print("======================RSI===============================")
+    print(rsi_data)
+    """
+    investor_data = s.get_daily_investor(count=count, inqr_strt_dt="20190226")
     print("======================투자자정보==============================")
     print(investor_data)
+    
+    kospi_data = s.get_daily_index_price(itm_no="0001", count=count, inqr_strt_dt="20190226")
     print("======================코스피================================")
     print(kospi_data)
+
+    kosdaq_data = s.get_daily_index_price(itm_no="1001", count=count, inqr_strt_dt="20190226")
     print("======================코스닥================================")
     print(kosdaq_data)
+
+    nasdaq_data = s.get_daily_chartprice(itm_no="COMP", count=count, inqr_strt_dt="20190226")
     print("======================나스닥================================")
     print(nasdaq_data)
+
+    spx_data = s.get_daily_chartprice(itm_no="SPX", count=count, inqr_strt_dt="20190226")
     print("======================S&P500================================")
     print(spx_data)
+    #"""
+    end = time.time()
+    print(f"{end - start:.5f} sec")
