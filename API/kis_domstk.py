@@ -1048,7 +1048,7 @@ def get_daily_inquire_investor(div_code="U", itm_no="0001", inqr_strt_dt=None, i
     #print(res.getBody())  # 오류 원인 확인 필요시 사용
     # Assuming 'output' is a dictionary that you want to convert to a DataFrame
     current_data = pd.DataFrame(res.getBody().output)  # 호가조회  * getBody() kis_auth.py 존재
-
+    
     dataframe = current_data
 
     return dataframe

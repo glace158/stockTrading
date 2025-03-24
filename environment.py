@@ -1,6 +1,8 @@
 import abc
 import gym
 import numpy as np
+import random
+import datetime
 from typing import (
     TYPE_CHECKING,
     Any,
@@ -8,7 +10,7 @@ from typing import (
 )
 
 from gym import spaces
-from communication.redisCommunication import RedisCom
+from stock_adaptor import DailyStockAdaptor
 
 class Environment:
     __metaclass__ = abc.ABCMeta
@@ -79,15 +81,34 @@ class GymEnvironment(Environment): # OpenAI gym 환경
         self.env.close()
 
 class StockEnvironment(Environment): # 주식 환경
-    def __init__(self):
+    def __init__(self, stock_code_list = ["005930","000660", "083650", "010120", "035720", "108490", "012450", "103140", "098460"], min_dt="20190101", max_dt="20250131", defult_count=30):
         super().__init__()
-        self.red = RedisCom()
+        self.stock = DailyStockAdaptor()
+        
+        self.min_dt = min_dt
+        self.max_dt = max_dt
+        self.stock_code_list = stock_code_list
+        self.defult_count = defult_count
 
-        self.observation_space = spaces.Box(low = -100, high= 100, shape= (3,4), dtype=np.float32)
-        self.action_space = spaces.Box(low= -1, high= 1, shape=(3,), dtype=np.float32)
+        self.observation_space = spaces.Box(low = -np.inf, high= np.inf, shape= (self.stock.get_info_len(),), dtype=np.float32)
+        self.action_space = spaces.Box(low= -1, high= 1, shape=(1,), dtype=np.float32)
+
+    def print_log(self):
+        print("--------------------------------------------------------------------------------------------")
+        print("start date : " + self.strt_dt)
+        print("stock code : " + self.stock_code)
+        print("total count :" + str(self.count))
+        print("--------------------------------------------------------------------------------------------")
 
     def reset(self) -> Tuple[Any, dict]: # ndarray, {None}
-        pass
+        self.strt_dt = self._get_random_strt_dt()
+        self.stock_code = self._get_random_stock_code()
+        self.count = self._get_random_count()
+        self.print_log()
+
+        self.stock.set_init_datas(itm_no=self.stock_code, inqr_strt_dt=self.strt_dt, count=self.count)
+        data, _ = self.stock.get_info()
+        return data, {}
 
     def getObservation(self) -> spaces.Space: # box
         return self.observation_space
@@ -95,27 +116,39 @@ class StockEnvironment(Environment): # 주식 환경
     def getActon(self) -> spaces.Space: # box
         return self.action_space
     
-    def getRewardRange(self) -> tuple[float, float]: # -1 ~ 1
-        pass
-    
     def step(self, action) -> Tuple[Any, float, bool, bool, dict]: # (nextstate, reward, terminated, truncated, info) 
-        pass
+        nextstate, terminated = self.stock.get_info()
+        truncated = False
+        info = {}
+
+        reward = 0.0
+        return nextstate, reward, terminated, truncated, info
     
     def render(self):
         pass
 
     def seed(self,random_seed):
-        pass
+        random.seed(random_seed)
 
     def close(self):
         pass
-
-    def stockDataLoad(self):
-        self.data = self.red.loadData("stock_data")
     
-    def requestStockData(self, stock_code): # 주식 코드 요청
-        self.red.sendData("stock_code", stock_code)
-    
+    def _get_random_strt_dt(self):
+        days = (datetime.datetime.strptime(self.max_dt, "%Y%m%d") - datetime.datetime.strptime(self.min_dt, "%Y%m%d")).days # 최대 날짜와 최소 날짜를 빼준다
+        days = random.randrange(0,days) # 일 랜덤 뽑기
+        return (datetime.datetime.strptime(self.max_dt, "%Y%m%d") - datetime.timedelta(days=days)).strftime("%Y%m%d") # 최종 시작날짜 계산
 
+    def _get_random_stock_code(self):
+        return random.choice(self.stock_code_list) # 주식 코드 랜덤 뽑기
+
+    def _get_random_count(self):
+        if random.random() > 0.0001:
+            return self.defult_count
+        else:
+            return random.randint(10,self.defult_count)
         
+if __name__ == '__main__':
+    stock_env= StockEnvironment()
 
+    print(stock_env.reset()[0])
+    print(stock_env.step(0)[0].shape)

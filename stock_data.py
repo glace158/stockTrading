@@ -81,7 +81,8 @@ class Stock:
             count=count,
             inqr_strt_dt=inqr_strt_dt,
             inqr_end_dt=inqr_end_dt
-        )[["stck_bsop_date", "stck_clpr", "stck_hgpr", "stck_lwpr", "acml_vol", "prdy_vrss"]] # 필요한 정보 필터링
+        )[["stck_bsop_date", "stck_clpr", "stck_hgpr", "stck_lwpr", "acml_vol", "prdy_vrss"]] # 필요한 정보 필터링 per, eps, pbr
+
 
     def get_daily_investor(self, inqr_strt_dt=None, count=30):
         """
@@ -93,7 +94,7 @@ class Stock:
             fetch_function=kb.get_daily_inquire_investor,
             count=count,
             inqr_strt_dt=inqr_strt_dt
-        )
+        )[["stck_bsop_date", "frgn_ntby_qty", "prsn_ntby_qty", "orgn_ntby_qty"]] # 필요한 정보 필터링
 
     def get_daily_index_price(self, itm_no="0001", inqr_strt_dt=None, count=30):
         """
@@ -107,7 +108,7 @@ class Stock:
             itm_no=itm_no,
             count=count,
             inqr_strt_dt=inqr_strt_dt
-        )[["stck_bsop_date", "bstp_nmix_prpr", "bstp_nmix_prdy_vrss", "bstp_nmix_prdy_ctrt"]] # 필요한 정보 필터링
+        )[["stck_bsop_date", "bstp_nmix_prpr", "bstp_nmix_hgpr", "bstp_nmix_lwpr", "bstp_nmix_prdy_ctrt", "acml_vol", "acml_tr_pbmn"]] # 필요한 정보 필터링
 
     def get_daily_chartprice(self, itm_no="COMP", inqr_strt_dt=None, count=30):
         '''
@@ -125,7 +126,7 @@ class Stock:
             count=count,
             inqr_strt_dt=inqr_strt_dt,
             inqr_end_dt=inqr_end_dt
-        )[["stck_bsop_date", "ovrs_nmix_prpr", "ovrs_nmix_hgpr", "ovrs_nmix_lwpr"]]# 필요한 정보 필터링
+        )[["stck_bsop_date", "ovrs_nmix_prpr", "ovrs_nmix_hgpr", "ovrs_nmix_lwpr", "acml_vol"]]# 필요한 정보 필터링
 
     def get_moving_average_line(self, stock_data : pd.DataFrame = None, count=0, moving_days = [5,20,60]):
         '''
@@ -135,10 +136,14 @@ class Stock:
 
         moving_average_data = pd.DataFrame(columns=moving_days) # 이동평균선 저장할 데이터프레임 생성
         
+        strt_index = stock_data.shape[0] - count # 시작 인덱스
+
         for i in range(count): # 이동평균선 구하기 작업
+            index = strt_index + i # 현재 인덱스
+            
             temp_list = []
             for days in moving_days: # 각 일별로 평균구하기 5일, 20일 60일
-                datas = rt_data.loc[(max(moving_days) - days) + i + 1:max(moving_days) + i].astype(float) # 일별로 데이터 슬라이싱
+                datas = rt_data.loc[index - days + 1 : index].astype(float) # 일별로 데이터 슬라이싱
                 temp_list.append(datas.mean()[0]) # 평균 구하기
             
             moving_average_data.loc[i] = temp_list # 데이터 넣기
@@ -188,11 +193,39 @@ class Stock:
         rsi_data.insert(loc=0, column='stck_bsop_date', value=stock_data["stck_bsop_date"].values[stock_data.shape[0] - count:])
         
         return rsi_data
+    
+    def get_bollinger_band(self, stock_data : pd.DataFrame = None, moving_average_line : pd.DataFrame = None ,count=0, days=20, k=2 ):
+        '''
+        볼린저 밴드 구하기
+        '''
         
+        bb_middle = moving_average_line[[days]].astype(float)
+        rt_data = stock_data[["stck_clpr"]]
+        bb_data = pd.DataFrame(columns=["bb_upper", "bb_middle", "bb_lower"]) # bollinger_band 저장할 데이터프레임 생성
+        
+        strt_index = stock_data.shape[0] - count # 시작 인덱스
+
+        for i in range(count):
+            index = strt_index + i # 현재 인덱스
+                
+            datas = rt_data.loc[index - days + 1 : index].astype(float) # 일별로 데이터 슬라이싱
+            std_data = np.std(datas)[0] # 표준편차 구하기
+            
+            middle = bb_middle.loc[i].values[0] # 중단 밴드
+            bb_upper = middle + std_data * k # 상단 밴드
+            bb_lower = middle - std_data * k # 하단 밴드
+
+            bb_data.loc[i] = [bb_upper, middle, bb_lower] # 밴드 추가
+        
+        # 데이터프레임 앞에 날짜 넣어주기
+        bb_data.insert(loc=0, column='stck_bsop_date', value=stock_data["stck_bsop_date"].values[stock_data.shape[0] - count:])
+        return bb_data
+    
 if __name__ == '__main__':
     s = Stock()
     count = 30
     moving_days = [5,20,60]
+    bb_days = 20
     start = time.time()
     stock_data = s.get_daily_stock_info(itm_no="005930", count=count+ max(moving_days), inqr_strt_dt="20190226")
     print("======================주식정보===============================")
@@ -206,9 +239,13 @@ if __name__ == '__main__':
     print("======================RSI===============================")
     print(rsi_data)
     
-    investor_data = s.get_daily_investor(count=count, inqr_strt_dt="20190226")
-    print("======================투자자정보==============================")
-    print(investor_data)
+    print("======================BollingerBand===============================")
+    bb_data = s.get_bollinger_band(stock_data=stock_data, moving_average_line=move_line_data, count=count, days=bb_days, k=2)
+    print(bb_data)
+    
+    #investor_data = s.get_daily_investor(count=count, inqr_strt_dt="20190226")
+    #print("======================투자자정보==============================")
+    #print(investor_data)
     
     kospi_data = s.get_daily_index_price(itm_no="0001", count=count, inqr_strt_dt="20190226")
     print("======================코스피================================")
@@ -218,13 +255,13 @@ if __name__ == '__main__':
     print("======================코스닥================================")
     print(kosdaq_data)
 
-    nasdaq_data = s.get_daily_chartprice(itm_no="COMP", count=count, inqr_strt_dt="20190226")
+    nasdaq_data = s.get_daily_chartprice(itm_no="COMP", count=count+5, inqr_strt_dt="20190226")
     print("======================나스닥================================")
     print(nasdaq_data)
 
-    spx_data = s.get_daily_chartprice(itm_no="SPX", count=count, inqr_strt_dt="20190226")
+    spx_data = s.get_daily_chartprice(itm_no="SPX", count=count+5, inqr_strt_dt="20190226")
     print("======================S&P500================================")
     print(spx_data)
-    #"""
+
     end = time.time()
     print(f"{end - start:.5f} sec")
