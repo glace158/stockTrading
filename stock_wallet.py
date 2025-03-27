@@ -8,13 +8,17 @@ class Wallet:
         pass
 
     @abc.abstractmethod
-    def get_balance(self):
+    def get_balance(self): # 현재 자산
         pass
 
     @abc.abstractmethod
-    def get_psbl_qty(self, price):
+    def get_psbl_qty(self, price): # 구매가능 개수
         pass
 
+    @abc.abstractmethod
+    def get_total_evlu_rate(self, price): # 총자산 증감 비율
+        pass 
+    
     @abc.abstractmethod
     def order(self, item_no="005930", order_percent=0.0, price=0):
         pass

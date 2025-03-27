@@ -230,7 +230,7 @@ if __name__ == '__main__':
     stock_data = s.get_daily_stock_info(itm_no="005930", count=count+ max(moving_days), inqr_strt_dt="20190226")
     print("======================주식정보===============================")
     print(stock_data)
-
+    """
     move_line_data = s.get_moving_average_line(stock_data=stock_data, count=count, moving_days=moving_days)
     print("======================이동평균선===============================")
     print(move_line_data)
@@ -262,6 +262,6 @@ if __name__ == '__main__':
     spx_data = s.get_daily_chartprice(itm_no="SPX", count=count+5, inqr_strt_dt="20190226")
     print("======================S&P500================================")
     print(spx_data)
-
+    #"""
     end = time.time()
     print(f"{end - start:.5f} sec")

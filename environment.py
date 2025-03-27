@@ -3,6 +3,7 @@ import gym
 import numpy as np
 import random
 import datetime
+
 from typing import (
     TYPE_CHECKING,
     Any,
@@ -11,6 +12,7 @@ from typing import (
 
 from gym import spaces
 from stock_adaptor import DailyStockAdaptor
+from stock_wallet import TrainStockWallet
 
 class Environment:
     __metaclass__ = abc.ABCMeta
@@ -84,6 +86,7 @@ class StockEnvironment(Environment): # 주식 환경
     def __init__(self, stock_code_list = ["005930","000660", "083650", "010120", "035720", "108490", "012450", "103140", "098460"], min_dt="20190101", max_dt="20250131", defult_count=30):
         super().__init__()
         self.stock = DailyStockAdaptor()
+        self.wallet = TrainStockWallet()
         
         self.min_dt = min_dt
         self.max_dt = max_dt
@@ -105,9 +108,17 @@ class StockEnvironment(Environment): # 주식 환경
         self.stock_code = self._get_random_stock_code()
         self.count = self._get_random_count()
         self.print_log()
-
+        
         self.stock.set_init_datas(itm_no=self.stock_code, inqr_strt_dt=self.strt_dt, count=self.count)
         data, _ = self.stock.get_info()
+        data = list(map(float, data))
+        
+        price = data[0]
+        evlu_rate = self.wallet.get_total_evlu_rate(price)
+
+        data.insert(0, evlu_rate)
+        data.insert(0, self.wallet.qty)
+        data.insert(0, self.wallet.get_balance())
         return data, {}
 
     def getObservation(self) -> spaces.Space: # box
@@ -118,10 +129,23 @@ class StockEnvironment(Environment): # 주식 환경
     
     def step(self, action) -> Tuple[Any, float, bool, bool, dict]: # (nextstate, reward, terminated, truncated, info) 
         nextstate, terminated = self.stock.get_info()
+        nextstate = list(map(float, nextstate))
+        price = nextstate[0]
+        current_amt, qty, is_order = self.wallet.order(self.stock_code, action, price)
+        evlu_rate = self.wallet.get_total_evlu_rate(price)
+
+        nextstate.insert(0, evlu_rate)
+        nextstate.insert(0, qty)
+        nextstate.insert(0, current_amt)
+
         truncated = False
         info = {}
-
-        reward = 0.0
+        
+        if is_order:
+            reward = np.clip(evlu_rate, -1, 1)
+        else:
+            reward = -1
+        print(reward)
         return nextstate, reward, terminated, truncated, info
     
     def render(self):
@@ -151,4 +175,4 @@ if __name__ == '__main__':
     stock_env= StockEnvironment()
 
     print(stock_env.reset()[0])
-    print(stock_env.step(0)[0].shape)
+    print(stock_env.step(0)[0])
