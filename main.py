@@ -7,7 +7,7 @@ import torch
 import numpy as np
 
 from PPO import PPO
-from environment import GymEnvironment
+from environment import GymEnvironment, StockEnvironment
 from fileManager import Config, File
 
 print("============================================================================================")
@@ -57,7 +57,8 @@ class RichDog:
         self.random_seed = config.random_seed         # set random seed if required (0 = no random seed) (랜덤 시드)
         #####################################################
 
-        self.env = GymEnvironment(env_name=self.env_name)
+        #self.env = GymEnvironment(env_name=self.env_name)
+        self.env = StockEnvironment()
 
         # state space dimension
         self.state_dim = self.env.getObservation().shape[0]
@@ -170,6 +171,7 @@ class RichDog:
 
                 # select action with policy
                 action, action_logprob, state_val = ppo_agent.select_action(state)
+                
                 next_state, reward, done, _, info = self.env.step(action)
 
                 # saving buffer
@@ -193,7 +195,7 @@ class RichDog:
 
                     # log average reward till last episode
                     log_avg_reward = log_running_reward / log_running_episodes
-                    log_avg_reward = round(log_avg_reward, 4)
+                    log_avg_reward = np.round(log_avg_reward, 4)
 
 
                     self.log_file.write_flush('{},{},{}\n'.format(i_episode, time_step, log_avg_reward))
@@ -206,7 +208,7 @@ class RichDog:
 
                     # print average reward till last episode
                     print_avg_reward = print_running_reward / print_running_episodes
-                    print_avg_reward = round(print_avg_reward, 2)
+                    print_avg_reward = np.round(print_avg_reward, 2)
 
                     print("Episode : {} \t\t Timestep : {} \t\t Average Reward : {}".format(i_episode, time_step, print_avg_reward))
 

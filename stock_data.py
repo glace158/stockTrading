@@ -8,7 +8,7 @@ import numpy as np
 class Stock:
     def __init__(self, svr="vps"):
         ka.auth(svr)  # 토큰발급
-        self.delay_time = 0.2
+        self.delay_time = 1
 
     def datetime_add(self, inqr_strt_dt, days):  # 날짜 더하기
         return (datetime.datetime.strptime(inqr_strt_dt, "%Y%m%d") + datetime.timedelta(days=days)).strftime("%Y%m%d")
@@ -126,7 +126,7 @@ class Stock:
             count=count,
             inqr_strt_dt=inqr_strt_dt,
             inqr_end_dt=inqr_end_dt
-        )[["stck_bsop_date", "ovrs_nmix_prpr", "ovrs_nmix_hgpr", "ovrs_nmix_lwpr", "acml_vol"]]# 필요한 정보 필터링
+        )[["stck_bsop_date", "ovrs_nmix_prpr", "ovrs_nmix_hgpr", "ovrs_nmix_lwpr"]]# 필요한 정보 필터링, "acml_vol"
 
     def get_moving_average_line(self, stock_data : pd.DataFrame = None, count=0, moving_days = [5,20,60]):
         '''
@@ -226,11 +226,13 @@ if __name__ == '__main__':
     count = 30
     moving_days = [5,20,60]
     bb_days = 20
+    inqr_strt_dt = "20190226"
+
     start = time.time()
-    stock_data = s.get_daily_stock_info(itm_no="005930", count=count+ max(moving_days), inqr_strt_dt="20190226")
+    stock_data = s.get_daily_stock_info(itm_no="005930", count=count+ max(moving_days), inqr_strt_dt=inqr_strt_dt)
     print("======================주식정보===============================")
     print(stock_data)
-    """
+    #"""
     move_line_data = s.get_moving_average_line(stock_data=stock_data, count=count, moving_days=moving_days)
     print("======================이동평균선===============================")
     print(move_line_data)
@@ -247,19 +249,19 @@ if __name__ == '__main__':
     #print("======================투자자정보==============================")
     #print(investor_data)
     
-    kospi_data = s.get_daily_index_price(itm_no="0001", count=count, inqr_strt_dt="20190226")
+    kospi_data = s.get_daily_index_price(itm_no="0001", count=count, inqr_strt_dt=inqr_strt_dt)
     print("======================코스피================================")
     print(kospi_data)
 
-    kosdaq_data = s.get_daily_index_price(itm_no="1001", count=count, inqr_strt_dt="20190226")
+    kosdaq_data = s.get_daily_index_price(itm_no="1001", count=count, inqr_strt_dt=inqr_strt_dt)
     print("======================코스닥================================")
     print(kosdaq_data)
 
-    nasdaq_data = s.get_daily_chartprice(itm_no="COMP", count=count+5, inqr_strt_dt="20190226")
+    nasdaq_data = s.get_daily_chartprice(itm_no="COMP", count=count+5, inqr_strt_dt=inqr_strt_dt)
     print("======================나스닥================================")
     print(nasdaq_data)
 
-    spx_data = s.get_daily_chartprice(itm_no="SPX", count=count+5, inqr_strt_dt="20190226")
+    spx_data = s.get_daily_chartprice(itm_no="SPX", count=count+5, inqr_strt_dt=inqr_strt_dt)
     print("======================S&P500================================")
     print(spx_data)
     #"""

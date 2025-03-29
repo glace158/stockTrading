@@ -26,13 +26,16 @@ class Wallet:
 class TrainStockWallet(Wallet):
     def __init__(self, start_amt=100000000, fee=0.0142, tax=0.15):
         super().__init__()
-        self.start_amt = start_amt
-        self.current_amt = start_amt
-
+        self.init_balance(start_amt)
+        
         self.fee = fee
         self.tax = tax
 
-        self.qty = 0
+    
+    def init_balance(self, start_amt):
+        self.start_amt = start_amt
+        self.current_amt = start_amt
+        self.qty = 0.0
     
     def get_balance(self): # 현재 자산
         return self.current_amt

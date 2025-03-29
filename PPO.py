@@ -85,7 +85,7 @@ class ActorCritic(nn.Module):
         raise NotImplementedError
     
     def act(self, state): # 행동
-
+        #print(state)
         if self.has_continuous_action_space:
             action_mean = self.actor(state)
             cov_mat = torch.diag(self.action_var).unsqueeze(dim=0)
