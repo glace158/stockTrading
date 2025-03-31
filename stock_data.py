@@ -80,7 +80,7 @@ class Stock:
             output_dv="2",
             count=count,
             inqr_strt_dt=inqr_strt_dt,
-            inqr_end_dt=inqr_end_dt
+            inqr_end_dt=inqr_end_dt 
         )[["stck_bsop_date", "stck_clpr", "stck_hgpr", "stck_lwpr", "acml_vol", "prdy_vrss"]] # 필요한 정보 필터링 per, eps, pbr
 
 
