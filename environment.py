@@ -3,7 +3,6 @@ import gym
 import numpy as np
 import random
 import datetime
-from sklearn.preprocessing import MinMaxScaler, RobustScaler
 
 from typing import (
     TYPE_CHECKING,

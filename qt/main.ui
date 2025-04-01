@@ -555,7 +555,7 @@ Button */
 
 </string>
    </property>
-   <layout class="QGridLayout" name="gridLayout_4">
+   <layout class="QHBoxLayout" name="horizontalLayout_8">
     <property name="leftMargin">
      <number>0</number>
     </property>
@@ -568,7 +568,7 @@ Button */
     <property name="bottomMargin">
      <number>0</number>
     </property>
-    <item row="0" column="0">
+    <item>
      <widget class="QFrame" name="bgApp">
       <property name="layoutDirection">
        <enum>Qt::LayoutDirection::LeftToRight</enum>
@@ -1867,13 +1867,68 @@ background-repeat: no-repeat;</string>
                            <number>0</number>
                           </property>
                           <item>
-                           <widget class="QLabel" name="graph_image">
-                            <property name="text">
-                             <string>No Images</string>
+                           <widget class="QFrame" name="graph_bg">
+                            <property name="frameShape">
+                             <enum>QFrame::Shape::StyledPanel</enum>
                             </property>
-                            <property name="alignment">
-                             <set>Qt::AlignmentFlag::AlignCenter</set>
+                            <property name="frameShadow">
+                             <enum>QFrame::Shadow::Raised</enum>
                             </property>
+                            <layout class="QHBoxLayout" name="horizontalLayout_7">
+                             <property name="spacing">
+                              <number>0</number>
+                             </property>
+                             <property name="leftMargin">
+                              <number>0</number>
+                             </property>
+                             <property name="topMargin">
+                              <number>0</number>
+                             </property>
+                             <property name="rightMargin">
+                              <number>0</number>
+                             </property>
+                             <property name="bottomMargin">
+                              <number>0</number>
+                             </property>
+                             <item>
+                              <widget class="QScrollArea" name="scrollArea_3">
+                               <property name="widgetResizable">
+                                <bool>true</bool>
+                               </property>
+                               <widget class="QWidget" name="scrollAreaWidgetContents_3">
+                                <property name="geometry">
+                                 <rect>
+                                  <x>0</x>
+                                  <y>0</y>
+                                  <width>883</width>
+                                  <height>604</height>
+                                 </rect>
+                                </property>
+                                <layout class="QHBoxLayout" name="horizontalLayout_15">
+                                 <item>
+                                  <widget class="QLabel" name="graph_image">
+                                   <property name="sizePolicy">
+                                    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                                     <horstretch>0</horstretch>
+                                     <verstretch>0</verstretch>
+                                    </sizepolicy>
+                                   </property>
+                                   <property name="styleSheet">
+                                    <string notr="true"/>
+                                   </property>
+                                   <property name="text">
+                                    <string>No Images</string>
+                                   </property>
+                                   <property name="alignment">
+                                    <set>Qt::AlignmentFlag::AlignCenter</set>
+                                   </property>
+                                  </widget>
+                                 </item>
+                                </layout>
+                               </widget>
+                              </widget>
+                             </item>
+                            </layout>
                            </widget>
                           </item>
                           <item>
@@ -1955,7 +2010,7 @@ QScrollArea{
                                   <x>0</x>
                                   <y>0</y>
                                   <width>222</width>
-                                  <height>232</height>
+                                  <height>238</height>
                                  </rect>
                                 </property>
                                 <property name="sizePolicy">
@@ -2417,8 +2472,8 @@ QScrollArea{
                                 <rect>
                                  <x>0</x>
                                  <y>0</y>
-                                 <width>330</width>
-                                 <height>218</height>
+                                 <width>224</width>
+                                 <height>224</height>
                                 </rect>
                                </property>
                                <property name="styleSheet">

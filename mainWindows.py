@@ -13,6 +13,9 @@ from types import SimpleNamespace
 
 import subprocess
 import csv
+import matplotlib.pyplot as plt
+import matplotlib.dates as dates
+import pandas as pd
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -55,6 +58,7 @@ class MainWindow(QMainWindow):
         widgets.removePushButton.clicked.connect(self.remove_graph)
         widgets.removeCSVPushButton.clicked.connect(self.remove_csv)
 
+    
     def menu_btns(self):
         # GET BUTTON CLICKED
         btn = self.sender()
@@ -84,8 +88,6 @@ class MainWindow(QMainWindow):
 
             if fname[0]:
                 widgets.filepath_lineEdit.setText(fname[0])
-                print(fname[0])
-                print(fname[1])
                 self.load_Hyperparameters_file(fname[0])
 
         # 파일 저장하기 버튼
@@ -180,7 +182,7 @@ class MainWindow(QMainWindow):
                 # 루트 항목 추가 (파일명, 체크박스 없음)
                 root_item = QTreeWidgetItem([file_path])
                 tree_widget.addTopLevelItem(root_item)
-                
+
                 # 첫 번째 행은 헤더로 설정
                 headers = next(reader, None)
                 if headers:
@@ -201,8 +203,12 @@ class MainWindow(QMainWindow):
         if item.flags() & Qt.ItemIsUserCheckable:  # 체크박스 항목인지 확인
             state = item.checkState(column)
             if state == Qt.Checked:
+                self.make_graph()
+                self.load_graph_image()
                 print(f"'{item.text(0)}'가 선택되었습니다.")
             elif state == Qt.Unchecked:
+                self.make_graph()
+                self.load_graph_image()
                 print(f"'{item.text(0)}'가 선택 해제되었습니다.")
     
     # 새로운 그래프 (트리) 추가하기
@@ -231,6 +237,48 @@ class MainWindow(QMainWindow):
         self.tree_widgets.remove(self.current_tree_widget)
         self.current_tree_widget.deleteLater() 
         self.current_tree_widget = None
+
+    # 그래프 그리기
+    def make_graph(self):
+        fig_count = len(self.tree_widgets)
+        plt.figure(figsize=(25, 10 * fig_count))
+        
+        
+        for i in range(fig_count):
+            rootItem = self.tree_widgets[i].invisibleRootItem()
+
+            items = self.get_items_recursively(rootItem)
+            datas = pd.DataFrame()
+            for item in items:
+                item_name = item.text(0)
+                if item_name.endswith('.csv'):
+                    path = item_name
+                    datas = pd.read_csv(path)
+                    continue
+                
+                state = item.checkState(0)
+                if "stck_bsop_date" in datas.columns and state == Qt.Checked:
+                    datas["stck_bsop_date"] = pd.to_datetime(datas["stck_bsop_date"],format="%Y%m%d")
+                    
+                    ax = plt.subplot(fig_count,1, i + 1)
+                    
+                    ax.plot(datas["stck_bsop_date"] ,datas[item_name])
+                    plt.xticks(rotation=45)
+                    ax = plt.gca()
+                    ax.xaxis.set_major_locator(dates.MonthLocator())
+
+        plt.savefig("./Data_graph/graph.png")
+
+    def load_graph_image(self):
+        pixmap = QPixmap("./Data_graph/graph.png")
+        widgets.graph_image.adjustSize()
+        widgets.graph_image.setPixmap(pixmap)
+
+    def get_items_recursively(self, item):
+        items = [item]  # 현재 항목을 리스트에 추가
+        for i in range(item.childCount()):  # 자식 아이템 순회
+            items.extend(self.get_items_recursively(item.child(i)))  # 자식 아이템들에 대해 재귀 호출
+        return items
 
     def mousePressEvent(self, event):
         # SET DRAG POS WINDOW

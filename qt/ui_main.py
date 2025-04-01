@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'main.ui'
+## Form generated from reading UI file 'mainKBFdgn.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.8.2
 ##
@@ -577,9 +577,9 @@ class Ui_MainWindow(object):
 "}\n"
 "\n"
 "")
-        self.gridLayout_4 = QGridLayout(self.styleSheet)
-        self.gridLayout_4.setObjectName(u"gridLayout_4")
-        self.gridLayout_4.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_8 = QHBoxLayout(self.styleSheet)
+        self.horizontalLayout_8.setObjectName(u"horizontalLayout_8")
+        self.horizontalLayout_8.setContentsMargins(0, 0, 0, 0)
         self.bgApp = QFrame(self.styleSheet)
         self.bgApp.setObjectName(u"bgApp")
         self.bgApp.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
@@ -1056,11 +1056,40 @@ class Ui_MainWindow(object):
         self.horizontalLayout_2.setSpacing(0)
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
         self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
-        self.graph_image = QLabel(self.graph_frame)
+        self.graph_bg = QFrame(self.graph_frame)
+        self.graph_bg.setObjectName(u"graph_bg")
+        self.graph_bg.setFrameShape(QFrame.Shape.StyledPanel)
+        self.graph_bg.setFrameShadow(QFrame.Shadow.Raised)
+        self.horizontalLayout_7 = QHBoxLayout(self.graph_bg)
+        self.horizontalLayout_7.setSpacing(0)
+        self.horizontalLayout_7.setObjectName(u"horizontalLayout_7")
+        self.horizontalLayout_7.setContentsMargins(0, 0, 0, 0)
+        self.scrollArea_3 = QScrollArea(self.graph_bg)
+        self.scrollArea_3.setObjectName(u"scrollArea_3")
+        self.scrollArea_3.setWidgetResizable(True)
+        self.scrollAreaWidgetContents_3 = QWidget()
+        self.scrollAreaWidgetContents_3.setObjectName(u"scrollAreaWidgetContents_3")
+        self.scrollAreaWidgetContents_3.setGeometry(QRect(0, 0, 883, 604))
+        self.horizontalLayout_15 = QHBoxLayout(self.scrollAreaWidgetContents_3)
+        self.horizontalLayout_15.setObjectName(u"horizontalLayout_15")
+        self.graph_image = QLabel(self.scrollAreaWidgetContents_3)
         self.graph_image.setObjectName(u"graph_image")
+        sizePolicy4 = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
+        sizePolicy4.setHorizontalStretch(0)
+        sizePolicy4.setVerticalStretch(0)
+        sizePolicy4.setHeightForWidth(self.graph_image.sizePolicy().hasHeightForWidth())
+        self.graph_image.setSizePolicy(sizePolicy4)
+        self.graph_image.setStyleSheet(u"")
         self.graph_image.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        self.horizontalLayout_2.addWidget(self.graph_image)
+        self.horizontalLayout_15.addWidget(self.graph_image)
+
+        self.scrollArea_3.setWidget(self.scrollAreaWidgetContents_3)
+
+        self.horizontalLayout_7.addWidget(self.scrollArea_3)
+
+
+        self.horizontalLayout_2.addWidget(self.graph_bg)
 
         self.data_list_bg = QFrame(self.graph_frame)
         self.data_list_bg.setObjectName(u"data_list_bg")
@@ -1097,12 +1126,12 @@ class Ui_MainWindow(object):
         self.scrollArea_2.setWidgetResizable(True)
         self.scrollAreaWidgetContents_2 = QWidget()
         self.scrollAreaWidgetContents_2.setObjectName(u"scrollAreaWidgetContents_2")
-        self.scrollAreaWidgetContents_2.setGeometry(QRect(0, 0, 222, 232))
-        sizePolicy4 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
-        sizePolicy4.setHorizontalStretch(0)
-        sizePolicy4.setVerticalStretch(0)
-        sizePolicy4.setHeightForWidth(self.scrollAreaWidgetContents_2.sizePolicy().hasHeightForWidth())
-        self.scrollAreaWidgetContents_2.setSizePolicy(sizePolicy4)
+        self.scrollAreaWidgetContents_2.setGeometry(QRect(0, 0, 222, 238))
+        sizePolicy5 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
+        sizePolicy5.setHorizontalStretch(0)
+        sizePolicy5.setVerticalStretch(0)
+        sizePolicy5.setHeightForWidth(self.scrollAreaWidgetContents_2.sizePolicy().hasHeightForWidth())
+        self.scrollAreaWidgetContents_2.setSizePolicy(sizePolicy5)
         self.scrollAreaWidgetContents_2.setStyleSheet(u" QScrollBar:vertical {\n"
 "	border: none;\n"
 "    background: rgb(52, 59, 72);\n"
@@ -1114,11 +1143,11 @@ class Ui_MainWindow(object):
         self.horizontalLayout_13.setObjectName(u"horizontalLayout_13")
         self.graphDataFrame = QFrame(self.scrollAreaWidgetContents_2)
         self.graphDataFrame.setObjectName(u"graphDataFrame")
-        sizePolicy5 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
-        sizePolicy5.setHorizontalStretch(0)
-        sizePolicy5.setVerticalStretch(0)
-        sizePolicy5.setHeightForWidth(self.graphDataFrame.sizePolicy().hasHeightForWidth())
-        self.graphDataFrame.setSizePolicy(sizePolicy5)
+        sizePolicy6 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
+        sizePolicy6.setHorizontalStretch(0)
+        sizePolicy6.setVerticalStretch(0)
+        sizePolicy6.setHeightForWidth(self.graphDataFrame.sizePolicy().hasHeightForWidth())
+        self.graphDataFrame.setSizePolicy(sizePolicy6)
         self.graphDataFrame.setMinimumSize(QSize(0, 0))
         self.graphDataFrame.setFrameShape(QFrame.Shape.StyledPanel)
         self.graphDataFrame.setFrameShadow(QFrame.Shadow.Raised)
@@ -1330,7 +1359,7 @@ class Ui_MainWindow(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 330, 218))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 224, 224))
         self.scrollAreaWidgetContents.setStyleSheet(u" QScrollBar:vertical {\n"
 "	border: none;\n"
 "    background: rgb(52, 59, 72);\n"
@@ -1573,7 +1602,7 @@ class Ui_MainWindow(object):
         self.appLayout.addWidget(self.contentBox)
 
 
-        self.gridLayout_4.addWidget(self.bgApp, 0, 0, 1, 1)
+        self.horizontalLayout_8.addWidget(self.bgApp)
 
         MainWindow.setCentralWidget(self.styleSheet)
 
