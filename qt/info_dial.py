@@ -8,6 +8,7 @@ class HollowDial(QDial):
         self.setStyleSheet("background-color: transparent;")  # 배경을 투명으로 설정
         self.setRange(0, 100)  # 0부터 100까지 값 설정
         self.setValue(50)  # 기본 값 설정
+        self.setEnabled(False)
         #self.setSizePolicy(Qt.Preferred, Qt.Preferred)
 
     def paintEvent(self, event):
@@ -32,14 +33,14 @@ class HollowDial(QDial):
         # 다이얼의 회전 값에 따라 섹션 그리기
         angle = self.value() / (self.maximum() - self.minimum()) * 360
         arcRect = QRect(center.x() - radius, center.y() - radius, 2 * radius, 2 * radius)  # 아크를 그릴 사각형의 크기 줄이기
-        painter.setPen(QPen(QColor(255, 0, 0), 15))  # 다이얼 진행 부분 색상 설정
+        painter.setPen(QPen(QColor(189, 147, 249), 15))  # 다이얼 진행 부분 색상 설정
         painter.setBrush(Qt.transparent)
         painter.drawArc(arcRect, 90 * 16, -angle * 16)  # 회전 값에 따라 아크 그리기
 
         # 현재 값 텍스트로 표시
         painter.setPen(QPen(QColor(255, 255, 255)))  # 텍스트 색상
         painter.setFont(QFont("Arial", 40))  # 폰트 설정
-        text = str(self.value())  # 현재 다이얼 값
+        text = str(self.value()) + '%' # 현재 다이얼 값
         painter.drawText(rect, Qt.AlignCenter, text)  # 텍스트를 다이얼의 중앙에 표시
 
         painter.end()

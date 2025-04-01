@@ -17,6 +17,8 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as dates
 import pandas as pd
 
+from qt.info_dial import HollowDial
+
 class MainWindow(QMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
@@ -45,7 +47,7 @@ class MainWindow(QMainWindow):
         self.load_Hyperparameters_file(self.path)
         
         # 학습 버튼
-        widgets.pushButton_4.clicked.connect(self.learningPPO)
+        widgets.learingPushButton.clicked.connect(self.learningPPO)
 
 
         self.tree_widgets = [widgets.treeWidget]  # 생성된 트리 위젯 목록
@@ -58,6 +60,16 @@ class MainWindow(QMainWindow):
         widgets.removePushButton.clicked.connect(self.remove_graph)
         widgets.removeCSVPushButton.clicked.connect(self.remove_csv)
 
+        # 다이얼 부분 바꾸기
+        widgets.verticalLayout_27.removeWidget(widgets.cpu_dial)
+        widgets.cpu_dial.deleteLater()
+        widgets.cpu_dial = HollowDial(widgets.cpu_frame)
+        widgets.verticalLayout_27.addWidget(widgets.cpu_dial)
+
+        widgets.verticalLayout_28.removeWidget(widgets.gpu_dial)
+        widgets.gpu_dial.deleteLater()
+        widgets.gpu_dial = HollowDial(widgets.gpu_frame)
+        widgets.verticalLayout_28.addWidget(widgets.gpu_dial)
     
     def menu_btns(self):
         # GET BUTTON CLICKED
