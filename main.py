@@ -134,6 +134,13 @@ class RichDog:
         print("save checkpoint path : " + self.checkpoint_file.get_file_path())
         #####################################################
 
+        ################## console logging ##################
+        self.console_file_name = "PPO_console_log.txt"
+        self.console_file = File(self.path + "PPO_console/" , self.console_file_name)
+
+        print("save console path : " + self.console_file.get_file_path())
+        #####################################################
+
     ################################### Training ###################################
     def train(self):
         self.init_parameters()
@@ -149,9 +156,12 @@ class RichDog:
         start_time = datetime.now().replace(microsecond=0)
         self.init_files()
         print("Started training at (GMT) : ", start_time)
-
         print("============================================================================================")
         
+        self.console_file.write_append("Started training at (GMT) : " + str(start_time) + "\n")
+        self.console_file.write_append("============================================================================================"+ "\n")
+
+
         # logging file
         self.log_file.write('episode,timestep,reward\n')
 
@@ -216,6 +226,8 @@ class RichDog:
                     print_avg_reward = np.round(print_avg_reward, 2)
 
                     print("Episode : {} \t\t Timestep : {} \t\t Average Reward : {}".format(i_episode, time_step, print_avg_reward))
+                    
+                    self.console_file.write_append("Episode : {} \t\t Timestep : {} \t\t Average Reward : {}\n".format(i_episode, time_step, print_avg_reward))
 
                     print_running_reward = 0
                     print_running_episodes = 0
@@ -228,6 +240,11 @@ class RichDog:
                     print("model saved")
                     print("Elapsed Time  : ", datetime.now().replace(microsecond=0) - start_time)
                     print("--------------------------------------------------------------------------------------------")
+
+                    self.console_file.write_append("--------------------------------------------------------------------------------------------"+ "\n")
+                    self.console_file.write_append("saving model at : " + self.checkpoint_file.get_file_path()+ "\n")
+                    self.console_file.write_append("Elapsed Time  : " + str(datetime.now().replace(microsecond=0) - start_time)+ "\n")
+                    self.console_file.write_append("--------------------------------------------------------------------------------------------"+ "\n")
 
                 # break; if the episode is over
                 if done:
@@ -251,10 +268,19 @@ class RichDog:
         print("Finished training at (GMT) : ", end_time)
         print("Total training time  : ", end_time - start_time)
         print("============================================================================================")
+        
+        self.console_file.write_append("============================================================================================"+ "\n")
+        self.console_file.write_append("Started training at (GMT) : " + str(start_time)+ "\n")
+        self.console_file.write_append("Finished training at (GMT) : "+ str(end_time)+ "\n")
+        self.console_file.write_append("Total training time  : " + str(end_time - start_time)+ "\n")
+        self.console_file.write_append("============================================================================================"+ "\n")
 
     #################################### Testing ###################################
-    def test(self):
+    def test(self, checkpoint_path):
         print("============================================================================================")
+        self.console_file_name = "PPO_console_log.txt"
+        self.console_file = File(self.path + "PPO_console/" , self.console_file_name)
+        print("save console path : " + self.console_file.get_file_path())
 
         ################## hyperparameters ##################
         self.init_parameters()
@@ -266,7 +292,8 @@ class RichDog:
         self.print_parameters()
         #####################################################
 
-        self.env = GymEnvironment(env_name=self.env_name, render_mode="human")
+        #self.env = GymEnvironment(env_name=self.env_name, render_mode="human")
+        self.env = StockEnvironment()
 
         # state space dimension
         self.state_dim = self.env.getObservation().shape[0]
@@ -282,15 +309,24 @@ class RichDog:
                     self.action_std,self. value_loss_coef, self.entropy_coef,self.lamda, self.minibatchsize)
         # preTrained weights directory
 
+        """
         directory = self.path + "PPO_preTrained" + '/' + self.env_name + '/'
         checkpoint_file_list = next(os.walk(directory))[2]
         checkpoint_path = directory + checkpoint_file_list[-1]
+        """
         
-        print("loading network from : " + checkpoint_path)
+        if checkpoint_path == "":
+            self.console_file.write_append("Error : Not Setting Model path\n")
+            return
 
+        print("loading network from : " + checkpoint_path)
+        self.console_file.write_append("loading network from : " + checkpoint_path + "\n")
+        
+        
         ppo_agent.load(checkpoint_path)
 
         print("--------------------------------------------------------------------------------------------")
+        self.console_file.write_append("--------------------------------------------------------------------------------------------" + "\n")
 
         test_running_reward = 0
 
@@ -315,6 +351,8 @@ class RichDog:
 
             test_running_reward +=  ep_reward
             print('Episode: {} \t\t Reward: {}'.format(ep, round(ep_reward, 2)))
+            self.console_file.write_append('Episode: {} \t\t Reward: {}\n'.format(ep, round(ep_reward, 2)))
+
             ep_reward = 0
 
         self.env.close()
@@ -324,8 +362,11 @@ class RichDog:
         avg_test_reward = test_running_reward / total_test_episodes
         avg_test_reward = round(avg_test_reward, 2)
         print("average test reward : " + str(avg_test_reward))
-
         print("============================================================================================")
+        
+        self.console_file.write_append("============================================================================================\n")
+        self.console_file.write_append("average test reward : " + str(avg_test_reward) + "\n")
+        self.console_file.write_append("============================================================================================\n")
 
 if __name__ == '__main__':
     richdog = RichDog()
@@ -333,4 +374,4 @@ if __name__ == '__main__':
         if sys.argv[1] == 'train':
             richdog.train()
         elif sys.argv[1] == 'test':
-            richdog.test()
+            richdog.test(sys.argv[2])

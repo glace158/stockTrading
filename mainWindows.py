@@ -44,16 +44,18 @@ class MainWindow(QMainWindow):
         widgets.btn_home.clicked.connect(self.menu_btns)
         widgets.btn_parameter.clicked.connect(self.menu_btns)
         widgets.btn_graph.clicked.connect(self.menu_btns)
+        widgets.btn_setting.clicked.connect(self.menu_btns)
         
         ##################################메인 페이지##########################################
         self.process = None
         self.model_path = ""
-
+        self.watch_log_file()
+        
         widgets.File_Button_4.clicked.connect(self.pth_file_load)
         widgets.clearLogPushButton.clicked.connect(self.clear_log)
         # 학습 버튼
         widgets.learingPushButton.clicked.connect(self.learningPPO)
-        widgets.testPushButton.clicked.connect(self.testStart())
+        widgets.testPushButton.clicked.connect(self.testStart)
 
         # 다이얼 부분 바꾸기 (CPU, GPU 정보)
         widgets.verticalLayout_27.removeWidget(widgets.cpu_dial)
@@ -98,6 +100,16 @@ class MainWindow(QMainWindow):
         widgets.imageSizeUpPushButton.setEnabled(False)
         widgets.imageSizeDownPushButton.setEnabled(False)
 
+        #################################설정 페이지##############################################
+        # 파일 버튼 
+        widgets.File_Button_5.clicked.connect(self.read_devlp_file)
+        widgets.SavePerarametersButton_2.clicked.connect(self.save_devlp_file)
+
+        # 파일 화면 초기화
+        self.devlp_path = str(os.path.dirname(__file__)) + "/API/" + "kis_devlp.yaml"
+        widgets.filepath_lineEdit_3.setText(self.devlp_path)
+        self.load_devlp_file(self.devlp_path)
+
     def menu_btns(self):
         # GET BUTTON CLICKED
         btn = self.sender()
@@ -115,38 +127,78 @@ class MainWindow(QMainWindow):
         if btnName == "btn_graph":
             widgets.stackedWidget.setCurrentWidget(widgets.graph_page)
 
+        # 설정 하기
+        if btnName == "btn_setting":
+            widgets.stackedWidget.setCurrentWidget(widgets.kis_devlp_page)
+
     #################################메인 페이지 메서드##########################################
     # 모델 테스트
     def testStart(self):
-        self.process = subprocess.Popen(
-        ['python', 'main.py', 'test'],  # 실행할 Python 스크립트
-        stdout=subprocess.PIPE,    # 표준 출력을 파이프로 전달
-        stderr=subprocess.PIPE,    # 표준 오류를 파이프로 전달
-        text=True                  # 출력 결과를 텍스트로 받기
-        )
+        widgets.ConsolePlainTextEdit.setPlainText("")
+        
+        widgets.testPushButton.setEnabled(False)
+
+        widgets.learingPushButton.clicked.disconnect(self.learningPPO)
+        widgets.learingPushButton.clicked.connect(self.stoplearningPPO)
+        widgets.learingPushButton.setIcon(QIcon('qt/images/icons/cil-media-stop.png')) 
+        widgets.learingPushButton.setText("Testing Stop")
+        widgets.testPushButton.setText("Wait Model Testing ..")
+
+        self.ppo_test_thread = PPOThread('test', self.model_path)
+        self.ppo_test_thread.finished_signal.connect(self.update_label)
+        self.ppo_test_thread.start()
+        print("테스트 시작")
 
     # 학습 시작하기
     def learningPPO(self):
-        widgets.pushButton_4.clicked.disconnect(self.learningPPO)
-        widgets.pushButton_4.clicked.connect(self.stoplearningPPO)
-        widgets.pushButton_4.setIcon(QIcon('qt/images/icons/cil-media-stop.png')) 
-        widgets.pushButton_4.setText("Learning Stop")
+        widgets.ConsolePlainTextEdit.setPlainText("")
         
-        self.process = subprocess.Popen(
-        ['python', 'main.py', 'train'],  # 실행할 Python 스크립트
-        stdout=subprocess.PIPE,    # 표준 출력을 파이프로 전달
-        stderr=subprocess.PIPE,    # 표준 오류를 파이프로 전달
-        text=True                  # 출력 결과를 텍스트로 받기
-        )
+        widgets.testPushButton.setEnabled(False)
 
-    # 학습 종료하기
-    def stoplearningPPO(self):
-        widgets.pushButton_4.clicked.disconnect(self.stoplearningPPO)
-        widgets.pushButton_4.clicked.connect(self.learningPPO)
-        widgets.pushButton_4.setIcon(QIcon('qt/images/icons/cil-media-play.png')) 
-        widgets.pushButton_4.setText("Learning Start")
+        widgets.learingPushButton.clicked.disconnect(self.learningPPO)
+        widgets.learingPushButton.clicked.connect(self.stoplearningPPO)
+        widgets.learingPushButton.setIcon(QIcon('qt/images/icons/cil-media-stop.png')) 
+        widgets.learingPushButton.setText("Learning Stop")
+        widgets.testPushButton.setText("Wait Model Learning ..")
         
-        self.process.kill()   
+        self.ppo_train_thread = PPOThread('train')
+        self.ppo_train_thread.finished_signal.connect(self.update_label)
+        self.ppo_train_thread.start()
+        print("학습 시작")
+
+    # 학습 종료하기 버튼
+    def stoplearningPPO(self):
+        self.ppo_train_thread.stop()  # 작업 중단 요청
+        print("중단 중..")
+
+    # 학습 종료 시 실행
+    def update_label(self):
+        widgets.learingPushButton.setEnabled(True)
+        widgets.testPushButton.setEnabled(True)
+        
+        widgets.learingPushButton.clicked.disconnect(self.stoplearningPPO)
+        widgets.learingPushButton.clicked.connect(self.learningPPO)
+        widgets.learingPushButton.setIcon(QIcon('qt/images/icons/cil-media-play.png')) 
+        widgets.learingPushButton.setText("Learning Start")
+        widgets.testPushButton.setText("Test Model Start")
+        print("중단 완료")
+
+    
+    # log 파일 읽기
+    def watch_log_file(self):
+        self.log_path = "PPO_console" + '/' + "PPO_console_log.txt"
+        self.file_watcher = QFileSystemWatcher([self.log_path])
+        self.file_watcher.fileChanged.connect(self.update_text_edit)
+
+    # log 파일 변경시 출력
+    def update_text_edit(self):
+        try:
+            with open(self.log_path, 'r', encoding='utf-8') as file:
+                content = file.read()
+                widgets.ConsolePlainTextEdit.setPlainText(content)
+        except Exception as e:
+            widgets.ConsolePlainTextEdit.setPlainText(f"파일을 읽는 중 오류가 발생했습니다: {e}")
+    
 
     # 컴퓨터 정보 출력
     def computer_usage_info(self):
@@ -167,7 +219,7 @@ class MainWindow(QMainWindow):
         print(self.model_path)
     
     def clear_log(self):
-        widgets.ConsolePlainTextEdit.setPlainText("")
+        widgets.ConsolePlainTextEdit.setPlainText("")   
 
     #################################파라미터 페이지 메서드##########################################
     # 파일 읽어오기 버튼
@@ -362,8 +414,6 @@ class MainWindow(QMainWindow):
                     ax = plt.subplot(fig_count,1, i + 1)
                     ax.plot(datas["timestep"] ,datas[item_name])
 
-
-
         plt.savefig("./Data_graph/graph.png")
 
     # 저장한 그래프 이미지 불러오기
@@ -404,7 +454,34 @@ class MainWindow(QMainWindow):
             self.image_height -= 20
             self.update_image()
 
-    
+    ########################################설정 페이지#################################################
+    # 파일 읽어오기 버튼
+    def read_devlp_file(self):
+        fname= QFileDialog.getOpenFileName(self, "yaml 파일 선택", "", "yaml Files (*.yaml)")
+
+        if fname[0]:
+            widgets.filepath_lineEdit_3.setText(fname[0])
+            self.devlp_path = fname[0]
+            self.load_devlp_file(fname[0])
+
+    # 파일 저장하기 버튼
+    def save_devlp_file(self):
+        self.read_table_data()
+        Config.save_config( self.devlp_config, self.devlp_path )
+
+    # 파일 읽어오기
+    def load_devlp_file(self, path):
+            self.devlp_config = Config.load_config(path)
+            widgets.paper_app_lineEdit.setText(self.devlp_config.paper_app)
+            widgets.paper_sec_lineEdit.setText(self.devlp_config.paper_sec)
+
+            widgets.my_app_lineEdit.setText(self.devlp_config.my_app)
+            widgets.my_sec_lineEdit.setText(self.devlp_config.my_sec)
+            
+            widgets.my_acct_stock_lineEdit.setText(self.devlp_config.my_acct_stock)
+            widgets.my_paper_stock_lineEdit.setText(self.devlp_config.my_paper_stock)
+            
+            widgets.my_prod_lineEdit.setText(self.devlp_config.my_prod)
     ###############################################################################################
     def mousePressEvent(self, event):
         # SET DRAG POS WINDOW
@@ -417,11 +494,53 @@ class MainWindow(QMainWindow):
             print('Mouse click: RIGHT CLICK')
 
     def closeEvent(self,event):  # QCloseEvent 
-        if self.process:
-            self.process.kill()
+        
+        self.stoplearningPPO()
 
         event.accept()
-        
+
+class PPOThread(QThread):
+    finished_signal = Signal()
+    
+    def __init__(self, run_mode="train", model_path='', parent = None):
+        super().__init__(parent)
+        self.run_mode = run_mode
+        self.model_path = model_path
+    
+    def run(self):
+        if self.run_mode == 'train':
+            self.learningPPO()
+        elif self.run_mode == 'test':
+            self.testStart()
+
+    # 모델 테스트
+    def testStart(self):
+        self.process = subprocess.Popen(
+        ['python', 'main.py', 'test', self.model_path],  # 실행할 Python 스크립트
+        stdout=subprocess.PIPE,    # 표준 출력을 파이프로 전달
+        stderr=subprocess.PIPE,    # 표준 오류를 파이프로 전달
+        text=True                  # 출력 결과를 텍스트로 받기
+        )
+
+        print(self.process.stdout.read())
+        print(self.process.stderr.read())
+        self.finished_signal.emit() 
+
+    # 학습 시작하기
+    def learningPPO(self):
+        self.process = subprocess.Popen(
+        ['python', 'main.py', 'train'],  # 실행할 Python 스크립트
+        stdout=subprocess.PIPE,    # 표준 출력을 파이프로 전달
+        stderr=subprocess.PIPE,    # 표준 오류를 파이프로 전달
+        text=True                  # 출력 결과를 텍스트로 받기
+        )
+        print(self.process.stdout.read())
+        print(self.process.stderr.read())
+        self.finished_signal.emit() 
+    
+    def stop(self):
+        self.process.kill() 
+
 if __name__ == "__main__":
     app = QApplication()
     window = MainWindow()

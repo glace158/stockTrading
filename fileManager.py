@@ -23,6 +23,10 @@ class File:
     def write(self, write_data):
         self.file.write(write_data)
 
+    def write_append(self, write_data):
+        with open(self.filename, "a", encoding="utf-8") as file:
+            file.write(write_data)
+
     def close(self):
         self.file.close()
     
@@ -58,7 +62,7 @@ class Config:
     @staticmethod
     def load_config(config_path: str) -> Dict[str, Any]:
         """Load configuration from YAML file"""
-        with open(config_path, 'r', encoding='UTF8') as f:
+        with open(config_path, 'r', encoding='utf-8') as f:
             config_dict = yaml.safe_load(f)
         return Config._convert_dict_to_obj(config_dict)
 
