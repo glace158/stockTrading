@@ -7,7 +7,7 @@ class HollowDial(QDial):
         super().__init__(parent)
         self.setStyleSheet("background-color: transparent;")  # 배경을 투명으로 설정
         self.setRange(0, 100)  # 0부터 100까지 값 설정
-        self.setValue(50)  # 기본 값 설정
+        self.setValue(0)  # 기본 값 설정
         self.setEnabled(False)
         #self.setSizePolicy(Qt.Preferred, Qt.Preferred)
 

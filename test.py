@@ -1,60 +1,54 @@
-from PySide6.QtWidgets import *
-from PySide6.QtCore import *
-from PySide6.QtGui import *
-
-class HollowDial(QDial):
-    def __init__(self, parent=None):
-        super().__init__(parent)
-        self.setStyleSheet("background-color: transparent;")  # 배경을 투명으로 설정
-        self.setRange(0, 100)  # 0부터 100까지 값 설정
-        self.setValue(50)  # 기본 값 설정
-        #self.setSizePolicy(Qt.Preferred, Qt.Preferred)
-
-    def paintEvent(self, event):
-        painter = QPainter(self)
-        painter.setRenderHint(QPainter.Antialiasing)
-
-        # 다이얼 크기와 중심 계산
-        rect = self.rect()
-        center = rect.center()
-        radius = min(rect.width(), rect.height()) / 2 * 0.8
-
-        # 배경 원을 비워둔 원 그래프 모양
-        painter.setPen(Qt.NoPen)
-        painter.setBrush(QColor(240, 240, 240, 0))  # 배경색
-        painter.drawEllipse(center, radius, radius)  # 속이 빈 원
-
-        # 회전할 수 있는 바깥쪽 원 그리기
-        painter.setPen(QPen(QColor(33, 37, 43), 15))  # 원 둘레 색상 설정
-        painter.setBrush(Qt.transparent)  # 채우지 않음
-        painter.drawEllipse(center, radius, radius)
-
-        # 다이얼의 회전 값에 따라 섹션 그리기
-        angle = self.value() / (self.maximum() - self.minimum()) * 360
-        arcRect = QRect(center.x() - radius, center.y() - radius, 2 * radius, 2 * radius)  # 아크를 그릴 사각형의 크기 줄이기
-        painter.setPen(QPen(QColor(255, 0, 0), 15))  # 다이얼 진행 부분 색상 설정
-        painter.setBrush(Qt.transparent)
-        painter.drawArc(arcRect, 90 * 16, -angle * 16)  # 회전 값에 따라 아크 그리기
-
-        # 현재 값 텍스트로 표시
-        painter.setPen(QPen(QColor(255, 255, 255)))  # 텍스트 색상
-        painter.setFont(QFont("Arial", 40))  # 폰트 설정
-        text = str(self.value())  # 현재 다이얼 값
-        painter.drawText(rect, Qt.AlignCenter, text)  # 텍스트를 다이얼의 중앙에 표시
-
-        painter.end()
+from PySide6.QtWidgets import QApplication, QLabel, QMainWindow, QPushButton, QVBoxLayout, QWidget
+from PySide6.QtGui import QPixmap
 
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
+        self.setWindowTitle("이미지 크기 조절")
 
-        dial = HollowDial(self)
-        dial.setGeometry(100, 100, 200, 200)
+        # 기본 이미지 크기 설정
+        self.image_width = 300
+        self.image_height = 200
 
-        self.setCentralWidget(dial)
-        self.setWindowTitle("Hollow Dial with Value")
-        self.setGeometry(200, 200, 400, 400)
+        # QLabel 설정
+        self.label = QLabel(self)
+        self.pixmap = QPixmap("qt/images/images/DogeIcon.png")  # 이미지 파일 경로
+        self.update_image()
 
+        # 버튼 설정
+        self.plus_button = QPushButton("+", self)
+        self.plus_button.clicked.connect(self.increase_size)
+
+        self.minus_button = QPushButton("-", self)
+        self.minus_button.clicked.connect(self.decrease_size)
+
+        # 레이아웃 설정
+        layout = QVBoxLayout()
+        layout.addWidget(self.label)
+        layout.addWidget(self.plus_button)
+        layout.addWidget(self.minus_button)
+
+        container = QWidget()
+        container.setLayout(layout)
+        self.setCentralWidget(container)
+
+    def update_image(self):
+        # 이미지를 현재 크기로 조정하여 QLabel에 표시
+        resized_pixmap = self.pixmap.scaled(self.image_width, self.image_height)
+        self.label.setPixmap(resized_pixmap)
+
+    def increase_size(self):
+        # 이미지 크기를 증가
+        self.image_width += 20
+        self.image_height += 20
+        self.update_image()
+
+    def decrease_size(self):
+        # 이미지 크기를 감소
+        if self.image_width > 20 and self.image_height > 20:  # 최소 크기 제한
+            self.image_width -= 20
+            self.image_height -= 20
+            self.update_image()
 
 if __name__ == "__main__":
     app = QApplication([])

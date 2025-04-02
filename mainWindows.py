@@ -8,7 +8,7 @@ from PySide6.QtCore import *
 from PySide6.QtGui import *
 from qt.ui_main import Ui_MainWindow
 
-from fileManager import Config, File
+from fileManager import Config
 from types import SimpleNamespace
 
 import subprocess
@@ -19,7 +19,16 @@ import pandas as pd
 
 from qt.info_dial import HollowDial
 
+import psutil
+import GPUtil
+import cpuinfo
+import torch
+import time
+import threading
+
+widgets = None
 class MainWindow(QMainWindow):
+
     def __init__(self):
         super(MainWindow, self).__init__()
         self.ui = Ui_MainWindow()
@@ -27,29 +36,52 @@ class MainWindow(QMainWindow):
         global widgets
         widgets = self.ui
 
-        self.process = None
+        self.setWindowTitle("Rich Dog")
 
-        widgets.stackedWidget.setCurrentIndex(0)
+        widgets.stackedWidget.setCurrentIndex(0) # 메인 화면 띄우기
 
         # 메뉴 버튼 
         widgets.btn_home.clicked.connect(self.menu_btns)
         widgets.btn_parameter.clicked.connect(self.menu_btns)
         widgets.btn_graph.clicked.connect(self.menu_btns)
         
-        # 파일 버튼
-        widgets.File_Button_3.clicked.connect(self.File_btns)
-        widgets.SavePerarametersButton.clicked.connect(self.File_btns)
+        ##################################메인 페이지##########################################
+        self.process = None
+        self.model_path = ""
+
+        widgets.File_Button_4.clicked.connect(self.pth_file_load)
+        widgets.clearLogPushButton.clicked.connect(self.clear_log)
+        # 학습 버튼
+        widgets.learingPushButton.clicked.connect(self.learningPPO)
+        widgets.testPushButton.clicked.connect(self.testStart())
+
+        # 다이얼 부분 바꾸기 (CPU, GPU 정보)
+        widgets.verticalLayout_27.removeWidget(widgets.cpu_dial)
+        widgets.cpu_dial.deleteLater()
+        widgets.cpu_dial = HollowDial(widgets.cpu_frame)
+        widgets.verticalLayout_27.addWidget(widgets.cpu_dial)
+
+        widgets.verticalLayout_28.removeWidget(widgets.gpu_dial)
+        widgets.gpu_dial.deleteLater()
+        widgets.gpu_dial = HollowDial(widgets.gpu_frame)
+        widgets.verticalLayout_28.addWidget(widgets.gpu_dial)
+
+        self.info_thread = threading.Thread(target=self.computer_usage_info, daemon=True)
+        self.info_thread.start()
+
+        #################################파라미터 페이지##########################################
+        # 파일 버튼 
+        widgets.File_Button_3.clicked.connect(self.read_file)
+        widgets.SavePerarametersButton.clicked.connect(self.save_file)
+        widgets.SaveAsPerarametersButton.clicked.connect(self.save_as)
 
         # 파일 화면 초기화
         widgets.tableWidget_2.setColumnCount(2)
         self.path = str(os.path.dirname(__file__)) + "/config/" + "Hyperparameters.yaml"
         widgets.filepath_lineEdit.setText(self.path)
         self.load_Hyperparameters_file(self.path)
-        
-        # 학습 버튼
-        widgets.learingPushButton.clicked.connect(self.learningPPO)
 
-
+        #################################그래프 페이지##############################################
         self.tree_widgets = [widgets.treeWidget]  # 생성된 트리 위젯 목록
         self.current_tree_widget = widgets.treeWidget # 현재 선택된 트리 위젯
         widgets.treeWidget.mouseDoubleClickEvent = lambda event: self.set_current_tree_widget(widgets.treeWidget)
@@ -60,17 +92,12 @@ class MainWindow(QMainWindow):
         widgets.removePushButton.clicked.connect(self.remove_graph)
         widgets.removeCSVPushButton.clicked.connect(self.remove_csv)
 
-        # 다이얼 부분 바꾸기
-        widgets.verticalLayout_27.removeWidget(widgets.cpu_dial)
-        widgets.cpu_dial.deleteLater()
-        widgets.cpu_dial = HollowDial(widgets.cpu_frame)
-        widgets.verticalLayout_27.addWidget(widgets.cpu_dial)
+        widgets.imageSizeUpPushButton.clicked.connect(self.increase_size)
+        widgets.imageSizeDownPushButton.clicked.connect(self.decrease_size)
+        
+        widgets.imageSizeUpPushButton.setEnabled(False)
+        widgets.imageSizeDownPushButton.setEnabled(False)
 
-        widgets.verticalLayout_28.removeWidget(widgets.gpu_dial)
-        widgets.gpu_dial.deleteLater()
-        widgets.gpu_dial = HollowDial(widgets.gpu_frame)
-        widgets.verticalLayout_28.addWidget(widgets.gpu_dial)
-    
     def menu_btns(self):
         # GET BUTTON CLICKED
         btn = self.sender()
@@ -88,24 +115,73 @@ class MainWindow(QMainWindow):
         if btnName == "btn_graph":
             widgets.stackedWidget.setCurrentWidget(widgets.graph_page)
 
-    # 파일 버튼 클릭 시
-    def File_btns(self):
-        # GET BUTTON CLICKED
-        btn = self.sender()
-        btnName = btn.objectName()
+    #################################메인 페이지 메서드##########################################
+    # 모델 테스트
+    def testStart(self):
+        self.process = subprocess.Popen(
+        ['python', 'main.py', 'test'],  # 실행할 Python 스크립트
+        stdout=subprocess.PIPE,    # 표준 출력을 파이프로 전달
+        stderr=subprocess.PIPE,    # 표준 오류를 파이프로 전달
+        text=True                  # 출력 결과를 텍스트로 받기
+        )
 
-        # 파일 읽어오기 버튼
-        if btnName == "File_Button_3":
-            fname= QFileDialog.getOpenFileName(self)
+    # 학습 시작하기
+    def learningPPO(self):
+        widgets.pushButton_4.clicked.disconnect(self.learningPPO)
+        widgets.pushButton_4.clicked.connect(self.stoplearningPPO)
+        widgets.pushButton_4.setIcon(QIcon('qt/images/icons/cil-media-stop.png')) 
+        widgets.pushButton_4.setText("Learning Stop")
+        
+        self.process = subprocess.Popen(
+        ['python', 'main.py', 'train'],  # 실행할 Python 스크립트
+        stdout=subprocess.PIPE,    # 표준 출력을 파이프로 전달
+        stderr=subprocess.PIPE,    # 표준 오류를 파이프로 전달
+        text=True                  # 출력 결과를 텍스트로 받기
+        )
 
-            if fname[0]:
-                widgets.filepath_lineEdit.setText(fname[0])
-                self.load_Hyperparameters_file(fname[0])
+    # 학습 종료하기
+    def stoplearningPPO(self):
+        widgets.pushButton_4.clicked.disconnect(self.stoplearningPPO)
+        widgets.pushButton_4.clicked.connect(self.learningPPO)
+        widgets.pushButton_4.setIcon(QIcon('qt/images/icons/cil-media-play.png')) 
+        widgets.pushButton_4.setText("Learning Start")
+        
+        self.process.kill()   
 
-        # 파일 저장하기 버튼
-        if btnName == "SavePerarametersButton" and self.config:
-            self.read_table_data()
-            Config.save_config( self.config, widgets.filepath_lineEdit.text() )
+    # 컴퓨터 정보 출력
+    def computer_usage_info(self):
+        widgets.cpu_name_label.setText(cpuinfo.get_cpu_info()['brand_raw'])
+        widgets.gpu_name_label.setText(GPUtil.getGPUs()[0].name)
+        widgets.cuda_label.setText('Available CUDA : ' + str(torch.cuda.is_available()))
+        while True:
+            widgets.cpu_dial.setValue( psutil.cpu_percent(interval=1) )
+            widgets.gpu_dial.setValue( GPUtil.getGPUs()[0].load * 100)
+            time.sleep(1)
+    
+    # 모델 파일 읽기
+    def pth_file_load(self):
+        pth_file_paths, _ = QFileDialog.getOpenFileNames(self, "모델 파일 선택", "", "pth Files (*.pth)")
+        
+        self.model_path = pth_file_paths[0]
+        widgets.filepath_lineEdit_2.setText(self.model_path)
+        print(self.model_path)
+    
+    def clear_log(self):
+        widgets.ConsolePlainTextEdit.setPlainText("")
+
+    #################################파라미터 페이지 메서드##########################################
+    # 파일 읽어오기 버튼
+    def read_file(self):
+        fname= QFileDialog.getOpenFileName(self, "yaml 파일 선택", "", "yaml Files (*.yaml)")
+
+        if fname[0]:
+            widgets.filepath_lineEdit.setText(fname[0])
+            self.load_Hyperparameters_file(fname[0])
+    
+    # 파일 저장하기 버튼
+    def save_file(self):
+        self.read_table_data()
+        Config.save_config( self.config, self.path )
 
     # 파일 읽어오기
     def load_Hyperparameters_file(self, path):
@@ -136,30 +212,16 @@ class MainWindow(QMainWindow):
 
         self.config = SimpleNamespace(**config_dict)
 
-    # 학습 시작하기
-    def learningPPO(self):
-        widgets.pushButton_4.clicked.disconnect(self.learningPPO)
-        widgets.pushButton_4.clicked.connect(self.stoplearningPPO)
-        widgets.pushButton_4.setIcon(QIcon('qt/images/icons/cil-media-stop.png')) 
-        widgets.pushButton_4.setText("Learning Stop")
+    def save_as(self):
+        # 파일 저장 대화상자 열기
+        options = QFileDialog.Options()
+        self.path, _ = QFileDialog.getSaveFileName(self, "다른 이름으로 저장", "", "yaml Files (*.yaml)", options=options)
         
-        self.process = subprocess.Popen(
-        ['python', 'main.py', 'train'],  # 실행할 Python 스크립트
-        stdout=subprocess.PIPE,    # 표준 출력을 파이프로 전달
-        stderr=subprocess.PIPE,    # 표준 오류를 파이프로 전달
-        text=True                  # 출력 결과를 텍스트로 받기
-        )   
-
-    # 학습 종료하기
-    def stoplearningPPO(self):
-        widgets.pushButton_4.clicked.disconnect(self.stoplearningPPO)
-        widgets.pushButton_4.clicked.connect(self.learningPPO)
-        widgets.pushButton_4.setIcon(QIcon('qt/images/icons/cil-media-play.png')) 
-        widgets.pushButton_4.setText("Learning Start")
+        self.read_table_data()
+        Config.save_config( self.config, self.path )
+        widgets.filepath_lineEdit.setText(self.path)
         
-        self.process.kill()   
-
-    ###################################################################################################
+    ########################################그래프 페이지 메서드#################################################
     # 현재 클릭한 트리 위젯
     def set_current_tree_widget(self, tree_widget):
         self.current_tree_widget = tree_widget
@@ -236,19 +298,37 @@ class MainWindow(QMainWindow):
         print("새로운 트리가 추가되었습니다.")
     
     # csv 삭제
-    def remove_csv(self):    
+    def remove_csv(self):
+        if not self.current_tree_widget:
+            return
+        
         selected_items = self.current_tree_widget.selectedItems()
         
         if selected_items:
             for item in selected_items:
                 index = self.current_tree_widget.indexOfTopLevelItem(item)
                 self.current_tree_widget.takeTopLevelItem(index)
+        
+        self.make_graph()
+        self.load_graph_image()
 
     # 그래프 삭제
     def remove_graph(self):
+        if not self.current_tree_widget:
+            return
+        
         self.tree_widgets.remove(self.current_tree_widget)
         self.current_tree_widget.deleteLater() 
         self.current_tree_widget = None
+        
+        if self.tree_widgets:
+            self.make_graph()
+            self.load_graph_image()
+        else:
+            widgets.graph_image.clear()
+            widgets.graph_image.setText("No Images")
+            widgets.imageSizeUpPushButton.setEnabled(False)
+            widgets.imageSizeDownPushButton.setEnabled(False)
 
     # 그래프 그리기
     def make_graph(self):
@@ -269,7 +349,7 @@ class MainWindow(QMainWindow):
                     continue
                 
                 state = item.checkState(0)
-                if "stck_bsop_date" in datas.columns and state == Qt.Checked:
+                if "stck_bsop_date" in datas.columns and state == Qt.Checked: 
                     datas["stck_bsop_date"] = pd.to_datetime(datas["stck_bsop_date"],format="%Y%m%d")
                     
                     ax = plt.subplot(fig_count,1, i + 1)
@@ -278,20 +358,54 @@ class MainWindow(QMainWindow):
                     plt.xticks(rotation=45)
                     ax = plt.gca()
                     ax.xaxis.set_major_locator(dates.MonthLocator())
+                elif "timestep" in datas.columns and state == Qt.Checked:
+                    ax = plt.subplot(fig_count,1, i + 1)
+                    ax.plot(datas["timestep"] ,datas[item_name])
+
+
 
         plt.savefig("./Data_graph/graph.png")
 
+    # 저장한 그래프 이미지 불러오기
     def load_graph_image(self):
-        pixmap = QPixmap("./Data_graph/graph.png")
-        widgets.graph_image.adjustSize()
-        widgets.graph_image.setPixmap(pixmap)
 
+        self.pixmap = QPixmap("./Data_graph/graph.png")
+        widgets.graph_image.adjustSize()
+        widgets.graph_image.setPixmap(self.pixmap)
+        
+        self.image_width = self.pixmap.width()
+        self.image_height = self.pixmap.height()
+        
+        widgets.imageSizeUpPushButton.setEnabled(True)
+        widgets.imageSizeDownPushButton.setEnabled(True)
+
+    # 트리 위젯 자식 순회
     def get_items_recursively(self, item):
         items = [item]  # 현재 항목을 리스트에 추가
         for i in range(item.childCount()):  # 자식 아이템 순회
             items.extend(self.get_items_recursively(item.child(i)))  # 자식 아이템들에 대해 재귀 호출
         return items
+    
+    def update_image(self):
+        # 이미지를 현재 크기로 조정하여 QLabel에 표시
+        resized_pixmap = self.pixmap.scaled(self.image_width, self.image_height)
+        widgets.graph_image.setPixmap(resized_pixmap)
 
+    def increase_size(self):
+        # 이미지 크기를 증가
+        self.image_width += 20
+        self.image_height += 20
+        self.update_image()
+
+    def decrease_size(self):
+        # 이미지 크기를 감소
+        if self.image_width > 20 and self.image_height > 20:  # 최소 크기 제한
+            self.image_width -= 20
+            self.image_height -= 20
+            self.update_image()
+
+    
+    ###############################################################################################
     def mousePressEvent(self, event):
         # SET DRAG POS WINDOW
         self.dragPos = event.globalPos()
@@ -311,5 +425,6 @@ class MainWindow(QMainWindow):
 if __name__ == "__main__":
     app = QApplication()
     window = MainWindow()
+    app.setWindowIcon(QIcon("icon.ico"))
     window.show()
     sys.exit(app.exec())
