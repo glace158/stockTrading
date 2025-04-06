@@ -6,11 +6,9 @@ from datetime import datetime
 import torch
 import numpy as np
 
-from PPO import PPO
-from environment import GymEnvironment, StockEnvironment
-from fileManager import Config, File
-
-
+from PPO.PPO import PPO
+from PPO.environment import GymEnvironment, StockEnvironment
+from PPO.fileManager import Config, File
 
 class RichDog:
     def __init__(self, config_path=None):
@@ -25,45 +23,45 @@ class RichDog:
     def init_parameters(self):
         print("============================================================================================")
         ####### initialize environment hyperparameters ######
-        self.env_name = self.config.env_name
+        self.env_name = self.config.env_name.value
 
-        self.has_continuous_action_space = bool(self.config.has_continuous_action_space)  # continuous action space; else discrete
+        self.has_continuous_action_space = bool(self.config.has_continuous_action_space.value)  # continuous action space; else discrete
 
-        self.max_ep_len = int(self.config.max_ep_len)      # max timesteps in one episode (에피소드 당 최대 타임 스텝)
-        self.max_training_timesteps = int(self.config.max_training_timesteps)   # break training loop if timeteps > max_training_timesteps (총 학습 타임스텝)
+        self.max_ep_len = int(self.config.max_ep_len.value)      # max timesteps in one episode (에피소드 당 최대 타임 스텝)
+        self.max_training_timesteps = int(self.config.max_training_timesteps.value)   # break training loop if timeteps > max_training_timesteps (총 학습 타임스텝)
     
-        self.print_freq = int(self.config.print_freq)        # print avg reward in the interval (in num timesteps) (출력 주기)
-        self.log_freq = int(self.config.log_freq)            # log avg reward in the interval (in num timesteps) (로그 파일 생성 주기)
-        self.save_model_freq = int(self.config.save_model_freq)          # save model frequency (in num timesteps) (모델 저장 주기)
+        self.print_freq = int(self.config.print_freq.value)        # print avg reward in the interval (in num timesteps) (출력 주기)
+        self.log_freq = int(self.config.log_freq.value)            # log avg reward in the interval (in num timesteps) (로그 파일 생성 주기)
+        self.save_model_freq = int(self.config.save_model_freq.value)          # save model frequency (in num timesteps) (모델 저장 주기)
 
-        self.action_std = float(self.config.action_std)                  # starting std for action distribution (Multivariate Normal) (행동 표준 편차)
-        self.action_std_decay_rate = float(self.config.action_std_decay_rate)        # linearly decay action_std (action_std = action_std - action_std_decay_rate) (행동 표준 편차 감소 값)
-        self.min_action_std = float(self.config.min_action_std)                # minimum action_std (stop decay after action_std <= min_action_std) (0.05 ~ 0.1) (최소 행동 표준 편차 값)
-        self.action_std_decay_freq = int(self.config.action_std_decay_freq)  # action_std decay frequency (in num timesteps) (표준 편차 감소 주기)
+        self.action_std = float(self.config.action_std.value)                  # starting std for action distribution (Multivariate Normal) (행동 표준 편차)
+        self.min_action_std = float(self.config.min_action_std.value)                # minimum action_std (stop decay after action_std <= min_action_std) (0.05 ~ 0.1) (최소 행동 표준 편차 값)
+        self.action_std_decay_freq = int(self.config.action_std_decay_freq.value)  # action_std decay frequency (in num timesteps) (표준 편차 감소 주기)
+        self.action_std_decay_rate = (self.action_std - self.min_action_std) / (self.max_training_timesteps // self.action_std_decay_freq)     # linearly decay action_std (action_std = action_std - action_std_decay_rate) (행동 표준 편차 감소 값)
         #####################################################
 
         ## Note : print/log frequencies should be > than max_ep_len
 
         ################ PPO hyperparameters ################
-        self.update_timestep = int(self.config.update_timestep)      # update policy every n timesteps (정책 업데이트 주기)
-        self.K_epochs = int(self.config.K_epochs)               # update policy for K epochs in one PPO update (최적화 횟수)
+        self.update_timestep = int(self.config.update_timestep.value)      # update policy every n timesteps (정책 업데이트 주기)
+        self.K_epochs = int(self.config.K_epochs.value)               # update policy for K epochs in one PPO update (최적화 횟수)
 
-        self.eps_clip = float(self.config.eps_clip)          # clip parameter for PPO (클리핑)
-        self.gamma = float(self.config.gamma)            # discount factor (감가율)
-        self.lamda = float(self.config.lamda)              # 어드벤티지 감가율
-        self.minibatchsize = int(self.config.minibatchsize)
+        self.eps_clip = float(self.config.eps_clip.value)          # clip parameter for PPO (클리핑)
+        self.gamma = float(self.config.gamma.value)            # discount factor (감가율)
+        self.lamda = float(self.config.lamda.value)              # 어드벤티지 감가율
+        self.minibatchsize = int(self.config.minibatchsize.value)
 
-        self.lr_actor = float(self.config.lr_actor)       # learning rate for actor network (액터의 학습률)
-        self.lr_critic = float(self.config.lr_critic)       # learning rate for critic network (크리틱 학습률)
+        self.lr_actor = float(self.config.lr_actor.value)       # learning rate for actor network (액터의 학습률)
+        self.lr_critic = float(self.config.lr_critic.value)       # learning rate for critic network (크리틱 학습률)
 
-        self.value_loss_coef = float(self.config.value_loss_coef)     # 가치 손실 계수
-        self.entropy_coef = float(self.config.entropy_coef)       # 엔트로피 계수
+        self.value_loss_coef = float(self.config.value_loss_coef.value)     # 가치 손실 계수
+        self.entropy_coef = float(self.config.entropy_coef.value)       # 엔트로피 계수
 
-        self.random_seed = int(self.config.random_seed)         # set random seed if required (0 = no random seed) (랜덤 시드)
+        self.random_seed = int(self.config.random_seed.value)         # set random seed if required (0 = no random seed) (랜덤 시드)
         #####################################################
 
         #self.env = GymEnvironment(env_name=self.env_name)
-        self.env = StockEnvironment()
+        self.env = StockEnvironment(self.config.stock_code_path.value, self.config.min_dt.value, self.config.max_dt.value, int(self.config.count.value))
 
         # state space dimension
         self.state_dim = self.env.getObservation().shape[0]
@@ -119,16 +117,16 @@ class RichDog:
     def init_files(self):
         ###################### logging ######################
         #### log files for multiple runs are NOT overwritten
-        cur_time = str(datetime.now().strftime("%Y%m%d-%H%M%S"))
-        log_file_name = 'PPO_' + self.env_name + "_log_" + cur_time + ".csv"
+        self.cur_time = str(datetime.now().strftime("%Y%m%d-%H%M%S"))
+        log_file_name = 'PPO_' + self.env_name + "_log_" + self.cur_time + ".csv"
         self.log_file = File(self.path + "PPO_logs/" + self.env_name + '/', log_file_name)
 
-        print("current logging run number for " + self.env_name + " : ", cur_time)
+        print("current logging run number for " + self.env_name + " : ", self.cur_time)
         print("logging at : " + self.log_file.get_file_path())
         #####################################################
 
         ################### checkpointing ###################
-        checkpoint_file_name = "PPO_{}_{}_{}.pth".format(self.env_name, self.random_seed, cur_time)
+        checkpoint_file_name = "PPO_{}_{}_{}.pth".format(self.env_name, self.random_seed, self.cur_time)
         self.checkpoint_file = File(self.path + "PPO_preTrained/" + self.env_name + '/', checkpoint_file_name)
 
         print("save checkpoint path : " + self.checkpoint_file.get_file_path())
@@ -139,6 +137,20 @@ class RichDog:
         self.console_file = File(self.path + "PPO_console/" , self.console_file_name)
 
         print("save console path : " + self.console_file.get_file_path())
+        #####################################################
+
+    def action_file_log(self, num):
+        ################## action logging ##################
+        action_file_name = "PPO_{}_action_{}_{}_{}.csv".format(self.env_name, self.random_seed, self.cur_time, num)
+        self.action_file = File(self.path + "PPO_action_logs/" + self.env_name + '/' + str(self.cur_time) + '/', action_file_name)
+        self.action_file.write('timestep,action,reward\n')
+        
+        
+        state_file_name = "PPO_{}_state_{}_{}_{}.csv".format(self.env_name, self.random_seed, self.cur_time, num)
+        self.state_file = File(self.path + "PPO_state_logs/" + self.env_name + '/' + str(self.cur_time) + '/', state_file_name)
+        self.state_file.write( ','.join(self.env.get_data_label()) +'\n')
+
+        print("save action logs path : " + self.action_file.get_file_path())
         #####################################################
 
     ################################### Training ###################################
@@ -155,6 +167,7 @@ class RichDog:
         # track total training time
         start_time = datetime.now().replace(microsecond=0)
         self.init_files()
+
         print("Started training at (GMT) : ", start_time)
         print("============================================================================================")
         
@@ -175,12 +188,19 @@ class RichDog:
         time_step = 0
         i_episode = 0
 
+        is_save_model = False
+
         # training loop
         while time_step <= self.max_training_timesteps:
 
             state, _ = self.env.reset()
             current_ep_reward = 0
             next_state = state
+
+            is_action_log = is_save_model
+
+            if is_action_log:
+                self.action_file_log(time_step)
 
             for t in range(1, self.max_ep_len+1):
 
@@ -203,7 +223,7 @@ class RichDog:
 
                 # if continuous action space; then decay action std of ouput action distribution (액션 분포의 표준편차 감소)
                 if self.has_continuous_action_space and time_step % self.action_std_decay_freq == 0:
-                    ppo_agent.decay_action_std(self.action_std_decay_rate, self.min_action_std)
+                    ppo_agent.decay_action_std(time_step, self.action_std_decay_freq, self.action_std, self.action_std_decay_rate, self.min_action_std)
 
                 # log in logging file
                 if time_step % self.log_freq == 0:
@@ -211,7 +231,6 @@ class RichDog:
                     # log average reward till last episode
                     log_avg_reward = log_running_reward / log_running_episodes
                     log_avg_reward = np.round(log_avg_reward, 4)
-
 
                     self.log_file.write_flush('{},{},{}\n'.format(i_episode, time_step, log_avg_reward))
                     
@@ -241,10 +260,18 @@ class RichDog:
                     print("Elapsed Time  : ", datetime.now().replace(microsecond=0) - start_time)
                     print("--------------------------------------------------------------------------------------------")
 
+                    is_save_model = True
+
                     self.console_file.write_append("--------------------------------------------------------------------------------------------"+ "\n")
                     self.console_file.write_append("saving model at : " + self.checkpoint_file.get_file_path()+ "\n")
                     self.console_file.write_append("Elapsed Time  : " + str(datetime.now().replace(microsecond=0) - start_time)+ "\n")
                     self.console_file.write_append("--------------------------------------------------------------------------------------------"+ "\n")
+
+                if is_action_log:
+                    self.action_file.write_flush('{},{},{}\n'.format(t, action[0], reward))
+                    str_state = [str(item) for item in state]
+                    self.state_file.write_flush(','.join(str_state)+'\n')
+                    is_save_model = False
 
                 # break; if the episode is over
                 if done:
@@ -257,7 +284,9 @@ class RichDog:
             log_running_episodes += 1
 
             i_episode += 1
-
+        
+        self.action_file.close()
+        self.state_file.close()
         self.log_file.close()
         self.env.close()
 
@@ -284,11 +313,11 @@ class RichDog:
 
         ################## hyperparameters ##################
         self.init_parameters()
-        render = bool(self.config.render)              # render environment on screen
-        frame_delay = float(self.config.frame_delay)   # if required; add delay b/w frames
+        render = bool(self.config.render.value)              # render environment on screen
+        frame_delay = float(self.config.frame_delay.value)   # if required; add delay b/w frames
 
-        total_test_episodes = int(self.config.total_test_episodes)    # total num of testing episodes
-        self.action_std = float(self.config.min_action_std)
+        total_test_episodes = int(self.config.total_test_episodes.value)    # total num of testing episodes
+        self.action_std = float(self.config.min_action_std.value)
         self.print_parameters()
         #####################################################
 
@@ -370,8 +399,14 @@ class RichDog:
 
 if __name__ == '__main__':
     richdog = RichDog()
-    if len(sys.argv) > 1:
-        if sys.argv[1] == 'train':
+    arg = sys.argv
+
+    if len(arg)<= 1:        
+        arg = ["main.py", "train", "PPO_preTrained/Richdog/PPO_Richdog_0_20250403-141334.pth"]
+        
+
+    if len(arg) > 1:
+        if arg[1] == 'train':
             richdog.train()
-        elif sys.argv[1] == 'test':
-            richdog.test(sys.argv[2])
+        elif arg[1] == 'test':
+            richdog.test(arg[2])

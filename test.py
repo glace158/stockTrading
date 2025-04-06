@@ -1,75 +1,33 @@
-from PySide6.QtCore import QThread, Signal
-from PySide6.QtWidgets import QApplication, QMainWindow, QPushButton, QLabel, QVBoxLayout, QWidget
+# 초기 표준편차와 최종 표준편차
+initial_std = 0.6
+final_std = 0.1
+
+# 전체 에포크 및 감소 주기
+total_epochs = 40000
+step_interval = 5000  # 50만 에포크마다 표준편차 감소
+
+# 주기에 따른 표준편차 감소량 계산
+num_steps = total_epochs // step_interval  # 감소 단계 수
+std_decrement = (initial_std - final_std) / num_steps  # 단계별 감소량
+
+# 현재 에포크에서 표준편차 계산 함수
+def get_stepwise_std(current_epoch, action_std_decay_freq, initial_std, action_std_decay_rate, min_action_std):
+    current_step = current_epoch // action_std_decay_freq
+    action_std = initial_std - current_step * action_std_decay_rate
+
+    # action_std가 최소값보다 작아지면 최소값으로 설정
+    if (action_std <= min_action_std):
+        action_std = min_action_std
+        print("setting actor output action_std to min_action_std : ", action_std)
+    else:
+        print("setting actor output action_std to : ", action_std)
+    
+    return action_std
 
 
-class WorkerThread(QThread):
-    finished_signal = Signal(str)  # 작업 상태를 전달할 시그널
 
-    def __init__(self):
-        super().__init__()
-        self._is_running = True  # 작업 실행 상태 플래그
-
-    def run(self):
-        try:
-            for i in range(5):  # 작업 수행
-                if not self._is_running:  # 강제 종료 플래그 확인
-                    self.finished_signal.emit("작업 강제 종료")
-                    return
-                print(f"작업 진행 중: {i + 1}")
-                self.sleep(1)
-            self.finished_signal.emit("작업 정상 종료")  # 작업 완료 시 신호
-        except Exception as e:
-            self.finished_signal.emit(f"에러: {str(e)}")  # 예외 발생 시 처리
-
-    def stop(self):
-        self._is_running = False  # 강제 종료 플래그 설정
-
-
-class MainWindow(QMainWindow):
-    def __init__(self):
-        super().__init__()
-        self.setWindowTitle("QThread 종료 유형 예제")
-        
-        self.label = QLabel("준비 완료")
-        self.start_button = QPushButton("작업 시작")
-        self.stop_button = QPushButton("작업 중단")
-        self.stop_button.setEnabled(False)  # 초기 상태에서 비활성화
-
-        self.start_button.clicked.connect(self.start_thread)
-        self.stop_button.clicked.connect(self.stop_thread)
-
-        layout = QVBoxLayout()
-        layout.addWidget(self.label)
-        layout.addWidget(self.start_button)
-        layout.addWidget(self.stop_button)
-
-        container = QWidget()
-        container.setLayout(layout)
-        self.setCentralWidget(container)
-
-        self.thread = WorkerThread()
-        self.thread.finished_signal.connect(self.update_label)  # 작업 완료 신호 연결
-
-    def start_thread(self):
-        self.label.setText("작업 진행 중...")
-        self.start_button.setEnabled(False)
-        self.stop_button.setEnabled(True)
-        self.thread = WorkerThread()  # 새로운 스레드 생성 (재사용 가능)
-        self.thread.finished_signal.connect(self.update_label)  # 신호 연결
-        self.thread.start()
-
-    def stop_thread(self):
-        self.label.setText("작업 중단 요청...")
-        self.thread.stop()  # 강제 종료 요청
-
-    def update_label(self, message):
-        self.label.setText(message)  # 종료 상태에 따라 메시지 업데이트
-        self.start_button.setEnabled(True)
-        self.stop_button.setEnabled(False)
-
-
-if __name__ == "__main__":
-    app = QApplication([])
-    window = MainWindow()
-    window.show()
-    app.exec()
+# 에포크 별 표준편차 출력 예시
+for epoch in range(0, total_epochs + 1):  # 샘플로 일부 에포크만 출력
+    if epoch % step_interval == 0:
+        current_std = get_stepwise_std(epoch, step_interval, initial_std, std_decrement, final_std)
+        print(f"Epoch {epoch}: Std = {current_std:.4f}")

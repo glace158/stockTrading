@@ -8,7 +8,7 @@ from PySide6.QtCore import *
 from PySide6.QtGui import *
 from qt.ui_main import Ui_MainWindow
 
-from fileManager import Config
+from PPO.fileManager import Config
 from types import SimpleNamespace
 
 import subprocess
@@ -16,6 +16,7 @@ import csv
 import matplotlib.pyplot as plt
 import matplotlib.dates as dates
 import pandas as pd
+import numpy as np
 
 from qt.info_dial import HollowDial
 
@@ -25,6 +26,8 @@ import cpuinfo
 import torch
 import time
 import threading
+
+from PPO.stock_adaptor import DailyStockAdaptor
 
 widgets = None
 class MainWindow(QMainWindow):
@@ -45,6 +48,7 @@ class MainWindow(QMainWindow):
         widgets.btn_parameter.clicked.connect(self.menu_btns)
         widgets.btn_graph.clicked.connect(self.menu_btns)
         widgets.btn_setting.clicked.connect(self.menu_btns)
+        widgets.btn_download.clicked.connect(self.menu_btns)
         
         ##################################메인 페이지##########################################
         self.process = None
@@ -71,6 +75,8 @@ class MainWindow(QMainWindow):
         self.info_thread = threading.Thread(target=self.computer_usage_info, daemon=True)
         self.info_thread.start()
 
+        self.ppo_test_thread = None
+        self.ppo_train_thread = None
         #################################파라미터 페이지##########################################
         # 파일 버튼 
         widgets.File_Button_3.clicked.connect(self.read_file)
@@ -78,7 +84,7 @@ class MainWindow(QMainWindow):
         widgets.SaveAsPerarametersButton.clicked.connect(self.save_as)
 
         # 파일 화면 초기화
-        widgets.tableWidget_2.setColumnCount(2)
+        widgets.tableWidget_2.setColumnCount(3)
         self.path = str(os.path.dirname(__file__)) + "/config/" + "Hyperparameters.yaml"
         widgets.filepath_lineEdit.setText(self.path)
         self.load_Hyperparameters_file(self.path)
@@ -110,6 +116,17 @@ class MainWindow(QMainWindow):
         widgets.filepath_lineEdit_3.setText(self.devlp_path)
         self.load_devlp_file(self.devlp_path)
 
+        # 데이터 지정
+        self.stock_config_path = "config/StockConfig.yaml"
+        self.choose_datas()
+
+        #################################다운로드 페이지###########################################
+        self.set_stock_code_list()
+
+        widgets.addStockCodePushButton.clicked.connect(self.add_stock_code)
+        widgets.removeStockCodePushButton.clicked.connect(self.remove_stock_code)
+        widgets.DownloadPushButton.clicked.connect(self.download_stock_datas)
+
     def menu_btns(self):
         # GET BUTTON CLICKED
         btn = self.sender()
@@ -130,6 +147,10 @@ class MainWindow(QMainWindow):
         # 설정 하기
         if btnName == "btn_setting":
             widgets.stackedWidget.setCurrentWidget(widgets.kis_devlp_page)
+            
+        # 데이터 다운로드 하기
+        if btnName == "btn_download":
+            widgets.stackedWidget.setCurrentWidget(widgets.download_page)
 
     #################################메인 페이지 메서드##########################################
     # 모델 테스트
@@ -168,7 +189,11 @@ class MainWindow(QMainWindow):
 
     # 학습 종료하기 버튼
     def stoplearningPPO(self):
-        self.ppo_train_thread.stop()  # 작업 중단 요청
+        # 작업 중단 요청
+        if self.ppo_train_thread != None:   
+            self.ppo_train_thread.stop()  
+        if self.ppo_test_thread != None:
+            self.ppo_test_thread.stop()
         print("중단 중..")
 
     # 학습 종료 시 실행
@@ -239,13 +264,14 @@ class MainWindow(QMainWindow):
     def load_Hyperparameters_file(self, path):
         self.config = Config.load_config(path)
         widgets.tableWidget_2.setRowCount(len(vars(self.config)))
-        widgets.tableWidget_2.setHorizontalHeaderLabels(['Hyperparameter', 'Value'])
+        widgets.tableWidget_2.setHorizontalHeaderLabels(['Hyperparameter', 'Value', 'Note'])
         
-        for row, (key, value) in enumerate(vars(self.config).items()):
-            text_edit = QTextEdit()
-            text_edit.setPlainText(f"{value}") 
+        for row, (key, item) in enumerate(vars(self.config).items()):
+            value_text_edit = QTextEdit()
+            value_text_edit.setPlainText(f"{item.value}") 
             widgets.tableWidget_2.setItem(row + 1, 0, QTableWidgetItem(key))
-            widgets.tableWidget_2.setCellWidget(row + 1, 1, text_edit)
+            widgets.tableWidget_2.setCellWidget(row + 1, 1, value_text_edit)
+            widgets.tableWidget_2.setItem(row + 1, 2, QTableWidgetItem(item.note))
 
     # 파일 저장하기
     def read_table_data(self):
@@ -259,8 +285,11 @@ class MainWindow(QMainWindow):
             text_edit = widgets.tableWidget_2.cellWidget(row + 1, 1)
             value = text_edit.toPlainText() if text_edit else "No Value"
 
-            config_dict[key] = value
-            #print(f"Row {row + 1}: Key = {key}, Value = {value}")
+            # note 데이터 읽기 (QTableWidgetItem)
+            note_item = widgets.tableWidget_2.item(row + 1, 2)
+            note = note_item.text() if note_item else "No Note"
+
+            config_dict[key] = {"value" : value, "note" : note}
 
         self.config = SimpleNamespace(**config_dict)
 
@@ -272,7 +301,50 @@ class MainWindow(QMainWindow):
         self.read_table_data()
         Config.save_config( self.config, self.path )
         widgets.filepath_lineEdit.setText(self.path)
-        
+
+    # 학습 데이터 지정하기
+    def choose_datas(self):
+        stock_config = Config.load_config(self.stock_config_path)
+        data_dir = "API/datas"
+        file_list = next(os.walk(data_dir))[2]
+        if len(file_list) > 0:
+            df = pd.read_csv(data_dir + '/' + file_list[0])
+            df.drop(['Unnamed: 0'], axis = 1, inplace = True)
+            
+            for column in df.columns:
+                if column == "stck_bsop_date":
+                    continue
+
+                item = QListWidgetItem(f"{column}")
+                item.setFlags(item.flags() | Qt.ItemIsUserCheckable)  # 체크 가능하도록 설정
+                item.setCheckState(Qt.Checked)  # 초기 체크 상태 설정
+                widgets.dataListWidget.addItem(item)
+            
+            widgets.dataListWidget.itemChanged.connect(self.data_list_item_change)
+
+            temp_list = list(df.columns)
+            temp_list.remove("stck_bsop_date")
+            stock_config.stock_columns = temp_list 
+            Config.save_config(stock_config,self.stock_config_path)
+
+    # 학습 데이터 체크박스 이벤트
+    def data_list_item_change(self, item):
+        if item.flags() & Qt.ItemIsUserCheckable: # 체크박스 항목인지 확인
+
+            stock_config = Config.load_config(self.stock_config_path)
+            temp_list = list(stock_config.stock_columns)
+
+            if item.checkState() == Qt.Checked:
+                print(f"{item.text()}이(가) 체크되었습니다.")
+                temp_list.insert(widgets.dataListWidget.row(item), item.text())
+                stock_config.stock_columns = temp_list
+            else:
+                print(f"{item.text()}이(가) 체크 해제되었습니다.")
+                temp_list.remove(str(item.text()))
+                stock_config.stock_columns = temp_list
+
+            Config.save_config(stock_config,self.stock_config_path)
+
     ########################################그래프 페이지 메서드#################################################
     # 현재 클릭한 트리 위젯
     def set_current_tree_widget(self, tree_widget):
@@ -392,6 +464,7 @@ class MainWindow(QMainWindow):
             rootItem = self.tree_widgets[i].invisibleRootItem()
 
             items = self.get_items_recursively(rootItem)
+            
             datas = pd.DataFrame()
             for item in items:
                 item_name = item.text(0)
@@ -413,7 +486,14 @@ class MainWindow(QMainWindow):
                 elif "timestep" in datas.columns and state == Qt.Checked:
                     ax = plt.subplot(fig_count,1, i + 1)
                     ax.plot(datas["timestep"] ,datas[item_name])
-
+                    ax.grid()
+                    plt.xticks(ticks=np.arange(len(datas.values)))
+                elif state == Qt.Checked:
+                    ax = plt.subplot(fig_count,1, i + 1)
+                    ax.plot(np.arange(len(datas.values)) ,datas[item_name])
+                    ax.grid()
+                    plt.xticks(ticks=np.arange(len(datas.values)))
+                
         plt.savefig("./Data_graph/graph.png")
 
     # 저장한 그래프 이미지 불러오기
@@ -482,6 +562,59 @@ class MainWindow(QMainWindow):
             widgets.my_paper_stock_lineEdit.setText(self.devlp_config.my_paper_stock)
             
             widgets.my_prod_lineEdit.setText(self.devlp_config.my_prod)
+    
+    ########################################다운로드 페이지#############################################
+    def set_stock_code_list(self):
+        stock_config = Config.load_config(self.stock_config_path)
+        
+        for code in stock_config.stock_codes:
+            # 확장자를 제외한 파일 이름 추가
+            widgets.stockCodeListWidget.addItem(code.strip())
+
+    def add_stock_code(self):
+        code = widgets.lineEdit_2.text().strip()
+        if code:
+            for i in range(widgets.stockCodeListWidget.count()):
+                    if widgets.stockCodeListWidget.item(i).text() == code:
+                        print("이미 존재하는 항목입니다.")
+                        return  # 중복 항목이 있으면 추가하지 않음
+
+            widgets.stockCodeListWidget.addItem(code)
+
+    def remove_stock_code(self):
+        code_item = widgets.stockCodeListWidget.currentRow()
+        
+        if code_item != -1:
+            widgets.stockCodeListWidget.takeItem(code_item)
+
+    def download_stock_datas(self):
+        widgets.DownloadPushButton.setEnabled(False)
+        widgets.DownloadPushButton.setText("Wait Downloading ..")
+
+        max_dt = widgets.LastDateEdit.date().toString("yyyyMMdd")
+        count = widgets.countSpinBox.value()
+        
+        stock_code_list = []
+        for i in range(widgets.stockCodeListWidget.count()):
+            stock_code_list.append(widgets.stockCodeListWidget.item(i).text())
+        
+        if os.path.exists("API/datas/"):
+            for file in os.scandir("API/datas/"):
+                print("Remove File: ",file)
+                os.remove(file)
+
+        self.download_thread = DownloadStockData(stock_code_list,max_dt,count)
+        self.download_thread.progress_updated.connect(self.update_progress)  # 진행도 신호 연결
+        self.download_thread.start()  # QThread 실행
+        
+    def update_progress(self, value):
+        widgets.downloadProgressBar.setValue(value)  # QProgressBar 업데이트
+        widgets.stockCodeListWidget.takeItem(0)
+        if value == 100:
+            widgets.DownloadPushButton.setEnabled(True)  # 작업 완료 후 버튼 활성화
+            widgets.DownloadPushButton.setText("Download")
+            widgets.downloadProgressBar.setValue(0)
+        
     ###############################################################################################
     def mousePressEvent(self, event):
         # SET DRAG POS WINDOW
@@ -498,6 +631,23 @@ class MainWindow(QMainWindow):
         self.stoplearningPPO()
 
         event.accept()
+
+class DownloadStockData(QThread):
+    progress_updated = Signal(int) 
+
+    def __init__(self, stock_codes, max_dt, count, parent = None):
+        super().__init__(parent)
+        self.stock_codes = stock_codes
+        self.max_dt = max_dt
+        self.count = count
+
+    def run(self):
+        for i in range(len(self.stock_codes)) :
+            daily_stock = DailyStockAdaptor()
+            daily_stock.set_init_datas(itm_no=self.stock_codes[i],inqr_strt_dt=self.max_dt,count=self.count, is_remove_date=False)
+            daily_stock.save_datas("API/datas/ " + self.stock_codes[i] + ".csv")
+
+            self.progress_updated.emit(((i + 1) / len(self.stock_codes)) * 100)
 
 class PPOThread(QThread):
     finished_signal = Signal()

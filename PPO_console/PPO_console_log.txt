@@ -1,1 +1,567 @@
-Error : Not Setting Model path
+Started training at (GMT) : 2025-04-06 02:01:01
+============================================================================================
+Episode : 344 		 Timestep : 10000 		 Average Reward : -4.26
+Episode : 689 		 Timestep : 20000 		 Average Reward : -4.29
+Episode : 1034 		 Timestep : 30000 		 Average Reward : -3.89
+Episode : 1379 		 Timestep : 40000 		 Average Reward : -3.96
+Episode : 1724 		 Timestep : 50000 		 Average Reward : -3.98
+Episode : 2069 		 Timestep : 60000 		 Average Reward : -3.86
+Episode : 2413 		 Timestep : 70000 		 Average Reward : -4.07
+Episode : 2758 		 Timestep : 80000 		 Average Reward : -4.05
+Episode : 3103 		 Timestep : 90000 		 Average Reward : -3.92
+Episode : 3448 		 Timestep : 100000 		 Average Reward : -4.08
+--------------------------------------------------------------------------------------------
+saving model at : C:\Users\11\Documents\Github\RichDog/PPO_preTrained/Richdog/PPO_Richdog_0_20250406-020101.pth
+Elapsed Time  : 0:04:30
+--------------------------------------------------------------------------------------------
+Episode : 3793 		 Timestep : 110000 		 Average Reward : -3.97
+Episode : 4138 		 Timestep : 120000 		 Average Reward : -3.84
+Episode : 4483 		 Timestep : 130000 		 Average Reward : -4.19
+Episode : 4827 		 Timestep : 140000 		 Average Reward : -3.78
+Episode : 5172 		 Timestep : 150000 		 Average Reward : -3.75
+Episode : 5517 		 Timestep : 160000 		 Average Reward : -3.99
+Episode : 5862 		 Timestep : 170000 		 Average Reward : -3.82
+Episode : 6207 		 Timestep : 180000 		 Average Reward : -4.02
+Episode : 6552 		 Timestep : 190000 		 Average Reward : -4.15
+Episode : 6896 		 Timestep : 200000 		 Average Reward : -4.04
+--------------------------------------------------------------------------------------------
+saving model at : C:\Users\11\Documents\Github\RichDog/PPO_preTrained/Richdog/PPO_Richdog_0_20250406-020101.pth
+Elapsed Time  : 0:09:38
+--------------------------------------------------------------------------------------------
+Episode : 7241 		 Timestep : 210000 		 Average Reward : -4.23
+Episode : 7586 		 Timestep : 220000 		 Average Reward : -4.11
+Episode : 7931 		 Timestep : 230000 		 Average Reward : -4.05
+Episode : 8276 		 Timestep : 240000 		 Average Reward : -3.79
+Episode : 8621 		 Timestep : 250000 		 Average Reward : -3.91
+Episode : 8965 		 Timestep : 260000 		 Average Reward : -4.11
+Episode : 9310 		 Timestep : 270000 		 Average Reward : -4.25
+Episode : 9655 		 Timestep : 280000 		 Average Reward : -3.68
+Episode : 10000 		 Timestep : 290000 		 Average Reward : -3.99
+Episode : 10345 		 Timestep : 300000 		 Average Reward : -3.91
+--------------------------------------------------------------------------------------------
+saving model at : C:\Users\11\Documents\Github\RichDog/PPO_preTrained/Richdog/PPO_Richdog_0_20250406-020101.pth
+Elapsed Time  : 0:15:30
+--------------------------------------------------------------------------------------------
+Episode : 10690 		 Timestep : 310000 		 Average Reward : -4.22
+Episode : 11034 		 Timestep : 320000 		 Average Reward : -3.85
+Episode : 11379 		 Timestep : 330000 		 Average Reward : -4.11
+Episode : 11724 		 Timestep : 340000 		 Average Reward : -3.79
+Episode : 12069 		 Timestep : 350000 		 Average Reward : -3.77
+Episode : 12414 		 Timestep : 360000 		 Average Reward : -4.19
+Episode : 12759 		 Timestep : 370000 		 Average Reward : -4.1
+Episode : 13103 		 Timestep : 380000 		 Average Reward : -3.72
+Episode : 13448 		 Timestep : 390000 		 Average Reward : -3.76
+Episode : 13793 		 Timestep : 400000 		 Average Reward : -4.2
+--------------------------------------------------------------------------------------------
+saving model at : C:\Users\11\Documents\Github\RichDog/PPO_preTrained/Richdog/PPO_Richdog_0_20250406-020101.pth
+Elapsed Time  : 0:20:50
+--------------------------------------------------------------------------------------------
+Episode : 14138 		 Timestep : 410000 		 Average Reward : -4.13
+Episode : 14483 		 Timestep : 420000 		 Average Reward : -3.87
+Episode : 14827 		 Timestep : 430000 		 Average Reward : -4.2
+Episode : 15172 		 Timestep : 440000 		 Average Reward : -4.07
+Episode : 15517 		 Timestep : 450000 		 Average Reward : -4.08
+Episode : 15862 		 Timestep : 460000 		 Average Reward : -4.05
+Episode : 16207 		 Timestep : 470000 		 Average Reward : -4.13
+Episode : 16552 		 Timestep : 480000 		 Average Reward : -3.94
+Episode : 16896 		 Timestep : 490000 		 Average Reward : -4.29
+Episode : 17241 		 Timestep : 500000 		 Average Reward : -4.24
+--------------------------------------------------------------------------------------------
+saving model at : C:\Users\11\Documents\Github\RichDog/PPO_preTrained/Richdog/PPO_Richdog_0_20250406-020101.pth
+Elapsed Time  : 0:26:13
+--------------------------------------------------------------------------------------------
+Episode : 17586 		 Timestep : 510000 		 Average Reward : -3.0
+Episode : 17931 		 Timestep : 520000 		 Average Reward : -2.82
+Episode : 18276 		 Timestep : 530000 		 Average Reward : -2.86
+Episode : 18621 		 Timestep : 540000 		 Average Reward : -3.03
+Episode : 18965 		 Timestep : 550000 		 Average Reward : -2.87
+Episode : 19310 		 Timestep : 560000 		 Average Reward : -2.95
+Episode : 19655 		 Timestep : 570000 		 Average Reward : -3.03
+Episode : 20000 		 Timestep : 580000 		 Average Reward : -3.1
+Episode : 20345 		 Timestep : 590000 		 Average Reward : -3.05
+Episode : 20690 		 Timestep : 600000 		 Average Reward : -2.78
+--------------------------------------------------------------------------------------------
+saving model at : C:\Users\11\Documents\Github\RichDog/PPO_preTrained/Richdog/PPO_Richdog_0_20250406-020101.pth
+Elapsed Time  : 0:31:23
+--------------------------------------------------------------------------------------------
+Episode : 21034 		 Timestep : 610000 		 Average Reward : -2.65
+Episode : 21379 		 Timestep : 620000 		 Average Reward : -2.84
+Episode : 21724 		 Timestep : 630000 		 Average Reward : -2.86
+Episode : 22069 		 Timestep : 640000 		 Average Reward : -3.23
+Episode : 22414 		 Timestep : 650000 		 Average Reward : -2.96
+Episode : 22759 		 Timestep : 660000 		 Average Reward : -2.98
+Episode : 23103 		 Timestep : 670000 		 Average Reward : -2.99
+Episode : 23448 		 Timestep : 680000 		 Average Reward : -3.02
+Episode : 23793 		 Timestep : 690000 		 Average Reward : -2.91
+Episode : 24138 		 Timestep : 700000 		 Average Reward : -3.16
+--------------------------------------------------------------------------------------------
+saving model at : C:\Users\11\Documents\Github\RichDog/PPO_preTrained/Richdog/PPO_Richdog_0_20250406-020101.pth
+Elapsed Time  : 0:36:11
+--------------------------------------------------------------------------------------------
+Episode : 24483 		 Timestep : 710000 		 Average Reward : -2.98
+Episode : 24828 		 Timestep : 720000 		 Average Reward : -2.82
+Episode : 25172 		 Timestep : 730000 		 Average Reward : -2.99
+Episode : 25517 		 Timestep : 740000 		 Average Reward : -3.15
+Episode : 25862 		 Timestep : 750000 		 Average Reward : -2.66
+Episode : 26207 		 Timestep : 760000 		 Average Reward : -2.65
+Episode : 26552 		 Timestep : 770000 		 Average Reward : -3.01
+Episode : 26897 		 Timestep : 780000 		 Average Reward : -2.89
+Episode : 27242 		 Timestep : 790000 		 Average Reward : -2.99
+Episode : 27587 		 Timestep : 800000 		 Average Reward : -3.13
+--------------------------------------------------------------------------------------------
+saving model at : C:\Users\11\Documents\Github\RichDog/PPO_preTrained/Richdog/PPO_Richdog_0_20250406-020101.pth
+Elapsed Time  : 0:40:53
+--------------------------------------------------------------------------------------------
+Episode : 27931 		 Timestep : 810000 		 Average Reward : -2.84
+Episode : 28276 		 Timestep : 820000 		 Average Reward : -2.87
+Episode : 28621 		 Timestep : 830000 		 Average Reward : -2.77
+Episode : 28966 		 Timestep : 840000 		 Average Reward : -3.12
+Episode : 29311 		 Timestep : 850000 		 Average Reward : -2.94
+Episode : 29655 		 Timestep : 860000 		 Average Reward : -2.54
+Episode : 30000 		 Timestep : 870000 		 Average Reward : -2.76
+Episode : 30345 		 Timestep : 880000 		 Average Reward : -3.09
+Episode : 30690 		 Timestep : 890000 		 Average Reward : -2.83
+Episode : 31035 		 Timestep : 900000 		 Average Reward : -2.69
+--------------------------------------------------------------------------------------------
+saving model at : C:\Users\11\Documents\Github\RichDog/PPO_preTrained/Richdog/PPO_Richdog_0_20250406-020101.pth
+Elapsed Time  : 0:45:34
+--------------------------------------------------------------------------------------------
+Episode : 31380 		 Timestep : 910000 		 Average Reward : -2.7
+Episode : 31724 		 Timestep : 920000 		 Average Reward : -2.83
+Episode : 32069 		 Timestep : 930000 		 Average Reward : -2.81
+Episode : 32414 		 Timestep : 940000 		 Average Reward : -2.77
+Episode : 32759 		 Timestep : 950000 		 Average Reward : -3.04
+Episode : 33104 		 Timestep : 960000 		 Average Reward : -3.14
+Episode : 33449 		 Timestep : 970000 		 Average Reward : -2.94
+Episode : 33793 		 Timestep : 980000 		 Average Reward : -2.68
+Episode : 34138 		 Timestep : 990000 		 Average Reward : -2.7
+Episode : 34483 		 Timestep : 1000000 		 Average Reward : -2.96
+--------------------------------------------------------------------------------------------
+saving model at : C:\Users\11\Documents\Github\RichDog/PPO_preTrained/Richdog/PPO_Richdog_0_20250406-020101.pth
+Elapsed Time  : 0:50:13
+--------------------------------------------------------------------------------------------
+Episode : 34828 		 Timestep : 1010000 		 Average Reward : -2.08
+Episode : 35173 		 Timestep : 1020000 		 Average Reward : -1.79
+Episode : 35518 		 Timestep : 1030000 		 Average Reward : -2.03
+Episode : 35862 		 Timestep : 1040000 		 Average Reward : -2.08
+Episode : 36207 		 Timestep : 1050000 		 Average Reward : -1.87
+Episode : 36552 		 Timestep : 1060000 		 Average Reward : -2.08
+Episode : 36897 		 Timestep : 1070000 		 Average Reward : -2.05
+Episode : 37242 		 Timestep : 1080000 		 Average Reward : -1.84
+Episode : 37587 		 Timestep : 1090000 		 Average Reward : -1.89
+Episode : 37931 		 Timestep : 1100000 		 Average Reward : -2.09
+--------------------------------------------------------------------------------------------
+saving model at : C:\Users\11\Documents\Github\RichDog/PPO_preTrained/Richdog/PPO_Richdog_0_20250406-020101.pth
+Elapsed Time  : 0:54:52
+--------------------------------------------------------------------------------------------
+Episode : 38276 		 Timestep : 1110000 		 Average Reward : -2.04
+Episode : 38621 		 Timestep : 1120000 		 Average Reward : -1.95
+Episode : 38966 		 Timestep : 1130000 		 Average Reward : -1.96
+Episode : 39311 		 Timestep : 1140000 		 Average Reward : -2.01
+Episode : 39655 		 Timestep : 1150000 		 Average Reward : -2.05
+Episode : 40000 		 Timestep : 1160000 		 Average Reward : -2.1
+Episode : 40345 		 Timestep : 1170000 		 Average Reward : -2.02
+Episode : 40690 		 Timestep : 1180000 		 Average Reward : -2.02
+Episode : 41035 		 Timestep : 1190000 		 Average Reward : -2.02
+Episode : 41380 		 Timestep : 1200000 		 Average Reward : -2.15
+--------------------------------------------------------------------------------------------
+saving model at : C:\Users\11\Documents\Github\RichDog/PPO_preTrained/Richdog/PPO_Richdog_0_20250406-020101.pth
+Elapsed Time  : 0:59:27
+--------------------------------------------------------------------------------------------
+Episode : 41724 		 Timestep : 1210000 		 Average Reward : -1.98
+Episode : 42069 		 Timestep : 1220000 		 Average Reward : -1.89
+Episode : 42414 		 Timestep : 1230000 		 Average Reward : -1.97
+Episode : 42759 		 Timestep : 1240000 		 Average Reward : -1.88
+Episode : 43104 		 Timestep : 1250000 		 Average Reward : -2.09
+Episode : 43449 		 Timestep : 1260000 		 Average Reward : -2.08
+Episode : 43793 		 Timestep : 1270000 		 Average Reward : -2.06
+Episode : 44138 		 Timestep : 1280000 		 Average Reward : -2.05
+Episode : 44483 		 Timestep : 1290000 		 Average Reward : -1.82
+Episode : 44828 		 Timestep : 1300000 		 Average Reward : -2.08
+--------------------------------------------------------------------------------------------
+saving model at : C:\Users\11\Documents\Github\RichDog/PPO_preTrained/Richdog/PPO_Richdog_0_20250406-020101.pth
+Elapsed Time  : 1:04:02
+--------------------------------------------------------------------------------------------
+Episode : 45173 		 Timestep : 1310000 		 Average Reward : -2.16
+Episode : 45518 		 Timestep : 1320000 		 Average Reward : -2.01
+Episode : 45862 		 Timestep : 1330000 		 Average Reward : -2.23
+Episode : 46207 		 Timestep : 1340000 		 Average Reward : -1.98
+Episode : 46552 		 Timestep : 1350000 		 Average Reward : -1.81
+Episode : 46897 		 Timestep : 1360000 		 Average Reward : -1.88
+Episode : 47242 		 Timestep : 1370000 		 Average Reward : -2.04
+Episode : 47587 		 Timestep : 1380000 		 Average Reward : -2.14
+Episode : 47931 		 Timestep : 1390000 		 Average Reward : -1.93
+Episode : 48276 		 Timestep : 1400000 		 Average Reward : -2.11
+--------------------------------------------------------------------------------------------
+saving model at : C:\Users\11\Documents\Github\RichDog/PPO_preTrained/Richdog/PPO_Richdog_0_20250406-020101.pth
+Elapsed Time  : 1:08:44
+--------------------------------------------------------------------------------------------
+Episode : 48621 		 Timestep : 1410000 		 Average Reward : -1.93
+Episode : 48966 		 Timestep : 1420000 		 Average Reward : -2.18
+Episode : 49311 		 Timestep : 1430000 		 Average Reward : -2.13
+Episode : 49655 		 Timestep : 1440000 		 Average Reward : -2.13
+Episode : 50000 		 Timestep : 1450000 		 Average Reward : -2.03
+Episode : 50345 		 Timestep : 1460000 		 Average Reward : -2.16
+Episode : 50690 		 Timestep : 1470000 		 Average Reward : -1.93
+Episode : 51035 		 Timestep : 1480000 		 Average Reward : -1.87
+Episode : 51380 		 Timestep : 1490000 		 Average Reward : -2.21
+Episode : 51724 		 Timestep : 1500000 		 Average Reward : -1.85
+--------------------------------------------------------------------------------------------
+saving model at : C:\Users\11\Documents\Github\RichDog/PPO_preTrained/Richdog/PPO_Richdog_0_20250406-020101.pth
+Elapsed Time  : 1:13:24
+--------------------------------------------------------------------------------------------
+Episode : 52069 		 Timestep : 1510000 		 Average Reward : -1.28
+Episode : 52414 		 Timestep : 1520000 		 Average Reward : -1.32
+Episode : 52759 		 Timestep : 1530000 		 Average Reward : -1.47
+Episode : 53104 		 Timestep : 1540000 		 Average Reward : -1.09
+Episode : 53449 		 Timestep : 1550000 		 Average Reward : -1.33
+Episode : 53793 		 Timestep : 1560000 		 Average Reward : -1.27
+Episode : 54138 		 Timestep : 1570000 		 Average Reward : -1.3
+Episode : 54483 		 Timestep : 1580000 		 Average Reward : -1.3
+Episode : 54828 		 Timestep : 1590000 		 Average Reward : -1.31
+Episode : 55173 		 Timestep : 1600000 		 Average Reward : -1.03
+--------------------------------------------------------------------------------------------
+saving model at : C:\Users\11\Documents\Github\RichDog/PPO_preTrained/Richdog/PPO_Richdog_0_20250406-020101.pth
+Elapsed Time  : 1:18:00
+--------------------------------------------------------------------------------------------
+Episode : 55518 		 Timestep : 1610000 		 Average Reward : -1.27
+Episode : 55862 		 Timestep : 1620000 		 Average Reward : -1.37
+Episode : 56207 		 Timestep : 1630000 		 Average Reward : -1.3
+Episode : 56552 		 Timestep : 1640000 		 Average Reward : -1.16
+Episode : 56897 		 Timestep : 1650000 		 Average Reward : -1.34
+Episode : 57242 		 Timestep : 1660000 		 Average Reward : -1.04
+Episode : 57587 		 Timestep : 1670000 		 Average Reward : -1.33
+Episode : 57931 		 Timestep : 1680000 		 Average Reward : -1.3
+Episode : 58276 		 Timestep : 1690000 		 Average Reward : -1.42
+Episode : 58621 		 Timestep : 1700000 		 Average Reward : -1.41
+--------------------------------------------------------------------------------------------
+saving model at : C:\Users\11\Documents\Github\RichDog/PPO_preTrained/Richdog/PPO_Richdog_0_20250406-020101.pth
+Elapsed Time  : 1:22:37
+--------------------------------------------------------------------------------------------
+Episode : 58966 		 Timestep : 1710000 		 Average Reward : -1.17
+Episode : 59311 		 Timestep : 1720000 		 Average Reward : -1.44
+Episode : 59655 		 Timestep : 1730000 		 Average Reward : -1.39
+Episode : 60000 		 Timestep : 1740000 		 Average Reward : -1.29
+Episode : 60345 		 Timestep : 1750000 		 Average Reward : -1.44
+Episode : 60690 		 Timestep : 1760000 		 Average Reward : -1.28
+Episode : 61035 		 Timestep : 1770000 		 Average Reward : -1.36
+Episode : 61380 		 Timestep : 1780000 		 Average Reward : -1.27
+Episode : 61724 		 Timestep : 1790000 		 Average Reward : -1.43
+Episode : 62069 		 Timestep : 1800000 		 Average Reward : -1.24
+--------------------------------------------------------------------------------------------
+saving model at : C:\Users\11\Documents\Github\RichDog/PPO_preTrained/Richdog/PPO_Richdog_0_20250406-020101.pth
+Elapsed Time  : 1:27:18
+--------------------------------------------------------------------------------------------
+Episode : 62414 		 Timestep : 1810000 		 Average Reward : -1.27
+Episode : 62759 		 Timestep : 1820000 		 Average Reward : -1.19
+Episode : 63104 		 Timestep : 1830000 		 Average Reward : -1.11
+Episode : 63449 		 Timestep : 1840000 		 Average Reward : -1.23
+Episode : 63793 		 Timestep : 1850000 		 Average Reward : -1.56
+Episode : 64138 		 Timestep : 1860000 		 Average Reward : -1.3
+Episode : 64483 		 Timestep : 1870000 		 Average Reward : -1.12
+Episode : 64828 		 Timestep : 1880000 		 Average Reward : -1.48
+Episode : 65173 		 Timestep : 1890000 		 Average Reward : -1.14
+Episode : 65518 		 Timestep : 1900000 		 Average Reward : -1.29
+--------------------------------------------------------------------------------------------
+saving model at : C:\Users\11\Documents\Github\RichDog/PPO_preTrained/Richdog/PPO_Richdog_0_20250406-020101.pth
+Elapsed Time  : 1:31:56
+--------------------------------------------------------------------------------------------
+Episode : 65862 		 Timestep : 1910000 		 Average Reward : -1.37
+Episode : 66207 		 Timestep : 1920000 		 Average Reward : -1.22
+Episode : 66552 		 Timestep : 1930000 		 Average Reward : -1.17
+Episode : 66897 		 Timestep : 1940000 		 Average Reward : -1.24
+Episode : 67242 		 Timestep : 1950000 		 Average Reward : -1.28
+Episode : 67587 		 Timestep : 1960000 		 Average Reward : -1.27
+Episode : 67931 		 Timestep : 1970000 		 Average Reward : -1.46
+Episode : 68276 		 Timestep : 1980000 		 Average Reward : -1.44
+Episode : 68621 		 Timestep : 1990000 		 Average Reward : -1.21
+Episode : 68966 		 Timestep : 2000000 		 Average Reward : -1.1
+--------------------------------------------------------------------------------------------
+saving model at : C:\Users\11\Documents\Github\RichDog/PPO_preTrained/Richdog/PPO_Richdog_0_20250406-020101.pth
+Elapsed Time  : 1:36:32
+--------------------------------------------------------------------------------------------
+Episode : 69311 		 Timestep : 2010000 		 Average Reward : -0.95
+Episode : 69655 		 Timestep : 2020000 		 Average Reward : -0.97
+Episode : 70000 		 Timestep : 2030000 		 Average Reward : -0.83
+Episode : 70345 		 Timestep : 2040000 		 Average Reward : -0.86
+Episode : 70690 		 Timestep : 2050000 		 Average Reward : -1.02
+Episode : 71035 		 Timestep : 2060000 		 Average Reward : -0.73
+Episode : 71380 		 Timestep : 2070000 		 Average Reward : -0.63
+Episode : 71724 		 Timestep : 2080000 		 Average Reward : -0.91
+Episode : 72069 		 Timestep : 2090000 		 Average Reward : -0.87
+Episode : 72414 		 Timestep : 2100000 		 Average Reward : -0.76
+--------------------------------------------------------------------------------------------
+saving model at : C:\Users\11\Documents\Github\RichDog/PPO_preTrained/Richdog/PPO_Richdog_0_20250406-020101.pth
+Elapsed Time  : 1:41:07
+--------------------------------------------------------------------------------------------
+Episode : 72759 		 Timestep : 2110000 		 Average Reward : -1.03
+Episode : 73104 		 Timestep : 2120000 		 Average Reward : -0.92
+Episode : 73449 		 Timestep : 2130000 		 Average Reward : -0.85
+Episode : 73793 		 Timestep : 2140000 		 Average Reward : -0.78
+Episode : 74138 		 Timestep : 2150000 		 Average Reward : -0.84
+Episode : 74483 		 Timestep : 2160000 		 Average Reward : -0.94
+Episode : 74828 		 Timestep : 2170000 		 Average Reward : -0.72
+Episode : 75173 		 Timestep : 2180000 		 Average Reward : -0.81
+Episode : 75518 		 Timestep : 2190000 		 Average Reward : -0.83
+Episode : 75862 		 Timestep : 2200000 		 Average Reward : -0.85
+--------------------------------------------------------------------------------------------
+saving model at : C:\Users\11\Documents\Github\RichDog/PPO_preTrained/Richdog/PPO_Richdog_0_20250406-020101.pth
+Elapsed Time  : 1:45:41
+--------------------------------------------------------------------------------------------
+Episode : 76207 		 Timestep : 2210000 		 Average Reward : -0.71
+Episode : 76552 		 Timestep : 2220000 		 Average Reward : -0.94
+Episode : 76897 		 Timestep : 2230000 		 Average Reward : -0.82
+Episode : 77242 		 Timestep : 2240000 		 Average Reward : -0.67
+Episode : 77587 		 Timestep : 2250000 		 Average Reward : -0.76
+Episode : 77931 		 Timestep : 2260000 		 Average Reward : -0.91
+Episode : 78276 		 Timestep : 2270000 		 Average Reward : -0.76
+Episode : 78621 		 Timestep : 2280000 		 Average Reward : -0.8
+Episode : 78966 		 Timestep : 2290000 		 Average Reward : -0.49
+Episode : 79311 		 Timestep : 2300000 		 Average Reward : -0.99
+--------------------------------------------------------------------------------------------
+saving model at : C:\Users\11\Documents\Github\RichDog/PPO_preTrained/Richdog/PPO_Richdog_0_20250406-020101.pth
+Elapsed Time  : 1:50:22
+--------------------------------------------------------------------------------------------
+Episode : 79655 		 Timestep : 2310000 		 Average Reward : -0.8
+Episode : 80000 		 Timestep : 2320000 		 Average Reward : -1.02
+Episode : 80345 		 Timestep : 2330000 		 Average Reward : -0.97
+Episode : 80690 		 Timestep : 2340000 		 Average Reward : -0.83
+Episode : 81035 		 Timestep : 2350000 		 Average Reward : -0.86
+Episode : 81380 		 Timestep : 2360000 		 Average Reward : -0.97
+Episode : 81724 		 Timestep : 2370000 		 Average Reward : -0.94
+Episode : 82069 		 Timestep : 2380000 		 Average Reward : -0.8
+Episode : 82414 		 Timestep : 2390000 		 Average Reward : -0.93
+Episode : 82759 		 Timestep : 2400000 		 Average Reward : -0.77
+--------------------------------------------------------------------------------------------
+saving model at : C:\Users\11\Documents\Github\RichDog/PPO_preTrained/Richdog/PPO_Richdog_0_20250406-020101.pth
+Elapsed Time  : 1:55:02
+--------------------------------------------------------------------------------------------
+Episode : 83104 		 Timestep : 2410000 		 Average Reward : -0.85
+Episode : 83449 		 Timestep : 2420000 		 Average Reward : -0.85
+Episode : 83793 		 Timestep : 2430000 		 Average Reward : -0.86
+Episode : 84138 		 Timestep : 2440000 		 Average Reward : -0.7
+Episode : 84483 		 Timestep : 2450000 		 Average Reward : -0.91
+Episode : 84828 		 Timestep : 2460000 		 Average Reward : -1.05
+Episode : 85173 		 Timestep : 2470000 		 Average Reward : -0.87
+Episode : 85518 		 Timestep : 2480000 		 Average Reward : -0.81
+Episode : 85862 		 Timestep : 2490000 		 Average Reward : -0.79
+Episode : 86207 		 Timestep : 2500000 		 Average Reward : -0.92
+--------------------------------------------------------------------------------------------
+saving model at : C:\Users\11\Documents\Github\RichDog/PPO_preTrained/Richdog/PPO_Richdog_0_20250406-020101.pth
+Elapsed Time  : 1:59:42
+--------------------------------------------------------------------------------------------
+Episode : 86552 		 Timestep : 2510000 		 Average Reward : -0.55
+Episode : 86897 		 Timestep : 2520000 		 Average Reward : -0.48
+Episode : 87242 		 Timestep : 2530000 		 Average Reward : -0.68
+Episode : 87587 		 Timestep : 2540000 		 Average Reward : -0.46
+Episode : 87932 		 Timestep : 2550000 		 Average Reward : -0.5
+Episode : 88276 		 Timestep : 2560000 		 Average Reward : -0.21
+Episode : 88621 		 Timestep : 2570000 		 Average Reward : -0.52
+Episode : 88966 		 Timestep : 2580000 		 Average Reward : -0.64
+Episode : 89311 		 Timestep : 2590000 		 Average Reward : -0.64
+Episode : 89656 		 Timestep : 2600000 		 Average Reward : -0.53
+--------------------------------------------------------------------------------------------
+saving model at : C:\Users\11\Documents\Github\RichDog/PPO_preTrained/Richdog/PPO_Richdog_0_20250406-020101.pth
+Elapsed Time  : 2:04:24
+--------------------------------------------------------------------------------------------
+Episode : 90001 		 Timestep : 2610000 		 Average Reward : -0.33
+Episode : 90346 		 Timestep : 2620000 		 Average Reward : -0.49
+Episode : 90690 		 Timestep : 2630000 		 Average Reward : -0.46
+Episode : 91036 		 Timestep : 2640000 		 Average Reward : -0.49
+Episode : 91381 		 Timestep : 2650000 		 Average Reward : -0.63
+Episode : 91725 		 Timestep : 2660000 		 Average Reward : -0.57
+Episode : 92070 		 Timestep : 2670000 		 Average Reward : -0.51
+Episode : 92415 		 Timestep : 2680000 		 Average Reward : -0.78
+Episode : 92760 		 Timestep : 2690000 		 Average Reward : -0.5
+Episode : 93105 		 Timestep : 2700000 		 Average Reward : -0.71
+--------------------------------------------------------------------------------------------
+saving model at : C:\Users\11\Documents\Github\RichDog/PPO_preTrained/Richdog/PPO_Richdog_0_20250406-020101.pth
+Elapsed Time  : 2:09:00
+--------------------------------------------------------------------------------------------
+Episode : 93449 		 Timestep : 2710000 		 Average Reward : -0.74
+Episode : 93794 		 Timestep : 2720000 		 Average Reward : -0.61
+Episode : 94139 		 Timestep : 2730000 		 Average Reward : -0.52
+Episode : 94484 		 Timestep : 2740000 		 Average Reward : -0.35
+Episode : 94829 		 Timestep : 2750000 		 Average Reward : -0.43
+Episode : 95174 		 Timestep : 2760000 		 Average Reward : -0.84
+Episode : 95518 		 Timestep : 2770000 		 Average Reward : -0.61
+Episode : 95863 		 Timestep : 2780000 		 Average Reward : -0.6
+Episode : 96208 		 Timestep : 2790000 		 Average Reward : -0.31
+Episode : 96553 		 Timestep : 2800000 		 Average Reward : -0.64
+--------------------------------------------------------------------------------------------
+saving model at : C:\Users\11\Documents\Github\RichDog/PPO_preTrained/Richdog/PPO_Richdog_0_20250406-020101.pth
+Elapsed Time  : 2:13:36
+--------------------------------------------------------------------------------------------
+Episode : 96898 		 Timestep : 2810000 		 Average Reward : -0.38
+Episode : 97243 		 Timestep : 2820000 		 Average Reward : -0.33
+Episode : 97587 		 Timestep : 2830000 		 Average Reward : -0.58
+Episode : 97932 		 Timestep : 2840000 		 Average Reward : -0.46
+Episode : 98277 		 Timestep : 2850000 		 Average Reward : -0.24
+Episode : 98622 		 Timestep : 2860000 		 Average Reward : -0.7
+Episode : 98967 		 Timestep : 2870000 		 Average Reward : -0.24
+Episode : 99312 		 Timestep : 2880000 		 Average Reward : -0.65
+Episode : 99656 		 Timestep : 2890000 		 Average Reward : -0.63
+Episode : 100001 		 Timestep : 2900000 		 Average Reward : -0.2
+--------------------------------------------------------------------------------------------
+saving model at : C:\Users\11\Documents\Github\RichDog/PPO_preTrained/Richdog/PPO_Richdog_0_20250406-020101.pth
+Elapsed Time  : 2:18:12
+--------------------------------------------------------------------------------------------
+Episode : 100346 		 Timestep : 2910000 		 Average Reward : -0.42
+Episode : 100691 		 Timestep : 2920000 		 Average Reward : -0.75
+Episode : 101036 		 Timestep : 2930000 		 Average Reward : -0.34
+Episode : 101381 		 Timestep : 2940000 		 Average Reward : -0.46
+Episode : 101725 		 Timestep : 2950000 		 Average Reward : -0.69
+Episode : 102070 		 Timestep : 2960000 		 Average Reward : -0.39
+Episode : 102415 		 Timestep : 2970000 		 Average Reward : -0.42
+Episode : 102760 		 Timestep : 2980000 		 Average Reward : -0.71
+Episode : 103105 		 Timestep : 2990000 		 Average Reward : -0.76
+Episode : 103449 		 Timestep : 3000000 		 Average Reward : -0.67
+--------------------------------------------------------------------------------------------
+saving model at : C:\Users\11\Documents\Github\RichDog/PPO_preTrained/Richdog/PPO_Richdog_0_20250406-020101.pth
+Elapsed Time  : 2:22:46
+--------------------------------------------------------------------------------------------
+Episode : 103794 		 Timestep : 3010000 		 Average Reward : -0.43
+Episode : 104139 		 Timestep : 3020000 		 Average Reward : -0.33
+Episode : 104484 		 Timestep : 3030000 		 Average Reward : -0.58
+Episode : 104829 		 Timestep : 3040000 		 Average Reward : -0.26
+Episode : 105174 		 Timestep : 3050000 		 Average Reward : -0.42
+Episode : 105518 		 Timestep : 3060000 		 Average Reward : -0.23
+Episode : 105863 		 Timestep : 3070000 		 Average Reward : -0.35
+Episode : 106208 		 Timestep : 3080000 		 Average Reward : -0.38
+Episode : 106553 		 Timestep : 3090000 		 Average Reward : -0.21
+Episode : 106898 		 Timestep : 3100000 		 Average Reward : -0.15
+--------------------------------------------------------------------------------------------
+saving model at : C:\Users\11\Documents\Github\RichDog/PPO_preTrained/Richdog/PPO_Richdog_0_20250406-020101.pth
+Elapsed Time  : 2:27:23
+--------------------------------------------------------------------------------------------
+Episode : 107243 		 Timestep : 3110000 		 Average Reward : -0.27
+Episode : 107587 		 Timestep : 3120000 		 Average Reward : -0.34
+Episode : 107932 		 Timestep : 3130000 		 Average Reward : -0.31
+Episode : 108277 		 Timestep : 3140000 		 Average Reward : -0.34
+Episode : 108622 		 Timestep : 3150000 		 Average Reward : -0.4
+Episode : 108967 		 Timestep : 3160000 		 Average Reward : -0.23
+Episode : 109312 		 Timestep : 3170000 		 Average Reward : -0.35
+Episode : 109656 		 Timestep : 3180000 		 Average Reward : -0.33
+Episode : 110001 		 Timestep : 3190000 		 Average Reward : -0.22
+Episode : 110347 		 Timestep : 3200000 		 Average Reward : -0.37
+--------------------------------------------------------------------------------------------
+saving model at : C:\Users\11\Documents\Github\RichDog/PPO_preTrained/Richdog/PPO_Richdog_0_20250406-020101.pth
+Elapsed Time  : 2:31:59
+--------------------------------------------------------------------------------------------
+Episode : 110691 		 Timestep : 3210000 		 Average Reward : -0.32
+Episode : 111036 		 Timestep : 3220000 		 Average Reward : -0.47
+Episode : 111381 		 Timestep : 3230000 		 Average Reward : -0.29
+Episode : 111726 		 Timestep : 3240000 		 Average Reward : -0.43
+Episode : 112071 		 Timestep : 3250000 		 Average Reward : -0.26
+Episode : 112416 		 Timestep : 3260000 		 Average Reward : -0.44
+Episode : 112760 		 Timestep : 3270000 		 Average Reward : -0.23
+Episode : 113105 		 Timestep : 3280000 		 Average Reward : -0.12
+Episode : 113450 		 Timestep : 3290000 		 Average Reward : -0.66
+Episode : 113795 		 Timestep : 3300000 		 Average Reward : -0.34
+--------------------------------------------------------------------------------------------
+saving model at : C:\Users\11\Documents\Github\RichDog/PPO_preTrained/Richdog/PPO_Richdog_0_20250406-020101.pth
+Elapsed Time  : 2:36:36
+--------------------------------------------------------------------------------------------
+Episode : 114140 		 Timestep : 3310000 		 Average Reward : -0.29
+Episode : 114485 		 Timestep : 3320000 		 Average Reward : -0.29
+Episode : 114830 		 Timestep : 3330000 		 Average Reward : -0.24
+Episode : 115174 		 Timestep : 3340000 		 Average Reward : -0.43
+Episode : 115519 		 Timestep : 3350000 		 Average Reward : -0.6
+Episode : 115864 		 Timestep : 3360000 		 Average Reward : -0.4
+Episode : 116209 		 Timestep : 3370000 		 Average Reward : -0.34
+Episode : 116554 		 Timestep : 3380000 		 Average Reward : -0.4
+Episode : 116899 		 Timestep : 3390000 		 Average Reward : -0.22
+Episode : 117243 		 Timestep : 3400000 		 Average Reward : -0.49
+--------------------------------------------------------------------------------------------
+saving model at : C:\Users\11\Documents\Github\RichDog/PPO_preTrained/Richdog/PPO_Richdog_0_20250406-020101.pth
+Elapsed Time  : 2:41:14
+--------------------------------------------------------------------------------------------
+Episode : 117588 		 Timestep : 3410000 		 Average Reward : -0.36
+Episode : 117933 		 Timestep : 3420000 		 Average Reward : -0.29
+Episode : 118278 		 Timestep : 3430000 		 Average Reward : -0.4
+Episode : 118623 		 Timestep : 3440000 		 Average Reward : -0.38
+Episode : 118968 		 Timestep : 3450000 		 Average Reward : -0.46
+Episode : 119312 		 Timestep : 3460000 		 Average Reward : -0.22
+Episode : 119657 		 Timestep : 3470000 		 Average Reward : -0.49
+Episode : 120002 		 Timestep : 3480000 		 Average Reward : -0.36
+Episode : 120347 		 Timestep : 3490000 		 Average Reward : -0.17
+Episode : 120692 		 Timestep : 3500000 		 Average Reward : -0.37
+--------------------------------------------------------------------------------------------
+saving model at : C:\Users\11\Documents\Github\RichDog/PPO_preTrained/Richdog/PPO_Richdog_0_20250406-020101.pth
+Elapsed Time  : 2:45:52
+--------------------------------------------------------------------------------------------
+Episode : 121037 		 Timestep : 3510000 		 Average Reward : -0.14
+Episode : 121381 		 Timestep : 3520000 		 Average Reward : -0.43
+Episode : 121726 		 Timestep : 3530000 		 Average Reward : -0.22
+Episode : 122071 		 Timestep : 3540000 		 Average Reward : -0.2
+Episode : 122416 		 Timestep : 3550000 		 Average Reward : -0.48
+Episode : 122761 		 Timestep : 3560000 		 Average Reward : 0.06
+Episode : 123105 		 Timestep : 3570000 		 Average Reward : -0.35
+Episode : 123450 		 Timestep : 3580000 		 Average Reward : -0.26
+Episode : 123795 		 Timestep : 3590000 		 Average Reward : -0.21
+Episode : 124140 		 Timestep : 3600000 		 Average Reward : -0.26
+--------------------------------------------------------------------------------------------
+saving model at : C:\Users\11\Documents\Github\RichDog/PPO_preTrained/Richdog/PPO_Richdog_0_20250406-020101.pth
+Elapsed Time  : 2:50:31
+--------------------------------------------------------------------------------------------
+Episode : 124485 		 Timestep : 3610000 		 Average Reward : -0.22
+Episode : 124830 		 Timestep : 3620000 		 Average Reward : -0.25
+Episode : 125174 		 Timestep : 3630000 		 Average Reward : -0.15
+Episode : 125519 		 Timestep : 3640000 		 Average Reward : -0.22
+Episode : 125864 		 Timestep : 3650000 		 Average Reward : -0.25
+Episode : 126209 		 Timestep : 3660000 		 Average Reward : -0.21
+Episode : 126554 		 Timestep : 3670000 		 Average Reward : -0.36
+Episode : 126899 		 Timestep : 3680000 		 Average Reward : -0.13
+Episode : 127243 		 Timestep : 3690000 		 Average Reward : -0.31
+Episode : 127588 		 Timestep : 3700000 		 Average Reward : -0.33
+--------------------------------------------------------------------------------------------
+saving model at : C:\Users\11\Documents\Github\RichDog/PPO_preTrained/Richdog/PPO_Richdog_0_20250406-020101.pth
+Elapsed Time  : 2:55:05
+--------------------------------------------------------------------------------------------
+Episode : 127933 		 Timestep : 3710000 		 Average Reward : -0.05
+Episode : 128278 		 Timestep : 3720000 		 Average Reward : -0.36
+Episode : 128623 		 Timestep : 3730000 		 Average Reward : -0.14
+Episode : 128968 		 Timestep : 3740000 		 Average Reward : -0.2
+Episode : 129312 		 Timestep : 3750000 		 Average Reward : -0.33
+Episode : 129657 		 Timestep : 3760000 		 Average Reward : -0.26
+Episode : 130002 		 Timestep : 3770000 		 Average Reward : -0.29
+Episode : 130347 		 Timestep : 3780000 		 Average Reward : -0.33
+Episode : 130692 		 Timestep : 3790000 		 Average Reward : -0.31
+Episode : 131037 		 Timestep : 3800000 		 Average Reward : -0.23
+--------------------------------------------------------------------------------------------
+saving model at : C:\Users\11\Documents\Github\RichDog/PPO_preTrained/Richdog/PPO_Richdog_0_20250406-020101.pth
+Elapsed Time  : 2:59:42
+--------------------------------------------------------------------------------------------
+Episode : 131381 		 Timestep : 3810000 		 Average Reward : -0.3
+Episode : 131726 		 Timestep : 3820000 		 Average Reward : -0.16
+Episode : 132071 		 Timestep : 3830000 		 Average Reward : -0.22
+Episode : 132416 		 Timestep : 3840000 		 Average Reward : -0.25
+Episode : 132761 		 Timestep : 3850000 		 Average Reward : -0.24
+Episode : 133105 		 Timestep : 3860000 		 Average Reward : -0.04
+Episode : 133450 		 Timestep : 3870000 		 Average Reward : -0.21
+Episode : 133795 		 Timestep : 3880000 		 Average Reward : -0.41
+Episode : 134140 		 Timestep : 3890000 		 Average Reward : -0.39
+Episode : 134485 		 Timestep : 3900000 		 Average Reward : -0.24
+--------------------------------------------------------------------------------------------
+saving model at : C:\Users\11\Documents\Github\RichDog/PPO_preTrained/Richdog/PPO_Richdog_0_20250406-020101.pth
+Elapsed Time  : 3:04:20
+--------------------------------------------------------------------------------------------
+Episode : 134830 		 Timestep : 3910000 		 Average Reward : -0.22
+Episode : 135174 		 Timestep : 3920000 		 Average Reward : -0.38
+Episode : 135519 		 Timestep : 3930000 		 Average Reward : -0.23
+Episode : 135864 		 Timestep : 3940000 		 Average Reward : -0.09
+Episode : 136209 		 Timestep : 3950000 		 Average Reward : -0.33
+Episode : 136554 		 Timestep : 3960000 		 Average Reward : -0.3
+Episode : 136899 		 Timestep : 3970000 		 Average Reward : -0.07
+Episode : 137244 		 Timestep : 3980000 		 Average Reward : -0.3
+Episode : 137588 		 Timestep : 3990000 		 Average Reward : -0.18
+Episode : 137933 		 Timestep : 4000000 		 Average Reward : -0.06
+--------------------------------------------------------------------------------------------
+saving model at : C:\Users\11\Documents\Github\RichDog/PPO_preTrained/Richdog/PPO_Richdog_0_20250406-020101.pth
+Elapsed Time  : 3:08:59
+--------------------------------------------------------------------------------------------
+============================================================================================
+Started training at (GMT) : 2025-04-06 02:01:01
+Finished training at (GMT) : 2025-04-06 05:10:00
+Total training time  : 3:08:59
+============================================================================================

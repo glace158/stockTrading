@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'mainYffTIf.ui'
+## Form generated from reading UI file 'mainEyJJWJ.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.8.2
 ##
@@ -16,12 +16,14 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QAbstractItemView, QAbstractScrollArea, QApplication, QCheckBox,
-    QComboBox, QCommandLinkButton, QDial, QFrame,
-    QGridLayout, QHBoxLayout, QHeaderView, QLabel,
-    QLineEdit, QMainWindow, QPlainTextEdit, QPushButton,
+    QComboBox, QCommandLinkButton, QDateEdit, QDial,
+    QFrame, QGridLayout, QHBoxLayout, QHeaderView,
+    QLabel, QLineEdit, QListWidget, QListWidgetItem,
+    QMainWindow, QPlainTextEdit, QProgressBar, QPushButton,
     QRadioButton, QScrollArea, QScrollBar, QSizePolicy,
-    QSlider, QStackedWidget, QTableWidget, QTableWidgetItem,
-    QTreeWidget, QTreeWidgetItem, QVBoxLayout, QWidget)
+    QSlider, QSpinBox, QStackedWidget, QTableWidget,
+    QTableWidgetItem, QTreeWidget, QTreeWidgetItem, QVBoxLayout,
+    QWidget)
 import qt.resources_rc
 
 class Ui_MainWindow(object):
@@ -577,9 +579,10 @@ class Ui_MainWindow(object):
 "}\n"
 "\n"
 "")
-        self.verticalLayout_12 = QVBoxLayout(self.styleSheet)
-        self.verticalLayout_12.setObjectName(u"verticalLayout_12")
-        self.verticalLayout_12.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_29 = QHBoxLayout(self.styleSheet)
+        self.horizontalLayout_29.setSpacing(0)
+        self.horizontalLayout_29.setObjectName(u"horizontalLayout_29")
+        self.horizontalLayout_29.setContentsMargins(0, 0, 0, 0)
         self.bgApp = QFrame(self.styleSheet)
         self.bgApp.setObjectName(u"bgApp")
         self.bgApp.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
@@ -704,6 +707,18 @@ class Ui_MainWindow(object):
         self.btn_setting.setStyleSheet(u"background-image: url(:/icons/images/icons/cil-settings.png)")
 
         self.verticalLayout_8.addWidget(self.btn_setting)
+
+        self.btn_download = QPushButton(self.topMenu)
+        self.btn_download.setObjectName(u"btn_download")
+        sizePolicy.setHeightForWidth(self.btn_download.sizePolicy().hasHeightForWidth())
+        self.btn_download.setSizePolicy(sizePolicy)
+        self.btn_download.setMinimumSize(QSize(0, 45))
+        self.btn_download.setFont(font)
+        self.btn_download.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+        self.btn_download.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
+        self.btn_download.setStyleSheet(u"background-image: url(:/icons/images/icons/cil-data-transfer-down.png)")
+
+        self.verticalLayout_8.addWidget(self.btn_download)
 
 
         self.verticalMenuLayout.addWidget(self.topMenu, 0, Qt.AlignmentFlag.AlignTop)
@@ -870,13 +885,13 @@ class Ui_MainWindow(object):
 
         self.ConsolePlainTextEdit = QPlainTextEdit(self.console_frame)
         self.ConsolePlainTextEdit.setObjectName(u"ConsolePlainTextEdit")
-        self.ConsolePlainTextEdit.setEnabled(False)
+        self.ConsolePlainTextEdit.setEnabled(True)
         sizePolicy3.setHeightForWidth(self.ConsolePlainTextEdit.sizePolicy().hasHeightForWidth())
         self.ConsolePlainTextEdit.setSizePolicy(sizePolicy3)
         self.ConsolePlainTextEdit.setMinimumSize(QSize(0, 0))
         self.ConsolePlainTextEdit.setStyleSheet(u"background-color: rgb(33, 37, 43);\n"
 "border: 2px solid rgb(52, 59, 72);")
-        self.ConsolePlainTextEdit.setTextInteractionFlags(Qt.TextInteractionFlag.TextEditorInteraction)
+        self.ConsolePlainTextEdit.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByKeyboard|Qt.TextInteractionFlag.TextSelectableByMouse)
 
         self.verticalLayout_30.addWidget(self.ConsolePlainTextEdit)
 
@@ -1330,6 +1345,29 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_11.addWidget(self.row_5)
 
+        self.row_7 = QFrame(self.parameters_page)
+        self.row_7.setObjectName(u"row_7")
+        self.row_7.setFrameShape(QFrame.Shape.StyledPanel)
+        self.row_7.setFrameShadow(QFrame.Shadow.Raised)
+        self.verticalLayout_40 = QVBoxLayout(self.row_7)
+        self.verticalLayout_40.setSpacing(10)
+        self.verticalLayout_40.setObjectName(u"verticalLayout_40")
+        self.verticalLayout_40.setContentsMargins(0, 0, 0, 0)
+        self.label_17 = QLabel(self.row_7)
+        self.label_17.setObjectName(u"label_17")
+
+        self.verticalLayout_40.addWidget(self.label_17)
+
+        self.dataListWidget = QListWidget(self.row_7)
+        self.dataListWidget.setObjectName(u"dataListWidget")
+        self.dataListWidget.setMinimumSize(QSize(0, 250))
+        self.dataListWidget.setStyleSheet(u"background-color: rgb(33, 37, 43);")
+
+        self.verticalLayout_40.addWidget(self.dataListWidget)
+
+
+        self.verticalLayout_11.addWidget(self.row_7)
+
         self.frame = QFrame(self.parameters_page)
         self.frame.setObjectName(u"frame")
         sizePolicy3.setHeightForWidth(self.frame.sizePolicy().hasHeightForWidth())
@@ -1364,6 +1402,149 @@ class Ui_MainWindow(object):
         self.verticalLayout_11.addWidget(self.frame)
 
         self.stackedWidget.addWidget(self.parameters_page)
+        self.download_page = QWidget()
+        self.download_page.setObjectName(u"download_page")
+        self.verticalLayout_12 = QVBoxLayout(self.download_page)
+        self.verticalLayout_12.setObjectName(u"verticalLayout_12")
+        self.stocklistFrame = QFrame(self.download_page)
+        self.stocklistFrame.setObjectName(u"stocklistFrame")
+        self.stocklistFrame.setFrameShape(QFrame.Shape.StyledPanel)
+        self.stocklistFrame.setFrameShadow(QFrame.Shadow.Raised)
+        self.verticalLayout_39 = QVBoxLayout(self.stocklistFrame)
+        self.verticalLayout_39.setObjectName(u"verticalLayout_39")
+        self.label_18 = QLabel(self.stocklistFrame)
+        self.label_18.setObjectName(u"label_18")
+
+        self.verticalLayout_39.addWidget(self.label_18)
+
+        self.stockCodeListWidget = QListWidget(self.stocklistFrame)
+        self.stockCodeListWidget.setObjectName(u"stockCodeListWidget")
+        self.stockCodeListWidget.setStyleSheet(u"background-color: rgb(33, 37, 43);")
+
+        self.verticalLayout_39.addWidget(self.stockCodeListWidget)
+
+        self.frame_15 = QFrame(self.stocklistFrame)
+        self.frame_15.setObjectName(u"frame_15")
+        self.frame_15.setFrameShape(QFrame.Shape.StyledPanel)
+        self.frame_15.setFrameShadow(QFrame.Shadow.Raised)
+        self.horizontalLayout_26 = QHBoxLayout(self.frame_15)
+        self.horizontalLayout_26.setObjectName(u"horizontalLayout_26")
+        self.label_14 = QLabel(self.frame_15)
+        self.label_14.setObjectName(u"label_14")
+
+        self.horizontalLayout_26.addWidget(self.label_14)
+
+        self.lineEdit_2 = QLineEdit(self.frame_15)
+        self.lineEdit_2.setObjectName(u"lineEdit_2")
+        self.lineEdit_2.setStyleSheet(u"background-color: rgb(33, 37, 43);")
+
+        self.horizontalLayout_26.addWidget(self.lineEdit_2)
+
+        self.addStockCodePushButton = QPushButton(self.frame_15)
+        self.addStockCodePushButton.setObjectName(u"addStockCodePushButton")
+        self.addStockCodePushButton.setMinimumSize(QSize(100, 0))
+        self.addStockCodePushButton.setStyleSheet(u"background-color: rgb(52, 59, 72);")
+
+        self.horizontalLayout_26.addWidget(self.addStockCodePushButton)
+
+        self.removeStockCodePushButton = QPushButton(self.frame_15)
+        self.removeStockCodePushButton.setObjectName(u"removeStockCodePushButton")
+        self.removeStockCodePushButton.setMinimumSize(QSize(100, 0))
+        self.removeStockCodePushButton.setStyleSheet(u"background-color: rgb(52, 59, 72);")
+
+        self.horizontalLayout_26.addWidget(self.removeStockCodePushButton)
+
+
+        self.verticalLayout_39.addWidget(self.frame_15)
+
+
+        self.verticalLayout_12.addWidget(self.stocklistFrame)
+
+        self.frame_17 = QFrame(self.download_page)
+        self.frame_17.setObjectName(u"frame_17")
+        self.frame_17.setFrameShape(QFrame.Shape.StyledPanel)
+        self.frame_17.setFrameShadow(QFrame.Shadow.Raised)
+        self.horizontalLayout_31 = QHBoxLayout(self.frame_17)
+        self.horizontalLayout_31.setObjectName(u"horizontalLayout_31")
+        self.dateEditFrame = QFrame(self.frame_17)
+        self.dateEditFrame.setObjectName(u"dateEditFrame")
+        self.dateEditFrame.setFrameShape(QFrame.Shape.StyledPanel)
+        self.dateEditFrame.setFrameShadow(QFrame.Shadow.Raised)
+        self.horizontalLayout_27 = QHBoxLayout(self.dateEditFrame)
+        self.horizontalLayout_27.setObjectName(u"horizontalLayout_27")
+        self.label_16 = QLabel(self.dateEditFrame)
+        self.label_16.setObjectName(u"label_16")
+        self.label_16.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
+
+        self.horizontalLayout_27.addWidget(self.label_16)
+
+        self.LastDateEdit = QDateEdit(self.dateEditFrame)
+        self.LastDateEdit.setObjectName(u"LastDateEdit")
+        self.LastDateEdit.setStyleSheet(u"background-color: rgb(33, 37, 43);")
+        self.LastDateEdit.setDateTime(QDateTime(QDate(2025, 1, 31), QTime(0, 0, 0)))
+
+        self.horizontalLayout_27.addWidget(self.LastDateEdit)
+
+
+        self.horizontalLayout_31.addWidget(self.dateEditFrame)
+
+        self.countFrame = QFrame(self.frame_17)
+        self.countFrame.setObjectName(u"countFrame")
+        self.countFrame.setFrameShape(QFrame.Shape.StyledPanel)
+        self.countFrame.setFrameShadow(QFrame.Shadow.Raised)
+        self.horizontalLayout_28 = QHBoxLayout(self.countFrame)
+        self.horizontalLayout_28.setObjectName(u"horizontalLayout_28")
+        self.label_15 = QLabel(self.countFrame)
+        self.label_15.setObjectName(u"label_15")
+        self.label_15.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
+
+        self.horizontalLayout_28.addWidget(self.label_15)
+
+        self.countSpinBox = QSpinBox(self.countFrame)
+        self.countSpinBox.setObjectName(u"countSpinBox")
+        self.countSpinBox.setStyleSheet(u"background-color: rgb(33, 37, 43);")
+        self.countSpinBox.setMaximum(9999)
+        self.countSpinBox.setValue(1500)
+
+        self.horizontalLayout_28.addWidget(self.countSpinBox)
+
+
+        self.horizontalLayout_31.addWidget(self.countFrame)
+
+        self.DownloadPushButton = QPushButton(self.frame_17)
+        self.DownloadPushButton.setObjectName(u"DownloadPushButton")
+        self.DownloadPushButton.setStyleSheet(u"background-color: rgb(52, 59, 72);")
+
+        self.horizontalLayout_31.addWidget(self.DownloadPushButton)
+
+
+        self.verticalLayout_12.addWidget(self.frame_17)
+
+        self.downloadProgressBar = QProgressBar(self.download_page)
+        self.downloadProgressBar.setObjectName(u"downloadProgressBar")
+        self.downloadProgressBar.setStyleSheet(u"QProgressBar{    \n"
+"	background-color: rgb(98, 114, 164);\n"
+"    color:rgb(200,200,200);\n"
+"    border-style: none;\n"
+"    border-bottom-right-radius: 5px;\n"
+"    border-bottom-left-radius: 5px;\n"
+"    border-top-right-radius: 5px;\n"
+"    border-top-left-radius: 5px;\n"
+"    text-align: center;\n"
+"}\n"
+"\n"
+"QProgressBar::chunk{\n"
+"    border-bottom-right-radius: 5px;\n"
+"    border-bottom-left-radius: 5px;\n"
+"    border-top-right-radius: 5px;\n"
+"    border-top-left-radius: 5px;\n"
+"    background-color: qlineargradient(spread:pad, x1:0, y1:0.511364, x2:1, y2:0.523, stop:0 rgba(254, 121, 199, 255), stop:1 rgba(170, 85, 255, 255));\n"
+"}")
+        self.downloadProgressBar.setValue(0)
+
+        self.verticalLayout_12.addWidget(self.downloadProgressBar)
+
+        self.stackedWidget.addWidget(self.download_page)
         self.kis_devlp_page = QWidget()
         self.kis_devlp_page.setObjectName(u"kis_devlp_page")
         self.verticalLayout_37 = QVBoxLayout(self.kis_devlp_page)
@@ -1737,7 +1918,7 @@ class Ui_MainWindow(object):
         self.scrollArea_3.setWidgetResizable(True)
         self.scrollAreaWidgetContents_3 = QWidget()
         self.scrollAreaWidgetContents_3.setObjectName(u"scrollAreaWidgetContents_3")
-        self.scrollAreaWidgetContents_3.setGeometry(QRect(0, 0, 862, 675))
+        self.scrollAreaWidgetContents_3.setGeometry(QRect(0, 0, 844, 657))
         self.horizontalLayout_15 = QHBoxLayout(self.scrollAreaWidgetContents_3)
         self.horizontalLayout_15.setObjectName(u"horizontalLayout_15")
         self.graph_image = QLabel(self.scrollAreaWidgetContents_3)
@@ -2017,7 +2198,7 @@ class Ui_MainWindow(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 323, 218))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 314, 218))
         self.scrollAreaWidgetContents.setStyleSheet(u" QScrollBar:vertical {\n"
 "	border: none;\n"
 "    background: rgb(52, 59, 72);\n"
@@ -2259,13 +2440,13 @@ class Ui_MainWindow(object):
         self.appLayout.addWidget(self.contentBox)
 
 
-        self.verticalLayout_12.addWidget(self.bgApp)
+        self.horizontalLayout_29.addWidget(self.bgApp)
 
         MainWindow.setCentralWidget(self.styleSheet)
 
         self.retranslateUi(MainWindow)
 
-        self.stackedWidget.setCurrentIndex(0)
+        self.stackedWidget.setCurrentIndex(1)
 
 
         QMetaObject.connectSlotsByName(MainWindow)
@@ -2279,6 +2460,7 @@ class Ui_MainWindow(object):
         self.btn_parameter.setText(QCoreApplication.translate("MainWindow", u"Widgets", None))
         self.btn_graph.setText(QCoreApplication.translate("MainWindow", u"Save", None))
         self.btn_setting.setText(QCoreApplication.translate("MainWindow", u"Widgets", None))
+        self.btn_download.setText(QCoreApplication.translate("MainWindow", u"Widgets", None))
         self.titleRightInfo.setText(QCoreApplication.translate("MainWindow", u"RichDog - AI Stock Trading Program", None))
         self.logo_label.setText("")
         self.label.setText(QCoreApplication.translate("MainWindow", u" Log", None))
@@ -2345,11 +2527,19 @@ class Ui_MainWindow(object):
         ___qtablewidgetitem20 = self.tableWidget_2.item(0, 1)
         ___qtablewidgetitem20.setText(QCoreApplication.translate("MainWindow", u"Value", None));
         ___qtablewidgetitem21 = self.tableWidget_2.item(0, 2)
-        ___qtablewidgetitem21.setText(QCoreApplication.translate("MainWindow", u"Text", None));
+        ___qtablewidgetitem21.setText(QCoreApplication.translate("MainWindow", u"Note", None));
         self.tableWidget_2.setSortingEnabled(__sortingEnabled)
 
+        self.label_17.setText(QCoreApplication.translate("MainWindow", u"Data list", None))
         self.SaveAsPerarametersButton.setText(QCoreApplication.translate("MainWindow", u"Save As Hyperparameters", None))
         self.SavePerarametersButton.setText(QCoreApplication.translate("MainWindow", u"Save Hyperparameters", None))
+        self.label_18.setText(QCoreApplication.translate("MainWindow", u"Stock Code List", None))
+        self.label_14.setText(QCoreApplication.translate("MainWindow", u"Stock Code", None))
+        self.addStockCodePushButton.setText(QCoreApplication.translate("MainWindow", u"Add", None))
+        self.removeStockCodePushButton.setText(QCoreApplication.translate("MainWindow", u"Remove", None))
+        self.label_16.setText(QCoreApplication.translate("MainWindow", u"Last Date", None))
+        self.label_15.setText(QCoreApplication.translate("MainWindow", u"count", None))
+        self.DownloadPushButton.setText(QCoreApplication.translate("MainWindow", u"Download", None))
         self.labelBoxBlenderInstalation_4.setText(QCoreApplication.translate("MainWindow", u"kis_devlp file", None))
         self.filepath_lineEdit_3.setText("")
         self.filepath_lineEdit_3.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Type here", None))
