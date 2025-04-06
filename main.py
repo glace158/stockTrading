@@ -8,7 +8,7 @@ import numpy as np
 
 from PPO.PPO import PPO
 from PPO.environment import GymEnvironment, StockEnvironment
-from PPO.fileManager import Config, File
+from common.fileManager import Config, File
 
 class RichDog:
     def __init__(self, config_path=None):

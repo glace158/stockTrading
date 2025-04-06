@@ -1,9 +1,9 @@
 import abc
 import pandas as pd
-from PPO.stock_data import Stock
+from stock.stock_data import Stock
 import numpy as np
 import datetime
-from PPO.fileManager import Config
+from common.fileManager import Config
 
 class Adaptor:
     __metaclass__ = abc.ABCMeta

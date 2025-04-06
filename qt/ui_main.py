@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'mainEyJJWJ.ui'
+## Form generated from reading UI file 'mainrVKHPv.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.8.2
 ##
@@ -1242,8 +1242,8 @@ class Ui_MainWindow(object):
         self.tableWidget_2.setHorizontalHeaderItem(1, __qtablewidgetitem1)
         __qtablewidgetitem2 = QTableWidgetItem()
         self.tableWidget_2.setHorizontalHeaderItem(2, __qtablewidgetitem2)
-        if (self.tableWidget_2.rowCount() < 16):
-            self.tableWidget_2.setRowCount(16)
+        if (self.tableWidget_2.rowCount() < 30):
+            self.tableWidget_2.setRowCount(30)
         font4 = QFont()
         font4.setFamilies([u"Segoe UI"])
         __qtablewidgetitem3 = QTableWidgetItem()
@@ -1331,6 +1331,7 @@ class Ui_MainWindow(object):
         self.tableWidget_2.setShowGrid(True)
         self.tableWidget_2.setGridStyle(Qt.PenStyle.SolidLine)
         self.tableWidget_2.setSortingEnabled(False)
+        self.tableWidget_2.setRowCount(30)
         self.tableWidget_2.horizontalHeader().setVisible(False)
         self.tableWidget_2.horizontalHeader().setCascadingSectionResizes(True)
         self.tableWidget_2.horizontalHeader().setDefaultSectionSize(200)
@@ -1481,7 +1482,7 @@ class Ui_MainWindow(object):
         self.LastDateEdit = QDateEdit(self.dateEditFrame)
         self.LastDateEdit.setObjectName(u"LastDateEdit")
         self.LastDateEdit.setStyleSheet(u"background-color: rgb(33, 37, 43);")
-        self.LastDateEdit.setDateTime(QDateTime(QDate(2025, 1, 31), QTime(0, 0, 0)))
+        self.LastDateEdit.setDateTime(QDateTime(QDate(2025, 1, 30), QTime(15, 0, 0)))
 
         self.horizontalLayout_27.addWidget(self.LastDateEdit)
 
@@ -1918,7 +1919,7 @@ class Ui_MainWindow(object):
         self.scrollArea_3.setWidgetResizable(True)
         self.scrollAreaWidgetContents_3 = QWidget()
         self.scrollAreaWidgetContents_3.setObjectName(u"scrollAreaWidgetContents_3")
-        self.scrollAreaWidgetContents_3.setGeometry(QRect(0, 0, 844, 657))
+        self.scrollAreaWidgetContents_3.setGeometry(QRect(0, 0, 90, 36))
         self.horizontalLayout_15 = QHBoxLayout(self.scrollAreaWidgetContents_3)
         self.horizontalLayout_15.setObjectName(u"horizontalLayout_15")
         self.graph_image = QLabel(self.scrollAreaWidgetContents_3)
@@ -1975,7 +1976,7 @@ class Ui_MainWindow(object):
         self.scrollArea_2.setWidgetResizable(True)
         self.scrollAreaWidgetContents_2 = QWidget()
         self.scrollAreaWidgetContents_2.setObjectName(u"scrollAreaWidgetContents_2")
-        self.scrollAreaWidgetContents_2.setGeometry(QRect(0, 0, 222, 232))
+        self.scrollAreaWidgetContents_2.setGeometry(QRect(0, 0, 99, 232))
         sizePolicy5.setHeightForWidth(self.scrollAreaWidgetContents_2.sizePolicy().hasHeightForWidth())
         self.scrollAreaWidgetContents_2.setSizePolicy(sizePolicy5)
         self.scrollAreaWidgetContents_2.setStyleSheet(u" QScrollBar:vertical {\n"
@@ -2198,7 +2199,7 @@ class Ui_MainWindow(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 314, 218))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 218, 218))
         self.scrollAreaWidgetContents.setStyleSheet(u" QScrollBar:vertical {\n"
 "	border: none;\n"
 "    background: rgb(52, 59, 72);\n"

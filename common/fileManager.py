@@ -71,8 +71,9 @@ class Config:
     def save_config(config, save_path: str) -> None:
         """Save configuration to YAML file"""
         config_dict = Config._convert_obj_to_dict(config)
-        with open(save_path, 'w', encoding='utf-8') as f:
-            yaml.dump(config_dict, f,allow_unicode=True)
+        if config_dict:
+            with open(save_path, 'w', encoding='utf-8') as f:
+                yaml.dump(config_dict, f,allow_unicode=True)
 
     @staticmethod
     def update_config(config: SimpleNamespace, updates: Dict) -> SimpleNamespace:

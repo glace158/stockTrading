@@ -2397,6 +2397,9 @@ border: 2px solid rgb(52, 59, 72);</string>
                             <property name="sortingEnabled">
                              <bool>false</bool>
                             </property>
+                            <property name="rowCount">
+                             <number>30</number>
+                            </property>
                             <attribute name="horizontalHeaderVisible">
                              <bool>false</bool>
                             </attribute>
@@ -2506,6 +2509,20 @@ border: 2px solid rgb(52, 59, 72);</string>
                               <string>New Row</string>
                              </property>
                             </row>
+                            <row/>
+                            <row/>
+                            <row/>
+                            <row/>
+                            <row/>
+                            <row/>
+                            <row/>
+                            <row/>
+                            <row/>
+                            <row/>
+                            <row/>
+                            <row/>
+                            <row/>
+                            <row/>
                             <column>
                              <property name="text">
                               <string>0</string>
@@ -2791,12 +2808,12 @@ border: 2px solid rgb(52, 59, 72);</string>
                                </property>
                                <property name="dateTime">
                                 <datetime>
-                                 <hour>0</hour>
+                                 <hour>15</hour>
                                  <minute>0</minute>
                                  <second>0</second>
                                  <year>2025</year>
                                  <month>1</month>
-                                 <day>31</day>
+                                 <day>30</day>
                                 </datetime>
                                </property>
                               </widget>
@@ -3571,8 +3588,8 @@ QProgressBar::chunk{
                                  <rect>
                                   <x>0</x>
                                   <y>0</y>
-                                  <width>844</width>
-                                  <height>657</height>
+                                  <width>90</width>
+                                  <height>36</height>
                                  </rect>
                                 </property>
                                 <layout class="QHBoxLayout" name="horizontalLayout_15">
@@ -3680,7 +3697,7 @@ QScrollArea{
                                  <rect>
                                   <x>0</x>
                                   <y>0</y>
-                                  <width>222</width>
+                                  <width>99</width>
                                   <height>232</height>
                                  </rect>
                                 </property>
@@ -4143,7 +4160,7 @@ QScrollArea{
                                 <rect>
                                  <x>0</x>
                                  <y>0</y>
-                                 <width>314</width>
+                                 <width>218</width>
                                  <height>218</height>
                                 </rect>
                                </property>
