@@ -9,7 +9,7 @@ action_std_decay_freq:
   value: '500000'
 count:
   note: count of data to use per training
-  value: '30'
+  value: '360'
 entropy_coef:
   note: 엔트로피 계수
   value: '0.01'
@@ -76,12 +76,12 @@ save_model_freq:
 stock_code_path:
   note: the path of folder where the data is located
   value: API/datas
+total_test_episodes:
+  note: total num of testing episodes (테스트 횟수)
+  value: '1'
 update_timestep:
   note: (Defult = max_ep_len * 4) update policy every n timesteps (정책 업데이트 주기)
   value: '4000'
 value_loss_coef:
   note: 가치 손실 계수
   value: '0.5'
-total_test_episodes:
-  note: total num of testing episodes (테스트 횟수)
-  value: 1

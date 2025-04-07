@@ -3,7 +3,7 @@ from PySide6.QtCore import *
 from PySide6.QtGui import *
 
 from qt.ui_main import Ui_MainWindow
-from qt.info_dial import HollowDial
+from qt.custom_ui.info_dial import HollowDial
 import threading
 import subprocess
 

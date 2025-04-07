@@ -125,7 +125,7 @@ class GraphPage(QWidget):
         if not self.current_tree_widget:
             return
         
-        self.tree_self.widgets.remove(self.current_tree_widget)
+        self.tree_widgets.remove(self.current_tree_widget)
         self.current_tree_widget.deleteLater() 
         self.current_tree_widget = None
         
@@ -140,44 +140,56 @@ class GraphPage(QWidget):
 
     # 그래프 그리기
     def make_graph(self):
+        color_list = ['red', 'blue', 'olive', 'hotpink','orange', 'green', 'brown', 'yellow', 'lime', 'cyan', 'navy', 'violet', 'purple', 'magenta', 'pink', 'gray']
+        
         fig_count = len(self.tree_widgets)
-        plt.figure(figsize=(25, 10 * fig_count))
+        fig = plt.figure(figsize=(25, 10 * fig_count))
         
-        
+        ax = fig.add_subplot()
         for i in range(fig_count):
             rootItem = self.tree_widgets[i].invisibleRootItem()
+            ax = plt.subplot(fig_count,1, i + 1)
 
             items = self.get_items_recursively(rootItem)
-            
+
             datas = pd.DataFrame()
+
+            color_index = 0    
+            gap = 0
             for item in items:
                 item_name = item.text(0)
+
                 if item_name.endswith('.csv'):
                     path = item_name
                     datas = pd.read_csv(path)
+                    ax = ax.twinx()
                     continue
                 
                 state = item.checkState(0)
-                if "stck_bsop_date" in datas.columns and state == Qt.Checked: 
-                    datas["stck_bsop_date"] = pd.to_datetime(datas["stck_bsop_date"],format="%Y%m%d")
-                    
-                    ax = plt.subplot(fig_count,1, i + 1)
-                    
-                    ax.plot(datas["stck_bsop_date"] ,datas[item_name])
-                    plt.xticks(rotation=45)
-                    ax = plt.gca()
-                    ax.xaxis.set_major_locator(dates.MonthLocator())
-                elif "timestep" in datas.columns and state == Qt.Checked:
-                    ax = plt.subplot(fig_count,1, i + 1)
-                    ax.plot(datas["timestep"] ,datas[item_name])
-                    ax.grid()
-                    plt.xticks(ticks=np.arange(len(datas.values)))
-                elif state == Qt.Checked:
-                    ax = plt.subplot(fig_count,1, i + 1)
-                    ax.plot(np.arange(len(datas.values)) ,datas[item_name])
-                    ax.grid()
-                    plt.xticks(ticks=np.arange(len(datas.values)))
-                
+                if state == Qt.Checked:
+                    if "stck_bsop_date" in datas.columns: 
+                        datas["stck_bsop_date"] = pd.to_datetime(datas["stck_bsop_date"],format="%Y%m%d")
+                        
+                        ax.plot(datas["stck_bsop_date"], datas[item_name], color=color_list[color_index], label=item_name)
+                        
+                        ax.set_xticklabels(datas["stck_bsop_date"], rotation=45)
+                        ax.xaxis.set_major_locator(dates.MonthLocator())
+                    elif "timestep" in datas.columns:
+                        ax.plot(datas[item_name], color=color_list[color_index], label=item_name)
+
+                        ax.set_xticks(datas["timestep"])
+                        
+                    else:
+                        ax.plot(datas[item_name], color=color_list[color_index], label=item_name)
+                        
+                        ax.set_xticks(ticks=np.arange(len(datas.values)))
+
+                    ax.spines.right.set_position(("axes",gap + 1))
+                    ax.set_ylabel(item_name, color=color_list[color_index])
+                    color_index = 0 if len(color_list) - 1 <= color_index else color_index + 1
+                    gap += 0.03
+        
+                ax.grid()
         plt.savefig("./Data_graph/graph.png")
 
     # 저장한 그래프 이미지 불러오기

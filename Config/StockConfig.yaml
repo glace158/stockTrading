@@ -10,6 +10,7 @@ stock_codes:
 - 056080
 - 068270
 - 039030
+- 124500
 stock_columns:
 - stck_clpr
 - stck_hgpr
@@ -21,23 +22,4 @@ stock_columns:
 - '60'
 - rsi
 - bb_upper
-- bb_middle
 - bb_lower
-- bstp_nmix_prpr
-- bstp_nmix_hgpr
-- bstp_nmix_lwpr
-- bstp_nmix_prdy_ctrt
-- acml_vol.1
-- acml_tr_pbmn
-- bstp_nmix_prpr.1
-- bstp_nmix_hgpr.1
-- bstp_nmix_lwpr.1
-- bstp_nmix_prdy_ctrt.1
-- acml_vol.2
-- acml_tr_pbmn.1
-- ovrs_nmix_prpr
-- ovrs_nmix_hgpr
-- ovrs_nmix_lwpr
-- ovrs_nmix_prpr.1
-- ovrs_nmix_hgpr.1
-- ovrs_nmix_lwpr.1

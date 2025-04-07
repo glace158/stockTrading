@@ -12,8 +12,8 @@ from typing import (
 )
 
 from gym import spaces
-from PPO.stock_adaptor import DailyStockAdaptor
-from PPO.stock_wallet import TrainStockWallet
+from stock.stock_adaptor import DailyStockAdaptor
+from stock.stock_wallet import TrainStockWallet
 
 class Environment:
     __metaclass__ = abc.ABCMeta

@@ -138,7 +138,7 @@ class RichDog:
 
         print("save console path : " + self.console_file.get_file_path())
         #####################################################
-
+        
     def action_file_log(self, num):
         ################## action logging ##################
         action_file_name = "PPO_{}_action_{}_{}_{}.csv".format(self.env_name, self.random_seed, self.cur_time, num)
@@ -176,7 +176,7 @@ class RichDog:
 
 
         # logging file
-        self.log_file.write('episode,timestep,reward\n')
+        self.log_file.write('episode,timestep,reward,loss,dist_entropy\n')
 
         # printing and logging variables
         print_running_reward = 0
@@ -189,6 +189,9 @@ class RichDog:
         i_episode = 0
 
         is_save_model = False
+
+        loss = 0
+        dist_entropy = 0
 
         # training loop
         while time_step <= self.max_training_timesteps:
@@ -219,7 +222,7 @@ class RichDog:
 
                 # update PPO agent
                 if time_step % self.update_timestep == 0:
-                    ppo_agent.update()
+                    loss, dist_entropy = ppo_agent.update()
 
                 # if continuous action space; then decay action std of ouput action distribution (액션 분포의 표준편차 감소)
                 if self.has_continuous_action_space and time_step % self.action_std_decay_freq == 0:
@@ -232,7 +235,7 @@ class RichDog:
                     log_avg_reward = log_running_reward / log_running_episodes
                     log_avg_reward = np.round(log_avg_reward, 4)
 
-                    self.log_file.write_flush('{},{},{}\n'.format(i_episode, time_step, log_avg_reward))
+                    self.log_file.write_flush('{},{},{},{},{}\n'.format(i_episode, time_step, log_avg_reward, loss, dist_entropy))
                     
                     log_running_reward = 0
                     log_running_episodes = 0

@@ -24,7 +24,7 @@ class DownloadPage(QWidget):
         
         for code in stock_config.stock_codes:
             # 확장자를 제외한 파일 이름 추가
-            self.widgets.stockCodeListWidget.addItem(code.strip())
+            self.widgets.stockCodeListWidget.addItem(str(code).strip())
 
     def add_stock_code(self):
         code = self.widgets.lineEdit_2.text().strip()
