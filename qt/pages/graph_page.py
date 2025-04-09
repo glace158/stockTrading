@@ -140,12 +140,13 @@ class GraphPage(QWidget):
 
     # 그래프 그리기
     def make_graph(self):
-        color_list = ['red', 'blue', 'olive', 'hotpink','orange', 'green', 'brown', 'yellow', 'lime', 'cyan', 'navy', 'violet', 'purple', 'magenta', 'pink', 'gray']
+        color_list = ['red', 'olive', 'blue', 'hotpink','orange', 'green', 'brown', 'yellow', 'lime', 'cyan', 'navy', 'violet', 'purple', 'magenta', 'pink', 'gray']
         
         fig_count = len(self.tree_widgets)
         fig = plt.figure(figsize=(25, 10 * fig_count))
         
         ax = fig.add_subplot()
+        ax.grid()
         for i in range(fig_count):
             rootItem = self.tree_widgets[i].invisibleRootItem()
             ax = plt.subplot(fig_count,1, i + 1)
@@ -163,6 +164,7 @@ class GraphPage(QWidget):
                     path = item_name
                     datas = pd.read_csv(path)
                     ax = ax.twinx()
+                    
                     continue
                 
                 state = item.checkState(0)
@@ -175,9 +177,23 @@ class GraphPage(QWidget):
                         ax.set_xticklabels(datas["stck_bsop_date"], rotation=45)
                         ax.xaxis.set_major_locator(dates.MonthLocator())
                     elif "timestep" in datas.columns:
-                        ax.plot(datas[item_name], color=color_list[color_index], label=item_name)
+                        if item_name == 'action':
+                            for i in range(len(datas[item_name])):
+                                if datas["order_qty"][i] == 0:
+                                    color = 'gray' 
+                                elif datas[item_name][i] < 0:
+                                    color = 'blue'
+                                elif datas[item_name][i] > 0:
+                                    color = 'red'
+                                else:
+                                    color = 'gray'
 
+                                plt.vlines(i, -1.0, 1.0, color=color, linestyle='solid', linewidth=3)
+                        else:       
+                            ax.plot(datas["timestep"], datas[item_name], color=color_list[color_index], label=item_name)
+                        
                         ax.set_xticks(datas["timestep"])
+
                         
                     else:
                         ax.plot(datas[item_name], color=color_list[color_index], label=item_name)
@@ -189,7 +205,6 @@ class GraphPage(QWidget):
                     color_index = 0 if len(color_list) - 1 <= color_index else color_index + 1
                     gap += 0.03
         
-                ax.grid()
         plt.savefig("./Data_graph/graph.png")
 
     # 저장한 그래프 이미지 불러오기

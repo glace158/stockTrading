@@ -31,12 +31,14 @@ class TrainStockWallet(Wallet):
         self.fee = fee
         self.tax = tax
 
-    
     def init_balance(self, start_amt):
         self.start_amt = start_amt # 처음 자산
         self.current_amt = start_amt # 현재 자산
         self.qty = 0.0 # 보유한 주식 개수
-    
+
+    def get_total_amt(self, price):
+        return self.current_amt + (price * self.qty) # 총 자산 계산
+
     def get_balance(self): # 현재 자산
         return self.current_amt
 
@@ -51,33 +53,28 @@ class TrainStockWallet(Wallet):
         return evlu_rate
 
     def order(self, item_no="005930", order_percent=0.0, price=0):
-        if (order_percent == 0): # 관망
-            return self.current_amt, self.qty, True
-        
-        if order_percent > 1 or order_percent < -1:
-            return self.current_amt, self.qty, False
-
+        if order_percent > 1 or order_percent < -1: # 매매 퍼센트가 -1 <= x <= 1 사이가 아니면 
+            return self.get_total_amt(price), 0.0, self.qty, False 
 
         is_sell = order_percent < 0 # 매도 확인
-
-
         total_qty = self.current_amt // price # 매수 가능 총 개수
-        
+
+        if (total_qty == 0 and order_percent > 0) or (self.qty == 0 and order_percent < 0): # 매매 수량 없는데 시도 시
+            return self.get_total_amt(price), 0.0, self.qty, False 
+
         if is_sell: # 매도
-            order_qty = np.ceil(np.abs(self.qty * order_percent)) # 매도 주문 개수 계산
+            order_qty = np.floor(np.abs(self.qty * order_percent)) # 매도 주문 개수 계산
             order_price = price * order_qty # 주문 가격 계산
             
         else: # 매수
-            order_qty = np.ceil(np.abs(total_qty * order_percent)) # 매수 주문 개수 계산
+            order_qty = np.floor(np.abs(total_qty * order_percent)) # 매수 주문 개수 계산
             order_price = price * order_qty # 주문 가격 계산
-
-        #if (total_qty == 0 and not is_sell) or (is_sell and self.qty < order_qty): # 매수가 불가능할때, 현재 주식 수량보다 더 많이 매도할려고 할 때
-        if order_qty == 0:
-            return self.current_amt, self.qty, False
 
         order_fee = self.calculate_fee(order_price) # 수수료 계산
 
-        if is_sell: # 매도
+        if order_qty == 0: # 관망
+            pass
+        elif is_sell: # 매도
             order_tax = self.calculate_tax(order_price)
             total_price = order_price - order_fee - order_tax
             self.current_amt += total_price
@@ -88,7 +85,7 @@ class TrainStockWallet(Wallet):
             self.qty += order_qty
 
         #print(self.current_amt)
-        return self.current_amt, self.qty, True # 현재 가지고 있는 현금, 가지고있는 주식 수량, 구매 선공 여부 
+        return self.get_total_amt(price), order_qty, self.qty, True # 현재 가지고 있는 현금, 가지고있는 주식 수량, 구매 선공 여부 
     
     def calculate_fee(self, order_price):
         return int(order_price * (self.fee / 100))
@@ -99,7 +96,7 @@ class TrainStockWallet(Wallet):
 
 if __name__ == '__main__':
     t = TrainStockWallet()
-    #print(t.order(order_percent=0.0055, price=60100))
-    #print(t.order(order_percent=0.0025, price=61000))
-    #print(t.order(order_percent=-0.0001, price=61300))
-    print(t.get_total_evlu_rate(61400))
+    print(t.order(order_percent=0.0065, price=60100))
+    print(t.order(order_percent=0.0035, price=61000))
+    print(t.order(order_percent=-0.0001, price=61300))
+    #print(t.get_total_evlu_rate(61400))

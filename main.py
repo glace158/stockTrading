@@ -19,6 +19,7 @@ class RichDog:
 
         self.config = Config.load_config(config_path)
         print("Run Directory : " + config_path)
+        self.cur_time = str(datetime.now().strftime("%Y%m%d-%H%M%S"))
 
     def init_parameters(self):
         print("============================================================================================")
@@ -117,10 +118,10 @@ class RichDog:
     def init_files(self):
         ###################### logging ######################
         #### log files for multiple runs are NOT overwritten
-        self.cur_time = str(datetime.now().strftime("%Y%m%d-%H%M%S"))
         log_file_name = 'PPO_' + self.env_name + "_log_" + self.cur_time + ".csv"
         self.log_file = File(self.path + "PPO_logs/" + self.env_name + '/', log_file_name)
 
+        self.log_file.write('episode,timestep,reward,loss,dist_entropy\n')
         print("current logging run number for " + self.env_name + " : ", self.cur_time)
         print("logging at : " + self.log_file.get_file_path())
         #####################################################
@@ -139,15 +140,14 @@ class RichDog:
         print("save console path : " + self.console_file.get_file_path())
         #####################################################
         
-    def action_file_log(self, num):
+    def action_file_log(self, num, root_dir):
         ################## action logging ##################
         action_file_name = "PPO_{}_action_{}_{}_{}.csv".format(self.env_name, self.random_seed, self.cur_time, num)
-        self.action_file = File(self.path + "PPO_action_logs/" + self.env_name + '/' + str(self.cur_time) + '/', action_file_name)
-        self.action_file.write('timestep,action,reward\n')
-        
+        self.action_file = File(self.path + root_dir + "/PPO_action_logs/" + self.env_name + '/' + str(self.cur_time) + '/', action_file_name)
+        self.action_file.write('timestep,action,reward,current_amt,order_qty\n')
         
         state_file_name = "PPO_{}_state_{}_{}_{}.csv".format(self.env_name, self.random_seed, self.cur_time, num)
-        self.state_file = File(self.path + "PPO_state_logs/" + self.env_name + '/' + str(self.cur_time) + '/', state_file_name)
+        self.state_file = File(self.path + root_dir + "/PPO_state_logs/" + self.env_name + '/' + str(self.cur_time) + '/', state_file_name)
         self.state_file.write( ','.join(self.env.get_data_label()) +'\n')
 
         print("save action logs path : " + self.action_file.get_file_path())
@@ -175,8 +175,6 @@ class RichDog:
         self.console_file.write_append("============================================================================================"+ "\n")
 
 
-        # logging file
-        self.log_file.write('episode,timestep,reward,loss,dist_entropy\n')
 
         # printing and logging variables
         print_running_reward = 0
@@ -203,7 +201,7 @@ class RichDog:
             is_action_log = is_save_model
 
             if is_action_log:
-                self.action_file_log(time_step)
+                self.action_file_log(time_step, "PPO_train_logs")
 
             for t in range(1, self.max_ep_len+1):
 
@@ -271,7 +269,7 @@ class RichDog:
                     self.console_file.write_append("--------------------------------------------------------------------------------------------"+ "\n")
 
                 if is_action_log:
-                    self.action_file.write_flush('{},{},{}\n'.format(t, action[0], reward))
+                    self.action_file.write_flush('{},{},{},{},{}\n'.format(t, action[0], reward, info["current_amt"], info["order_qty"]))
                     str_state = [str(item) for item in state]
                     self.state_file.write_flush(','.join(str_state)+'\n')
                     is_save_model = False
@@ -313,6 +311,7 @@ class RichDog:
         self.console_file_name = "PPO_console_log.txt"
         self.console_file = File(self.path + "PPO_console/" , self.console_file_name)
         print("save console path : " + self.console_file.get_file_path())
+
 
         ################## hyperparameters ##################
         self.init_parameters()
@@ -363,6 +362,8 @@ class RichDog:
         test_running_reward = 0
 
         for ep in range(1, total_test_episodes+1):
+            self.action_file_log(ep, "PPO_test_logs")
+            
             ep_reward = 0
             state, _ = self.env.reset()
 
@@ -374,6 +375,11 @@ class RichDog:
                 if render:
                     self.env.render()
                     time.sleep(frame_delay)
+
+                # logging
+                self.action_file.write_flush('{},{},{},{},{}\n'.format(t, action[0], reward, info["current_amt"], info["order_qty"]))
+                str_state = [str(item) for item in state]
+                self.state_file.write_flush(','.join(str_state)+'\n')
 
                 if done:
                     break
@@ -387,7 +393,10 @@ class RichDog:
 
             ep_reward = 0
 
+            
+
         self.env.close()
+        self.action_file.close()
 
         print("============================================================================================")
 

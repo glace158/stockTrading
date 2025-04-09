@@ -1,6 +1,6 @@
-loading network from : C:/Users/11/Documents/Github/RichDog/PPO_preTrained/Richdog/PPO_Richdog_0_20250407-011524.pth
+loading network from : C:/Users/11/Documents/Github/RichDog/PPO_preTrained/Richdog/PPO_Richdog_0_20250409-161810.pth
 --------------------------------------------------------------------------------------------
-Episode: 1 		 Reward: -1.4
+Episode: 1 		 Reward: 2.13
 ============================================================================================
-average test reward : -1.4
+average test reward : 2.13
 ============================================================================================

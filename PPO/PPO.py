@@ -292,7 +292,7 @@ class PPO:
         # clear buffer
         self.buffer.clear()
 
-        return loss, dist_entropy
+        return np.mean(loss.detach().cpu().numpy()), np.mean(dist_entropy.detach().cpu().numpy())
     
     def save(self, checkpoint_path): 
         torch.save(self.policy_old.state_dict(), checkpoint_path)

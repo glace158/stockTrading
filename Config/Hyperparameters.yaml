@@ -46,17 +46,17 @@ max_dt:
   value: '20250131'
 max_ep_len:
   note: max timesteps in one episode (에피소드 당 최대 타임 스텝)
-  value: '1000'
+  value: '400'
 max_training_timesteps:
   note: break training loop if timeteps > max_training_timesteps (총 학습 타임스텝)
-  value: '4000000'
+  value: '10000000'
 min_action_std:
   note: minimum action_std (stop decay after action_std <= min_action_std) (0.05 ~
     0.1) (최소 행동 표준 편차 값)
   value: '0.1'
 min_dt:
   note: start of the data
-  value: '20190214'
+  value: '20160711'
 minibatchsize:
   note: mini batch size
   value: '32'
@@ -81,7 +81,7 @@ total_test_episodes:
   value: '1'
 update_timestep:
   note: (Defult = max_ep_len * 4) update policy every n timesteps (정책 업데이트 주기)
-  value: '4000'
+  value: '1600'
 value_loss_coef:
   note: 가치 손실 계수
   value: '0.5'

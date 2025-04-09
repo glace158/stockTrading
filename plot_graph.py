@@ -6,7 +6,7 @@ from common.fileManager import Config, File
 
 def save_graph():
     print("============================================================================================")
-    env_name = 'MountainCarContinuous-v0'
+    env_name = 'Richdog'
 
     fig_num = 0     #### change this to prevent overwriting figures in same env_name folder
     plot_avg = True    # plot average of all runs; else plot all runs separately
