@@ -9,9 +9,10 @@ import numpy as np
 from PPO.PPO import PPO
 from PPO.environment import GymEnvironment, StockEnvironment
 from common.fileManager import Config, File
+from common.logger import Logger
 
 class RichDog:
-    def __init__(self, config_path=None):
+    def __init__(self, config_path=None, mode="train"):
         print("============================================================================================")
         self.path = str(os.path.dirname(__file__)) + "/" 
         if not config_path:
@@ -20,6 +21,18 @@ class RichDog:
         self.config = Config.load_config(config_path)
         print("Run Directory : " + config_path)
         self.cur_time = str(datetime.now().strftime("%Y%m%d-%H%M%S"))
+
+        if mode == "train":
+            root_path = 'PPO_logs/' + self.config.env_name.value + "/" + self.cur_time + '/'
+            self.logger = Logger(root_path)
+            self.console_logger = Logger()
+
+            Config.save_config( self.config, root_path + "config/Hyperparameters.yaml")
+            self.stock_config = Config.load_config("config/StockConfig.yaml")
+            Config.save_config( self.config, root_path + "config/StockConfig.yaml")
+        elif mode == "test":
+            pass
+
 
     def init_parameters(self):
         print("============================================================================================")
@@ -119,38 +132,52 @@ class RichDog:
         ###################### logging ######################
         #### log files for multiple runs are NOT overwritten
         log_file_name = 'PPO_' + self.env_name + "_log_" + self.cur_time + ".csv"
-        self.log_file = File(self.path + "PPO_logs/" + self.env_name + '/', log_file_name)
+        log_file_dir = ''
+        self.logger.add_file("log_file", log_file_dir, log_file_name)
+        #self.log_file = File(self.path + "PPO_logs/" + self.env_name + '/', log_file_name)
 
-        self.log_file.write('episode,timestep,reward,loss,dist_entropy\n')
+        self.logger.write_file("log_file", 'episode,timestep,reward,loss,dist_entropy\n')
+        #self.log_file.write('episode,timestep,reward,loss,dist_entropy\n')
         print("current logging run number for " + self.env_name + " : ", self.cur_time)
-        print("logging at : " + self.log_file.get_file_path())
+        print("logging at : " + log_file_dir + log_file_name)
         #####################################################
 
         ################### checkpointing ###################
         checkpoint_file_name = "PPO_{}_{}_{}.pth".format(self.env_name, self.random_seed, self.cur_time)
-        self.checkpoint_file = File(self.path + "PPO_preTrained/" + self.env_name + '/', checkpoint_file_name)
-
-        print("save checkpoint path : " + self.checkpoint_file.get_file_path())
+        checkpoint_dir = self.path + "PPO_preTrained/" + self.env_name + '/'
+        self.logger.add_file("checkpoint", checkpoint_dir, checkpoint_file_name)
+        
+        #self.checkpoint_file = File(self.path + "PPO_preTrained/" + self.env_name + '/', checkpoint_file_name)
+        print("save checkpoint path : " + checkpoint_dir + checkpoint_file_name)
         #####################################################
 
+    def console_file_log(self):
         ################## console logging ##################
         self.console_file_name = "PPO_console_log.txt"
-        self.console_file = File(self.path + "PPO_console/" , self.console_file_name)
+        console_dir = "PPO_console/"
+        self.console_logger.add_file("console", console_dir, self.console_file_name)
+        #self.console_file = File(console_dir , self.console_file_name)
 
-        print("save console path : " + self.console_file.get_file_path())
+        print("save console path : " + console_dir)
         #####################################################
         
     def action_file_log(self, num, root_dir):
         ################## action logging ##################
         action_file_name = "PPO_{}_action_{}_{}_{}.csv".format(self.env_name, self.random_seed, self.cur_time, num)
-        self.action_file = File(self.path + root_dir + "/PPO_action_logs/" + self.env_name + '/' + str(self.cur_time) + '/', action_file_name)
-        self.action_file.write('timestep,action,reward,current_amt,order_qty\n')
-        
-        state_file_name = "PPO_{}_state_{}_{}_{}.csv".format(self.env_name, self.random_seed, self.cur_time, num)
-        self.state_file = File(self.path + root_dir + "/PPO_state_logs/" + self.env_name + '/' + str(self.cur_time) + '/', state_file_name)
-        self.state_file.write( ','.join(self.env.get_data_label()) +'\n')
+        action_dir = root_dir + "/PPO_action_logs/" + self.env_name + '/' + str(self.cur_time) + '/'
+        #self.action_file = File(action_dir, action_file_name)
+        #self.action_file.write('timestep,action,reward,current_amt,order_qty\n')
+        self.logger.add_file("action", action_dir, action_file_name)
+        self.logger.write_file("action", 'timestep,action,reward,current_amt,order_qty\n')
 
-        print("save action logs path : " + self.action_file.get_file_path())
+        state_file_name = "PPO_{}_state_{}_{}_{}.csv".format(self.env_name, self.random_seed, self.cur_time, num)
+        state_dir = root_dir + "/PPO_state_logs/" + self.env_name + '/' + str(self.cur_time) + '/'
+        #self.state_file = File(state_dir, state_file_name)
+        #self.state_file.write( ','.join(self.env.get_data_label()) +'\n')
+        self.logger.add_file("state", state_dir, state_file_name)
+        self.logger.list_write_file("state", self.env.get_data_label())
+
+        print("save action logs path : " + action_dir)
         #####################################################
 
     ################################### Training ###################################
@@ -167,14 +194,13 @@ class RichDog:
         # track total training time
         start_time = datetime.now().replace(microsecond=0)
         self.init_files()
+        self.console_file_log()
 
-        print("Started training at (GMT) : ", start_time)
-        print("============================================================================================")
+        self.console_logger.print_wirte_file("console", "Started training at (GMT) : ", start_time)
+        self.console_logger.print_wirte_file("console", "============================================================================================")
         
-        self.console_file.write_append("Started training at (GMT) : " + str(start_time) + "\n")
-        self.console_file.write_append("============================================================================================"+ "\n")
-
-
+        #self.console_file.write_append("Started training at (GMT) : " + str(start_time) + "\n")
+        #self.console_file.write_append("============================================================================================"+ "\n")
 
         # printing and logging variables
         print_running_reward = 0
@@ -233,8 +259,9 @@ class RichDog:
                     log_avg_reward = log_running_reward / log_running_episodes
                     log_avg_reward = np.round(log_avg_reward, 4)
 
-                    self.log_file.write_flush('{},{},{},{},{}\n'.format(i_episode, time_step, log_avg_reward, loss, dist_entropy))
-                    
+                    #self.log_file.write_flush('{},{},{},{},{}\n'.format(i_episode, time_step, log_avg_reward, loss, dist_entropy))
+                    self.logger.list_write_file("log_file", [i_episode, time_step, log_avg_reward, loss, dist_entropy])
+
                     log_running_reward = 0
                     log_running_episodes = 0
 
@@ -245,33 +272,28 @@ class RichDog:
                     print_avg_reward = print_running_reward / print_running_episodes
                     print_avg_reward = np.round(print_avg_reward, 2)
 
-                    print("Episode : {} \t\t Timestep : {} \t\t Average Reward : {}".format(i_episode, time_step, print_avg_reward))
+                    self.console_logger.print_wirte_file("console", "Episode : {} \t\t Timestep : {} \t\t Average Reward : {}".format(i_episode, time_step, print_avg_reward))
                     
-                    self.console_file.write_append("Episode : {} \t\t Timestep : {} \t\t Average Reward : {}\n".format(i_episode, time_step, print_avg_reward))
+                    #self.console_file.write_append("Episode : {} \t\t Timestep : {} \t\t Average Reward : {}\n".format(i_episode, time_step, print_avg_reward))
 
                     print_running_reward = 0
                     print_running_episodes = 0
 
                 # save model weights
                 if time_step % self.save_model_freq == 0:
-                    print("--------------------------------------------------------------------------------------------")
-                    print("saving model at : " + self.checkpoint_file.get_file_path())
-                    ppo_agent.save(self.checkpoint_file.get_file_path())
-                    print("model saved")
-                    print("Elapsed Time  : ", datetime.now().replace(microsecond=0) - start_time)
-                    print("--------------------------------------------------------------------------------------------")
+                    self.console_logger.print_wirte_file("console", "--------------------------------------------------------------------------------------------")
+                    self.console_logger.print_wirte_file("console", "saving model at : " + self.logger.get_file_path("checkpoint"))
+                    ppo_agent.save(self.logger.get_file_path("checkpoint"))
+                    self.console_logger.print_wirte_file("console", "model saved")
+                    self.console_logger.print_wirte_file("console", "Elapsed Time  : ", datetime.now().replace(microsecond=0) - start_time)
+                    self.console_logger.print_wirte_file("console", "--------------------------------------------------------------------------------------------")
 
                     is_save_model = True
 
-                    self.console_file.write_append("--------------------------------------------------------------------------------------------"+ "\n")
-                    self.console_file.write_append("saving model at : " + self.checkpoint_file.get_file_path()+ "\n")
-                    self.console_file.write_append("Elapsed Time  : " + str(datetime.now().replace(microsecond=0) - start_time)+ "\n")
-                    self.console_file.write_append("--------------------------------------------------------------------------------------------"+ "\n")
-
                 if is_action_log:
-                    self.action_file.write_flush('{},{},{},{},{}\n'.format(t, action[0], reward, info["current_amt"], info["order_qty"]))
+                    self.logger.list_write_file('action', [t, action[0], reward, info["current_amt"], info["order_qty"]])
                     str_state = [str(item) for item in state]
-                    self.state_file.write_flush(','.join(str_state)+'\n')
+                    self.logger.list_write_file('state', str_state)
                     is_save_model = False
 
                 # break; if the episode is over
@@ -286,31 +308,26 @@ class RichDog:
 
             i_episode += 1
         
-        self.action_file.close()
-        self.state_file.close()
-        self.log_file.close()
+        self.logger.close_all()
         self.env.close()
 
         # print total training time
         print("============================================================================================")
         end_time = datetime.now().replace(microsecond=0)
-        print("Started training at (GMT) : ", start_time)
-        print("Finished training at (GMT) : ", end_time)
-        print("Total training time  : ", end_time - start_time)
-        print("============================================================================================")
+        self.console_logger.print_wirte_file("console", "Started training at (GMT) : ", start_time)
+        self.console_logger.print_wirte_file("console", "Finished training at (GMT) : ", end_time)
+        self.console_logger.print_wirte_file("console", "Total training time  : ", end_time - start_time)
+        self.console_logger.print_wirte_file("console", "============================================================================================")
         
-        self.console_file.write_append("============================================================================================"+ "\n")
-        self.console_file.write_append("Started training at (GMT) : " + str(start_time)+ "\n")
-        self.console_file.write_append("Finished training at (GMT) : "+ str(end_time)+ "\n")
-        self.console_file.write_append("Total training time  : " + str(end_time - start_time)+ "\n")
-        self.console_file.write_append("============================================================================================"+ "\n")
-
     #################################### Testing ###################################
     def test(self, checkpoint_path):
         print("============================================================================================")
-        self.console_file_name = "PPO_console_log.txt"
-        self.console_file = File(self.path + "PPO_console/" , self.console_file_name)
-        print("save console path : " + self.console_file.get_file_path())
+        self.console_file_log()
+        #console_file_name = "PPO_console_log.txt"
+        #console_dir = self.path + "PPO_console/"
+        #self.logger.add_file("console",console_dir, console_file_name)
+        #self.console_file = File(self.path + "PPO_console/" , self.console_file_name)
+        #print("save console path : " + console_dir)
 
 
         ################## hyperparameters ##################
@@ -347,17 +364,19 @@ class RichDog:
         """
         
         if checkpoint_path == "":
-            self.console_file.write_append("Error : Not Setting Model path\n")
+            #self.console_file.write_append("Error : Not Setting Model path\n")
+            self.console_logger.print_wirte_file("console", "Error : Not Setting Model path\n" )
             return
 
         print("loading network from : " + checkpoint_path)
-        self.console_file.write_append("loading network from : " + checkpoint_path + "\n")
+        self.console_logger.print_wirte_file("console", "loading network from : " + checkpoint_path + "\n")
+        #self.console_file.write_append("loading network from : " + checkpoint_path + "\n")
         
         
         ppo_agent.load(checkpoint_path)
 
-        print("--------------------------------------------------------------------------------------------")
-        self.console_file.write_append("--------------------------------------------------------------------------------------------" + "\n")
+        self.console_logger.print_wirte_file("console", "--------------------------------------------------------------------------------------------")
+        #self.console_file.write_append("--------------------------------------------------------------------------------------------" + "\n")
 
         test_running_reward = 0
 
@@ -377,9 +396,9 @@ class RichDog:
                     time.sleep(frame_delay)
 
                 # logging
-                self.action_file.write_flush('{},{},{},{},{}\n'.format(t, action[0], reward, info["current_amt"], info["order_qty"]))
+                self.logger.list_write_file('action', [t, action[0], reward, info["current_amt"], info["order_qty"]])
                 str_state = [str(item) for item in state]
-                self.state_file.write_flush(','.join(str_state)+'\n')
+                self.logger.list_write_file('state', str_state)
 
                 if done:
                     break
@@ -388,29 +407,25 @@ class RichDog:
             ppo_agent.buffer.clear()
 
             test_running_reward +=  ep_reward
-            print('Episode: {} \t\t Reward: {}'.format(ep, round(ep_reward, 2)))
-            self.console_file.write_append('Episode: {} \t\t Reward: {}\n'.format(ep, round(ep_reward, 2)))
+            self.console_logger.print_wirte_file("console", 'Episode: {} \t\t Reward: {}'.format(ep, round(ep_reward, 2)))
+            #self.console_file.write_append('Episode: {} \t\t Reward: {}\n'.format(ep, round(ep_reward, 2)))
 
             ep_reward = 0
 
             
 
         self.env.close()
-        self.action_file.close()
+        self.logger.close_all()
 
-        print("============================================================================================")
+        self.console_logger.print_wirte_file("console", "============================================================================================")
 
         avg_test_reward = test_running_reward / total_test_episodes
         avg_test_reward = round(avg_test_reward, 2)
-        print("average test reward : " + str(avg_test_reward))
-        print("============================================================================================")
+        self.console_logger.print_wirte_file("console", "average test reward : " + str(avg_test_reward))
+        self.console_logger.print_wirte_file("console", "============================================================================================")
         
-        self.console_file.write_append("============================================================================================\n")
-        self.console_file.write_append("average test reward : " + str(avg_test_reward) + "\n")
-        self.console_file.write_append("============================================================================================\n")
-
 if __name__ == '__main__':
-    richdog = RichDog()
+    
     arg = sys.argv
 
     if len(arg)<= 1:        
@@ -418,7 +433,9 @@ if __name__ == '__main__':
         
 
     if len(arg) > 1:
+        richdog = RichDog("train")
         if arg[1] == 'train':
             richdog.train()
         elif arg[1] == 'test':
+            richdog = RichDog('test')
             richdog.test(arg[2])

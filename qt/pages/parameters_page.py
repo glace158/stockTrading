@@ -101,17 +101,15 @@ class ParameterPage(QWidget):
                 if column == "stck_bsop_date":
                     continue
 
+                check_state = Qt.Checked if column in stock_config.stock_columns else Qt.Unchecked
+
                 item = QListWidgetItem(f"{column}")
                 item.setFlags(item.flags() | Qt.ItemIsUserCheckable)  # 체크 가능하도록 설정
-                item.setCheckState(Qt.Checked)  # 초기 체크 상태 설정
+                item.setCheckState(check_state)  # 초기 체크 상태 설정
                 self.widgets.dataListWidget.addItem(item)
             
             self.widgets.dataListWidget.itemChanged.connect(self.data_list_item_change)
 
-            temp_list = list(df.columns)
-            temp_list.remove("stck_bsop_date")
-            stock_config.stock_columns = temp_list 
-            Config.save_config(stock_config,self.stock_config_path)
 
     # 학습 데이터 체크박스 이벤트
     def data_list_item_change(self, item):

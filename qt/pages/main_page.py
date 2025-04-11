@@ -116,15 +116,18 @@ class MainPage(QWidget):
         except Exception as e:
             self.widgets.ConsolePlainTextEdit.setPlainText(f"파일을 읽는 중 오류가 발생했습니다: {e}")
     
-
     # 컴퓨터 정보 출력
     def computer_usage_info(self):
         self.widgets.cpu_name_label.setText(cpuinfo.get_cpu_info()['brand_raw'])
-        self.widgets.gpu_name_label.setText(GPUtil.getGPUs()[0].name)
+        if GPUtil.getGPUs():
+            self.widgets.gpu_name_label.setText(GPUtil.getGPUs()[0].name)
+    
         self.widgets.cuda_label.setText('Available CUDA : ' + str(torch.cuda.is_available()))
+    
         while True:
             self.widgets.cpu_dial.setValue( psutil.cpu_percent(interval=1) )
-            self.widgets.gpu_dial.setValue( GPUtil.getGPUs()[0].load * 100)
+            if GPUtil.getGPUs():
+                self.widgets.gpu_dial.setValue( GPUtil.getGPUs()[0].load * 100)
             time.sleep(1)
     
     # 모델 파일 읽기
@@ -161,7 +164,7 @@ class PPOThread(QThread):
     # 모델 테스트
     def testStart(self):
         self.process = subprocess.Popen(
-        ['python', 'main.py', 'test', self.model_path],  # 실행할 Python 스크립트
+        ['python3', 'main.py', 'test', self.model_path],  # 실행할 Python 스크립트
         stdout=subprocess.PIPE,    # 표준 출력을 파이프로 전달
         stderr=subprocess.PIPE,    # 표준 오류를 파이프로 전달
         text=True                  # 출력 결과를 텍스트로 받기
@@ -174,7 +177,7 @@ class PPOThread(QThread):
     # 학습 시작하기
     def learningPPO(self):
         self.process = subprocess.Popen(
-        ['python', 'main.py', 'train'],  # 실행할 Python 스크립트
+        ['python3', 'main.py', 'train'],  # 실행할 Python 스크립트
         stdout=subprocess.PIPE,    # 표준 출력을 파이프로 전달
         stderr=subprocess.PIPE,    # 표준 오류를 파이프로 전달
         text=True                  # 출력 결과를 텍스트로 받기

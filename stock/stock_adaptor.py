@@ -120,7 +120,7 @@ class DailyStockAdaptor(Adaptor):
         self.result.index = np.arange(len(self.result.index)) # 인덱스 재정렬
         
         config = Config.load_config("config/StockConfig.yaml")
-        self.result = self.result[list(config.stock_columns)]
+        self.result = self.result[list(config.stock_columns)]# 데이터 필터링
         
         return self.result
     
