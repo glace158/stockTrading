@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'mainrVKHPv.ui'
+## Form generated from reading UI file 'mainiBwRub.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.8.2
 ##
@@ -1482,7 +1482,7 @@ class Ui_MainWindow(object):
         self.LastDateEdit = QDateEdit(self.dateEditFrame)
         self.LastDateEdit.setObjectName(u"LastDateEdit")
         self.LastDateEdit.setStyleSheet(u"background-color: rgb(33, 37, 43);")
-        self.LastDateEdit.setDateTime(QDateTime(QDate(2025, 1, 30), QTime(15, 0, 0)))
+        self.LastDateEdit.setDateTime(QDateTime(QDate(2025, 1, 30), QTime(6, 0, 0)))
 
         self.horizontalLayout_27.addWidget(self.LastDateEdit)
 
@@ -1682,6 +1682,7 @@ class Ui_MainWindow(object):
 
         self.paper_app_lineEdit = QLineEdit(self.frame_7)
         self.paper_app_lineEdit.setObjectName(u"paper_app_lineEdit")
+        self.paper_app_lineEdit.setMinimumSize(QSize(0, 30))
         self.paper_app_lineEdit.setStyleSheet(u"background-color: rgb(33, 37, 43);")
 
         self.horizontalLayout_19.addWidget(self.paper_app_lineEdit)
@@ -1703,6 +1704,7 @@ class Ui_MainWindow(object):
 
         self.paper_sec_lineEdit = QLineEdit(self.frame_8)
         self.paper_sec_lineEdit.setObjectName(u"paper_sec_lineEdit")
+        self.paper_sec_lineEdit.setMinimumSize(QSize(0, 30))
         self.paper_sec_lineEdit.setStyleSheet(u"background-color: rgb(33, 37, 43);")
 
         self.horizontalLayout_20.addWidget(self.paper_sec_lineEdit)
@@ -1731,6 +1733,7 @@ class Ui_MainWindow(object):
 
         self.my_app_lineEdit = QLineEdit(self.frame_9)
         self.my_app_lineEdit.setObjectName(u"my_app_lineEdit")
+        self.my_app_lineEdit.setMinimumSize(QSize(0, 30))
         self.my_app_lineEdit.setStyleSheet(u"background-color: rgb(33, 37, 43);")
 
         self.horizontalLayout_21.addWidget(self.my_app_lineEdit)
@@ -1752,6 +1755,7 @@ class Ui_MainWindow(object):
 
         self.my_sec_lineEdit = QLineEdit(self.frame_10)
         self.my_sec_lineEdit.setObjectName(u"my_sec_lineEdit")
+        self.my_sec_lineEdit.setMinimumSize(QSize(0, 30))
         self.my_sec_lineEdit.setStyleSheet(u"background-color: rgb(33, 37, 43);")
 
         self.horizontalLayout_22.addWidget(self.my_sec_lineEdit)
@@ -1780,6 +1784,7 @@ class Ui_MainWindow(object):
 
         self.my_acct_stock_lineEdit = QLineEdit(self.frame_11)
         self.my_acct_stock_lineEdit.setObjectName(u"my_acct_stock_lineEdit")
+        self.my_acct_stock_lineEdit.setMinimumSize(QSize(0, 30))
         self.my_acct_stock_lineEdit.setStyleSheet(u"background-color: rgb(33, 37, 43);")
 
         self.horizontalLayout_23.addWidget(self.my_acct_stock_lineEdit)
@@ -1808,6 +1813,7 @@ class Ui_MainWindow(object):
 
         self.my_paper_stock_lineEdit = QLineEdit(self.frame_12)
         self.my_paper_stock_lineEdit.setObjectName(u"my_paper_stock_lineEdit")
+        self.my_paper_stock_lineEdit.setMinimumSize(QSize(0, 30))
         self.my_paper_stock_lineEdit.setStyleSheet(u"background-color: rgb(33, 37, 43);")
 
         self.horizontalLayout_24.addWidget(self.my_paper_stock_lineEdit)
@@ -1836,6 +1842,7 @@ class Ui_MainWindow(object):
 
         self.my_prod_lineEdit = QLineEdit(self.frame_13)
         self.my_prod_lineEdit.setObjectName(u"my_prod_lineEdit")
+        self.my_prod_lineEdit.setMinimumSize(QSize(0, 30))
         self.my_prod_lineEdit.setStyleSheet(u"background-color: rgb(33, 37, 43);")
 
         self.horizontalLayout_25.addWidget(self.my_prod_lineEdit)
@@ -1919,7 +1926,7 @@ class Ui_MainWindow(object):
         self.scrollArea_3.setWidgetResizable(True)
         self.scrollAreaWidgetContents_3 = QWidget()
         self.scrollAreaWidgetContents_3.setObjectName(u"scrollAreaWidgetContents_3")
-        self.scrollAreaWidgetContents_3.setGeometry(QRect(0, 0, 90, 36))
+        self.scrollAreaWidgetContents_3.setGeometry(QRect(0, 0, 862, 675))
         self.horizontalLayout_15 = QHBoxLayout(self.scrollAreaWidgetContents_3)
         self.horizontalLayout_15.setObjectName(u"horizontalLayout_15")
         self.graph_image = QLabel(self.scrollAreaWidgetContents_3)
@@ -1976,7 +1983,7 @@ class Ui_MainWindow(object):
         self.scrollArea_2.setWidgetResizable(True)
         self.scrollAreaWidgetContents_2 = QWidget()
         self.scrollAreaWidgetContents_2.setObjectName(u"scrollAreaWidgetContents_2")
-        self.scrollAreaWidgetContents_2.setGeometry(QRect(0, 0, 99, 232))
+        self.scrollAreaWidgetContents_2.setGeometry(QRect(0, 0, 222, 232))
         sizePolicy5.setHeightForWidth(self.scrollAreaWidgetContents_2.sizePolicy().hasHeightForWidth())
         self.scrollAreaWidgetContents_2.setSizePolicy(sizePolicy5)
         self.scrollAreaWidgetContents_2.setStyleSheet(u" QScrollBar:vertical {\n"
@@ -2199,7 +2206,7 @@ class Ui_MainWindow(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 218, 218))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 323, 218))
         self.scrollAreaWidgetContents.setStyleSheet(u" QScrollBar:vertical {\n"
 "	border: none;\n"
 "    background: rgb(52, 59, 72);\n"
@@ -2447,7 +2454,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.stackedWidget.setCurrentIndex(1)
+        self.stackedWidget.setCurrentIndex(2)
 
 
         QMetaObject.connectSlotsByName(MainWindow)

@@ -21,7 +21,7 @@ class Logger:
 
     def print_wirte_file(self, key, data:str):
         print(data)
-        self.file_dict[key].write_flush(data)
+        self.file_dict[key].write_append(data)
 
     def close_all(self):
         for key in self.file_dict.keys():

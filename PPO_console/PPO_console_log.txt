@@ -1,2 +1,4 @@
-loading network from : /Users/glace/Documents/RichDog/PPO_preTrained/Richdog/PPO_Richdog_0_20250409-161810.pth
---------------------------------------------------------------------------------------------Episode: 1 		 Reward: 6.15
+Started training at (GMT) : 2025-04-11 15:31:56
+============================================================================================
+Episode : 27 		 Timestep : 10000 		 Average Reward : -36.9
+Episode : 55 		 Timestep : 20000 		 Average Reward : -2.22

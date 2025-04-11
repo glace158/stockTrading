@@ -84,17 +84,17 @@ class GymEnvironment(Environment): # OpenAI gym 환경
         self.env.close()
 
 class StockEnvironment(Environment): # 주식 환경
-    def __init__(self, stock_code_path = "API/datas", #["005930","000660", "083650", "010120", "035720", "012450", "098460", "064350", "056080", "068270", "039030"], 
+    def __init__(self, stock_code_path = "API/datas", stock_config=None,
                  min_dt="20190214", max_dt="20250131", defult_count=30):
         super().__init__()
-        self.stock = DailyStockAdaptor()
+        self.stock_config = stock_config
+        self.stock = DailyStockAdaptor(stock_config)
         self.wallet = TrainStockWallet()
         
         self.min_dt = min_dt
         self.max_dt = max_dt
         self.stock_code_path = stock_code_path
         self.defult_count = defult_count
-
 
         self.observation_space = spaces.Box(low = -np.inf, high= np.inf, shape= (len(self.reset()[0]),), dtype=np.float32)
         self.action_space = spaces.Box(low= -1, high= 1, shape=(1,), dtype=np.float32)

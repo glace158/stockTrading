@@ -69,6 +69,11 @@ class Config:
 
     @staticmethod
     def save_config(config, save_path: str) -> None:
+        dir_path = os.path.dirname(save_path)
+        
+        if not os.path.exists(dir_path):
+            os.makedirs(dir_path)
+            
         """Save configuration to YAML file"""
         config_dict = Config._convert_obj_to_dict(config)
         if config_dict:

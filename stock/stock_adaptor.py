@@ -17,12 +17,14 @@ class Adaptor:
         pass
 
 class DailyStockAdaptor(Adaptor):
-    def __init__(self):
+    def __init__(self, data_filter):
         super().__init__()
         self.stock = Stock("vps")
         self.moving_days = [5,20,60]
         self.rsi_days = 14
         self.bb_days = 20
+
+        self.data_filter = data_filter
 
         self.index = 0
         #self.set_init_datas(itm_no=itm_no, inqr_strt_dt=inqr_strt_dt , count=count, is_remove_date=is_remove_date)
@@ -112,15 +114,13 @@ class DailyStockAdaptor(Adaptor):
         while not index_number:
             index_number = self.result[self.result["stck_bsop_date"] == np.float64(inqr_strt_dt)].index.to_list() # 해당하는 날짜 인덱스 찾기
             inqr_strt_dt = (datetime.datetime.strptime(inqr_strt_dt, "%Y%m%d") - datetime.timedelta(days=1)).strftime("%Y%m%d")
-        #print(index_number)
         
         silce_datas = self.result.loc[index_number[0] - count + 1 : index_number[0]] # 데이터 슬라이싱
         del silce_datas["stck_bsop_date"] # 날짜 값 삭제
         self.result = silce_datas # 슬라이싱 한 데이터로 바꾸기
         self.result.index = np.arange(len(self.result.index)) # 인덱스 재정렬
         
-        config = Config.load_config("config/StockConfig.yaml")
-        self.result = self.result[list(config.stock_columns)]# 데이터 필터링
+        self.result = self.result[list(self.data_filter.stock_columns)]# 데이터 필터링
         
         return self.result
     
