@@ -1,6 +1,6 @@
 import abc
 import pandas as pd
-from stock.stock_data import Stock
+from stock.stock_wallet import TrainStockWallet 
 import numpy as np
 import datetime
 from common.fileManager import Config
@@ -19,94 +19,24 @@ class Adaptor:
 class DailyStockAdaptor(Adaptor):
     def __init__(self, data_filter):
         super().__init__()
-        self.stock = Stock("vps")
-        self.moving_days = [5,20,60]
-        self.rsi_days = 14
-        self.bb_days = 20
+        self.wallet = TrainStockWallet()
 
         self.data_filter = data_filter
 
         self.index = 0
-        #self.set_init_datas(itm_no=itm_no, inqr_strt_dt=inqr_strt_dt , count=count, is_remove_date=is_remove_date)
-    
-    def _compare_datetime(self, standard_datas : pd.DataFrame, target_datas : pd.DataFrame):
-        rt_data = pd.DataFrame(columns=target_datas.columns)
-        for i in range(standard_datas.shape[0]):
-            for j in reversed(range(0, target_datas.shape[0])):
-                if datetime.datetime.strptime(standard_datas["stck_bsop_date"][i], "%Y%m%d") > datetime.datetime.strptime(target_datas["stck_bsop_date"][j], "%Y%m%d"):
-                    rt_data.loc[i] = target_datas.iloc[j]
-                    break
+
+        self.inqr_strt_dt = ''
+        self.init_price = 0
         
-        return rt_data
+        self.bond_yield_data_directory = "API/extra_datas/" + "TreasuryBondYield" + ".csv"
+        self.bond_yield_datas = pd.read_csv(self.bond_yield_data_directory)
+
+    def init_balance(self, start_amt):
+        self.wallet.init_balance(start_amt)
     
-    def set_init_datas(self, itm_no=None, inqr_strt_dt=None , count=30, is_remove_date=True):
+    def load_datas(self, path, inqr_strt_dt, count): # 데이터 읽어오기
         self.index = 0
-        self.result = pd.DataFrame()
-
-        datas = []
-        # 주식정보
-        stock_data = self.stock.get_daily_stock_info(itm_no=itm_no, count=count+ max(self.moving_days), inqr_strt_dt=inqr_strt_dt)
-        print(stock_data.loc[stock_data.shape[0] - count :].reset_index(drop=True))
-        sliced_stock_data = stock_data.loc[stock_data.shape[0] - count :].reset_index(drop=True)
-
-        #datas.append(sliced_stock_data)
-
-        # 이동평균선
-        move_line_data = self.stock.get_moving_average_line(stock_data=stock_data, count=count, moving_days=self.moving_days)
-        print(move_line_data)
-        datas.append(move_line_data)
-        
-        # RSI
-        rsi_data = self.stock.get_rsi(stock_data=stock_data, count=count,days=self.rsi_days)
-        print(rsi_data)
-        datas.append(rsi_data)
-        
-        # BollingerBand
-        bb_data = self.stock.get_bollinger_band(stock_data=stock_data, moving_average_line=move_line_data, count=count, days=self.bb_days, k=2)
-        print(bb_data)
-        datas.append(bb_data)
-        
-        # 코스피
-        kospi_data = self.stock.get_daily_index_price(itm_no="0001", count=count, inqr_strt_dt=inqr_strt_dt)
-        print(kospi_data)
-        datas.append(kospi_data)
-        
-        # 코스닥
-        kosdaq_data = self.stock.get_daily_index_price(itm_no="1001", count=count, inqr_strt_dt=inqr_strt_dt)
-        print(kosdaq_data)
-        datas.append(kosdaq_data)
-        
-        # 나스닥
-        nasdaq_data = self.stock.get_daily_chartprice(itm_no="COMP", count=count+60, inqr_strt_dt=inqr_strt_dt)
-        nasdaq_data = self._compare_datetime(sliced_stock_data,nasdaq_data)
-        print(nasdaq_data)
-        datas.append(nasdaq_data)
-        
-        # S&P500
-        spx_data = self.stock.get_daily_chartprice(itm_no="SPX", count=count+60, inqr_strt_dt=inqr_strt_dt)
-        spx_data = self._compare_datetime(sliced_stock_data,spx_data)
-        #del spx_data["acml_vol"]
-        print(spx_data)
-        datas.append(spx_data)
-
-        if is_remove_date:
-            del sliced_stock_data["stck_bsop_date"]
-            
-        self.result = sliced_stock_data
-
-        for data in datas:
-            del data["stck_bsop_date"]
-            self.result = pd.concat([self.result, data], axis=1)
-
-        print("================================================")
-        return self.result
-    
-    def save_datas(self, path):
-
-        self.result.to_csv(path, header=True, index=True)
-    
-    def load_datas(self, path, inqr_strt_dt, count):
-        self.index = 0
+        self.inqr_strt_dt = inqr_strt_dt
 
         self.result = pd.read_csv(path, header=0, index_col=0)
         index_number = []
@@ -115,30 +45,139 @@ class DailyStockAdaptor(Adaptor):
             index_number = self.result[self.result["stck_bsop_date"] == np.float64(inqr_strt_dt)].index.to_list() # 해당하는 날짜 인덱스 찾기
             inqr_strt_dt = (datetime.datetime.strptime(inqr_strt_dt, "%Y%m%d") - datetime.timedelta(days=1)).strftime("%Y%m%d")
         
-        silce_datas = self.result.loc[index_number[0] - count + 1 : index_number[0]] # 데이터 슬라이싱
-        del silce_datas["stck_bsop_date"] # 날짜 값 삭제
+        silce_datas = self.result.loc[index_number[0] - count + 1 : index_number[0] + 1] # 데이터 슬라이싱
+
         self.result = silce_datas # 슬라이싱 한 데이터로 바꾸기
         self.result.index = np.arange(len(self.result.index)) # 인덱스 재정렬
         
-        self.result = self.result[list(self.data_filter.stock_columns)]# 데이터 필터링
-        
-        return self.result
-    
-    def get_info(self):
-        #print(str(len(self.result)- 1)  + " / " + str(self.index))
-        if len(self.result) - 1 == self.index:
-            data = self.result.iloc[self.index, :].values
-            self.index += 1
-            done = True
-        else:
-            data = self.result.iloc[self.index, :].values
-            self.index += 1
-            done = False
-        
-        data = list(map(float, data))
-        return data, done
+        self.filtering_datas = self.result[list(self.data_filter)]# 데이터 필터링
+        self.price = float(self.filtering_datas["stck_clpr"].iloc[self.index])# 가격 추출
+        self.init_price = self.price 
+        return self.result 
 
+    # 주식 데이터 하나씩 가져오기
+    def get_info(self, stock_code, action):
+        self.price = float(self.filtering_datas["stck_clpr"].iloc[self.index])# 가격 추출
+        data = self.filtering_datas.iloc[self.index, :].values # 현재 인덱스에 맞춰 슬라이싱
+        
+        done = len(self.filtering_datas) - 2 == self.index # 환경 종료 여부
+        
+        data = list(map(float, data)) # 리스트로 변환
+        
+        current_total_amt, daily_rate, order_qty , qty, is_order = self.wallet.order(stock_code, action, self.price) # 주문 시도
+        current_total_amt = self._np_to_float(current_total_amt)
+        order_qty = self._np_to_float(order_qty)
+        qty = self._np_to_float(qty)
+
+        evlu_rate = self.wallet.get_total_evlu_rate(self.price) # 현재 주식 수익률 계산
+        diff_price = self.price - self.init_price # 현재 주식 증감률 계산
+        price_rate = (diff_price / self.init_price) * 100
+        evlu_rate = self._np_to_float(evlu_rate) - self._np_to_float(price_rate) # 순이익 구하기
+        
+        
+        # 정보 추가
+        data.insert(0, evlu_rate) # 주식 수익률
+        data.insert(0, qty) # 보유 수량
+        data.insert(0, self._np_to_float(self.wallet.get_psbl_qty(self.price))) # 현재 구매 가능한 수량
+        
+        # 새프 지수, 소르티노 지수 계산
+        sharp_data = self.sharpe_ratio()
+        sharp_data = self._np_to_float(sharp_data)
+        
+        sortino_data = self.sortino_ratio()
+        sortino_data = self._np_to_float(sortino_data)
+
+        self.index += 1
+        
+        next_price = float(self.filtering_datas["stck_clpr"].iloc[self.index])# 다음 날 가격 추출
+        diff_price = next_price - self.price
+        next_ctrt = (diff_price / self.price) * 100 # 다음 날 증감률 추출
+        next_ctrt = self._np_to_float(next_ctrt)
+
+        next_day_rate = self.wallet.get_next_day_evlu_rate(next_price)# 다음 날 수익률 계산
+        next_day_rate = self._np_to_float(next_day_rate)
+        next_day_rate = next_day_rate - next_ctrt # 순수 수익률 구하기
+        print(next_day_rate)
+        print(next_ctrt)
+
+        data = np.array(data, dtype=np.float32)
+        return data, done, {"price": self.price,
+                            "current_amt" : current_total_amt, 
+                            "total_rate": evlu_rate,
+                            "daily_rate": daily_rate,
+                            "next_day_rate" : next_day_rate, 
+                            "order_qty" : order_qty, 
+                            "is_order" : is_order, 
+                            "sharp_ratio" : sharp_data, 
+                            "sortino_ratio" : sortino_data
+                            }
     
+    # 라벨 정보 가져오기
+    def get_data_label(self):
+        return ["psbl_qty", "qty", "evlu_rate"] + list(self.filtering_datas.columns)
+    
+    def sharpe_ratio(self):
+
+        current_date = self.result["stck_bsop_date"][self.index] # 현재 날짜 가져오기
+
+        index = self.bond_yield_datas[self.bond_yield_datas["stck_bsop_date"] == np.float64(current_date)].index.to_list()[0] # 해당하는 날짜 인덱스 찾기
+
+        i = 0
+        while True: # 국채 금리 데이터 가져오기
+            bond_yield = self.bond_yield_datas["Treasury_Bond_Yield(10Year)"][index + i]
+            
+            if bond_yield != -1: # 해당 날짜의 데이터가 -1이 아니면 
+                break
+            
+            i -= 1 # 해당 날짜의 데이터가 -1이면 이전 데이터 확인
+        
+        total_evlu_rate = self.wallet.get_total_evlu_rate(self.price) # 현재 전체 수익률
+        rate_std = np.std(self.wallet.rate_list) # 수익률 표준 편차 구하기
+    
+
+        if rate_std != 0:
+            ratio = (total_evlu_rate - bond_yield) / rate_std
+        else:
+            ratio  = 0.0
+
+        return ratio
+    
+    def sortino_ratio(self):
+
+        current_date = self.result["stck_bsop_date"][self.index] # 현재 날짜 가져오기
+
+        index = self.bond_yield_datas[self.bond_yield_datas["stck_bsop_date"] == np.float64(current_date)].index.to_list()[0] # 해당하는 날짜 인덱스 찾기
+
+        i = 0
+        while True: # 국채 금리 데이터 가져오기
+            bond_yield = self.bond_yield_datas["Treasury_Bond_Yield(10Year)"][index + i]
+            
+            if bond_yield != -1: # 해당 날짜의 데이터가 -1이 아니면 
+                break
+            
+            i -= 1 # 해당 날짜의 데이터가 -1이면 이전 데이터 확인
+
+        total_evlu_rate = self.wallet.get_total_evlu_rate(self.price) # 현재 전체 수익률
+        minus_rate_list = list(filter(lambda x: x<0, self.wallet.rate_list)) # 마이너스 수익률
+
+        if not minus_rate_list: # 마이너스 수익률이 없는 경우
+            rate_std = 0
+        else:    
+            rate_std = np.std(minus_rate_list) # 마이너스 수익률 표준 편차 구하기
+        
+        if rate_std != 0:
+            ratio = (total_evlu_rate - bond_yield) / rate_std
+        else:
+            ratio  = 0.0
+
+        return ratio
+
+
+    def _np_to_float(self, x):
+        if isinstance(x, np.ndarray): # numpy 자료형 바꾸기
+            return float(x[0])
+        return x
+
 if __name__ == '__main__':
     #a = DailyStockAdaptor()
     #a.save_datas()

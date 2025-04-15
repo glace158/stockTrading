@@ -113,6 +113,11 @@ class MainPage(QWidget):
             with open(self.log_path, 'r', encoding='utf-8') as file:
                 content = file.read()
                 self.widgets.ConsolePlainTextEdit.setPlainText(content)
+
+                # 커서 움직이기
+                self.widgets.ConsolePlainTextEdit.verticalScrollBar().setValue(self.widgets.ConsolePlainTextEdit.verticalScrollBar().maximum())
+
+                
         except Exception as e:
             self.widgets.ConsolePlainTextEdit.setPlainText(f"파일을 읽는 중 오류가 발생했습니다: {e}")
     

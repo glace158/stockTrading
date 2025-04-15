@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'mainiBwRub.ui'
+## Form generated from reading UI file 'mainKBRHww.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.8.2
 ##
@@ -1512,6 +1512,24 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_31.addWidget(self.countFrame)
 
+        self.frame_14 = QFrame(self.frame_17)
+        self.frame_14.setObjectName(u"frame_14")
+        self.frame_14.setFrameShape(QFrame.Shape.StyledPanel)
+        self.frame_14.setFrameShadow(QFrame.Shadow.Raised)
+        self.horizontalLayout_30 = QHBoxLayout(self.frame_14)
+        self.horizontalLayout_30.setObjectName(u"horizontalLayout_30")
+        self.isDataFileRemoveCheckBox = QCheckBox(self.frame_14)
+        self.isDataFileRemoveCheckBox.setObjectName(u"isDataFileRemoveCheckBox")
+        self.isDataFileRemoveCheckBox.setAutoFillBackground(False)
+        self.isDataFileRemoveCheckBox.setStyleSheet(u"")
+        self.isDataFileRemoveCheckBox.setChecked(True)
+        self.isDataFileRemoveCheckBox.setTristate(False)
+
+        self.horizontalLayout_30.addWidget(self.isDataFileRemoveCheckBox)
+
+
+        self.horizontalLayout_31.addWidget(self.frame_14)
+
         self.DownloadPushButton = QPushButton(self.frame_17)
         self.DownloadPushButton.setObjectName(u"DownloadPushButton")
         self.DownloadPushButton.setStyleSheet(u"background-color: rgb(52, 59, 72);")
@@ -2454,7 +2472,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.stackedWidget.setCurrentIndex(2)
+        self.stackedWidget.setCurrentIndex(0)
 
 
         QMetaObject.connectSlotsByName(MainWindow)
@@ -2547,6 +2565,7 @@ class Ui_MainWindow(object):
         self.removeStockCodePushButton.setText(QCoreApplication.translate("MainWindow", u"Remove", None))
         self.label_16.setText(QCoreApplication.translate("MainWindow", u"Last Date", None))
         self.label_15.setText(QCoreApplication.translate("MainWindow", u"count", None))
+        self.isDataFileRemoveCheckBox.setText(QCoreApplication.translate("MainWindow", u"Is data File Remove", None))
         self.DownloadPushButton.setText(QCoreApplication.translate("MainWindow", u"Download", None))
         self.labelBoxBlenderInstalation_4.setText(QCoreApplication.translate("MainWindow", u"kis_devlp file", None))
         self.filepath_lineEdit_3.setText("")

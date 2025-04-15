@@ -3,6 +3,7 @@ from PySide6.QtCore import *
 from PySide6.QtGui import *
 
 from stock.stock_adaptor import DailyStockAdaptor
+from stock.stock_data import Stock
 from qt.ui_main import Ui_MainWindow
 from common.fileManager import Config
 import os
@@ -53,7 +54,7 @@ class DownloadPage(QWidget):
         for i in range(self.widgets.stockCodeListWidget.count()):
             stock_code_list.append(self.widgets.stockCodeListWidget.item(i).text())
         
-        if os.path.exists("API/datas/"):
+        if os.path.exists("API/datas/") and self.widgets.isDataFileRemoveCheckBox.isChecked():
             for file in os.scandir("API/datas/"):
                 print("Remove File: ",file)
                 os.remove(file)
@@ -82,8 +83,8 @@ class DownloadStockData(QThread):
 
     def run(self):
         for i in range(len(self.stock_codes)) :
-            daily_stock = DailyStockAdaptor()
-            daily_stock.set_init_datas(itm_no=self.stock_codes[i],inqr_strt_dt=self.max_dt,count=self.count, is_remove_date=False)
-            daily_stock.save_datas("API/datas/ " + self.stock_codes[i] + ".csv")
+            stock = Stock()
+            stock.get_all_datas(itm_no=self.stock_codes[i],inqr_strt_dt=self.max_dt,count=self.count, is_remove_date=False)
+            stock.save_datas("API/datas/ " + self.stock_codes[i] + ".csv")
 
             self.progress_updated.emit(((i + 1) / len(self.stock_codes)) * 100)

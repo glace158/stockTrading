@@ -1,5 +1,6 @@
 import numpy as np
 import abc
+import pandas as pd
 
 class Wallet:
     __metaclass__ = abc.ABCMeta
@@ -30,37 +31,57 @@ class TrainStockWallet(Wallet):
         
         self.fee = fee
         self.tax = tax
-
+        
     def init_balance(self, start_amt):
         self.start_amt = start_amt # 처음 자산
         self.current_amt = start_amt # 현재 자산
+        
         self.qty = 0.0 # 보유한 주식 개수
 
+        self.total_amt_list = [start_amt]
+        self.rate_list = []
+        
     def get_total_amt(self, price):
         return self.current_amt + (price * self.qty) # 총 자산 계산
 
-    def get_balance(self): # 현재 자산
+    def get_balance(self): # 현재 현금 자산
         return self.current_amt
 
     def get_psbl_qty(self, price): # 구매가능 개수
         return self.current_amt // price
     
     def get_total_evlu_rate(self, price): # 총자산 증감 비율
+        
         total_amt = self.current_amt + (price * self.qty) # 총 자산 계산
         amt_diff = total_amt - self.start_amt # 초기 자산 차이 계산
         evlu_rate = amt_diff / self.start_amt # 비율 계산
 
-        return evlu_rate
+        return evlu_rate * 100
+
+    def get_daily_evlu_rate(self): # 거래당 증감 비율
+        amt_diff = self.total_amt_list[-1] - self.total_amt_list[-2]  # 현재 자산 - 이전 자산
+        rate = amt_diff / self.total_amt_list[-2] # (현재 자산 - 이전 자산) / 이전 자산
+        return rate * 100
+    
+    def get_next_day_evlu_rate(self, next_price): # 다음날 증감 비율
+        next_day_total_amt = self.get_total_amt(next_price)
+        amt_diff = next_day_total_amt - self.total_amt_list[-1]  # 예측 다음날 자산 - 현재 자산
+        rate = amt_diff / self.total_amt_list[-1] # (예측 다음날 자산 - 현재 자산) / 현재 자산
+        return rate * 100
 
     def order(self, item_no="005930", order_percent=0.0, price=0):
         if order_percent > 1 or order_percent < -1: # 매매 퍼센트가 -1 <= x <= 1 사이가 아니면 
-            return self.get_total_amt(price), 0.0, self.qty, False 
+            daily_rate = self._np_to_float(self.get_daily_evlu_rate())
+            self.rate_list.append(daily_rate) # 수익률 기록
+            return self.get_total_amt(price), daily_rate, 0.0, self.qty, False 
 
         is_sell = order_percent < 0 # 매도 확인
         total_qty = self.current_amt // price # 매수 가능 총 개수
 
         if (total_qty == 0 and order_percent > 0) or (self.qty == 0 and order_percent < 0): # 매매 수량 없는데 시도 시
-            return self.get_total_amt(price), 0.0, self.qty, False 
+            daily_rate = self._np_to_float(self.get_daily_evlu_rate())
+            self.rate_list.append(daily_rate) # 수익률 기록
+            return self.get_total_amt(price), daily_rate, 0.0, self.qty, False 
 
         if is_sell: # 매도
             order_qty = np.floor(np.abs(self.qty * order_percent)) # 매도 주문 개수 계산
@@ -83,20 +104,32 @@ class TrainStockWallet(Wallet):
             total_price = order_price + order_fee
             self.current_amt -= total_price
             self.qty += order_qty
-
-        #print(self.current_amt)
-        return self.get_total_amt(price), order_qty, self.qty, True # 현재 가지고 있는 현금, 가지고있는 주식 수량, 구매 선공 여부 
+         
+        self.total_amt_list.append(self._np_to_float(self.get_total_amt(price))) # 현재 자산 기록
+        daily_rate = self._np_to_float(self.get_daily_evlu_rate())
+        self.rate_list.append(daily_rate) # 수익률 기록
+        return (self.get_total_amt(price), daily_rate, order_qty, self.qty, True) # 총 자산, 주문 수량,가지고있는 주식 수량, 구매 선공 여부 
     
     def calculate_fee(self, order_price):
         return int(order_price * (self.fee / 100))
     
     def calculate_tax(self, order_price):
         return int(order_price * (self.tax / 100))
-
-
+    
+    def _np_to_float(self, x):
+        if isinstance(x, np.ndarray): # numpy 자료형 바꾸기
+            return float(x[0])
+        return x
 if __name__ == '__main__':
     t = TrainStockWallet()
-    print(t.order(order_percent=0.0065, price=60100))
-    print(t.order(order_percent=0.0035, price=61000))
-    print(t.order(order_percent=-0.0001, price=61300))
+    print(t.order(order_percent=0.0, price=60100))
+    print(t.order(order_percent=0.1, price=1000))
+    
+    print(t.order(order_percent=-1, price=1000))
+    print(t.order(order_percent=1., price=61300))
+    print(t.order(order_percent=-1.0, price=1000))
+
+    #print(t.order(order_percent=0.0065, price=60100))
+    #print(t.order(order_percent=0.0035, price=61000))
+    #print(t.order(order_percent=-0.1, price=61300))
     #print(t.get_total_evlu_rate(61400))

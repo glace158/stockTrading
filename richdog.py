@@ -45,7 +45,7 @@ class RichDog:
         self.action_std = float(self.config.action_std.value)                  # starting std for action distribution (Multivariate Normal) (행동 표준 편차)
         self.min_action_std = float(self.config.min_action_std.value)                # minimum action_std (stop decay after action_std <= min_action_std) (0.05 ~ 0.1) (최소 행동 표준 편차 값)
         self.action_std_decay_freq = int(self.config.action_std_decay_freq.value)  # action_std decay frequency (in num timesteps) (표준 편차 감소 주기)
-        self.action_std_decay_rate = (self.action_std - self.min_action_std) / (self.max_training_timesteps // self.action_std_decay_freq)     # linearly decay action_std (action_std = action_std - action_std_decay_rate) (행동 표준 편차 감소 값)
+        self.action_std_decay_rate = (self.action_std - self.min_action_std) / ((self.max_training_timesteps - self.action_std_decay_freq)  // self.action_std_decay_freq)     # linearly decay action_std (action_std = action_std - action_std_decay_rate) (행동 표준 편차 감소 값)
         #####################################################
 
         ## Note : print/log frequencies should be > than max_ep_len
@@ -127,7 +127,6 @@ class RichDog:
         self.console_file_name = "PPO_console_log.txt"
         console_dir = "PPO_console/"
         self.console_logger.add_file("console", console_dir, self.console_file_name)
-        #self.console_file = File(console_dir , self.console_file_name)
 
         print("save console path : " + console_dir)
         #####################################################
@@ -136,15 +135,13 @@ class RichDog:
         ################## action logging ##################
         action_file_name = "PPO_{}_action_{}_{}_{}.csv".format(self.env_name, self.random_seed, self.cur_time, num)
         action_dir = self.log_root_path + mode_dir + "/PPO_action_logs/" + self.env_name + '/' + str(self.cur_time) + '/'
-        #self.action_file = File(action_dir, action_file_name)
-        #self.action_file.write('timestep,action,reward,current_amt,order_qty\n')
+
         self.logger.add_file("action", action_dir, action_file_name)
-        self.logger.write_file("action", 'timestep,action,reward,current_amt,order_qty\n')
+        self.logger.write_file("action", 'timestep,action,reward,price,current_amt,order_qty,sharp_ratio,sortino_ratio,daily_rate\n')
 
         state_file_name = "PPO_{}_state_{}_{}_{}.csv".format(self.env_name, self.random_seed, self.cur_time, num)
         state_dir = self.log_root_path + mode_dir + "/PPO_state_logs/" + self.env_name + '/' + str(self.cur_time) + '/'
-        #self.state_file = File(state_dir, state_file_name)
-        #self.state_file.write( ','.join(self.env.get_data_label()) +'\n')
+
         self.logger.add_file("state", state_dir, state_file_name)
         self.logger.list_write_file("state", self.env.get_data_label())
 
@@ -160,7 +157,7 @@ class RichDogTrain(RichDog):
         self.console_logger = Logger()
         
         Config.save_config( self.config, self.log_root_path + "config/Hyperparameters.yaml")
-        Config.save_config( self.config, self.log_root_path + "config/StockConfig.yaml")
+        Config.save_config( self.stock_config, self.log_root_path + "config/StockConfig.yaml")
     
     def init_files(self):
         ###################### logging ######################
@@ -168,10 +165,9 @@ class RichDogTrain(RichDog):
         log_file_name = 'PPO_' + self.env_name + "_log_" + self.cur_time + ".csv"
         log_file_dir = self.log_root_path
         self.logger.add_file("log_file", log_file_dir, log_file_name)
-        #self.log_file = File(self.path + "PPO_logs/" + self.env_name + '/', log_file_name)
-
+        
         self.logger.write_file("log_file", 'episode,timestep,reward,loss,dist_entropy\n')
-        #self.log_file.write('episode,timestep,reward,loss,dist_entropy\n')
+
         print("current logging run number for " + self.env_name + " : ", self.cur_time)
         print("logging at : " + log_file_dir + log_file_name)
         #####################################################
@@ -181,9 +177,9 @@ class RichDogTrain(RichDog):
         checkpoint_dir = "PPO_preTrained/" + self.env_name + '/'
         self.logger.add_file("checkpoint", checkpoint_dir, checkpoint_file_name)
         
-        #self.checkpoint_file = File(self.path + "PPO_preTrained/" + self.env_name + '/', checkpoint_file_name)
         print("save checkpoint path : " + checkpoint_dir + checkpoint_file_name)
         #####################################################
+
 
     ################################### Training ###################################
     def train(self):
@@ -204,9 +200,6 @@ class RichDogTrain(RichDog):
         self.console_logger.print_wirte_file("console", "Started training at (GMT) : " + str(start_time) + "\n")
         self.console_logger.print_wirte_file("console", "============================================================================================\n")
         
-        #self.console_file.write_append("Started training at (GMT) : " + str(start_time) + "\n")
-        #self.console_file.write_append("============================================================================================"+ "\n")
-
         # printing and logging variables
         print_running_reward = 0
         print_running_episodes = 0
@@ -226,6 +219,7 @@ class RichDogTrain(RichDog):
         while time_step <= self.max_training_timesteps:
 
             state, _ = self.env.reset()
+
             current_ep_reward = 0
             next_state = state
 
@@ -240,7 +234,7 @@ class RichDogTrain(RichDog):
                 action, action_logprob, state_val = ppo_agent.select_action(state)
                 
                 next_state, reward, done, _, info = self.env.step(action)
-
+                
                 # saving buffer
                 ppo_agent.buffer.rewards.append(reward)
                 ppo_agent.buffer.is_terminals.append(done)
@@ -264,7 +258,6 @@ class RichDogTrain(RichDog):
                     log_avg_reward = log_running_reward / log_running_episodes
                     log_avg_reward = np.round(log_avg_reward, 4)
 
-                    #self.log_file.write_flush('{},{},{},{},{}\n'.format(i_episode, time_step, log_avg_reward, loss, dist_entropy))
                     self.logger.list_write_file("log_file", [i_episode, time_step, log_avg_reward, loss, dist_entropy])
 
                     log_running_reward = 0
@@ -279,8 +272,6 @@ class RichDogTrain(RichDog):
 
                     self.console_logger.print_wirte_file("console", "Episode : {} \t\t Timestep : {} \t\t Average Reward : {}\n".format(i_episode, time_step, print_avg_reward))
                     
-                    #self.console_file.write_append("Episode : {} \t\t Timestep : {} \t\t Average Reward : {}\n".format(i_episode, time_step, print_avg_reward))
-
                     print_running_reward = 0
                     print_running_episodes = 0
 
@@ -296,7 +287,7 @@ class RichDogTrain(RichDog):
                     is_save_model = True
 
                 if is_action_log:
-                    self.logger.list_write_file('action', [t, action[0], reward, info["current_amt"], info["order_qty"]])
+                    self.logger.list_write_file('action', [t, action[0], reward, info["price"], info["current_amt"], info["order_qty"], info["sharp_ratio"], info["sortino_ratio"],info["next_day_rate"]])
                     str_state = [str(item) for item in state]
                     self.logger.list_write_file('state', str_state)
                     is_save_model = False
@@ -338,7 +329,7 @@ class RichDogTest(RichDog):
         self.config = Config.load_config(root_path + "config/Hyperparameters.yaml")
         self.stock_config = Config.load_config(root_path + "config/StockConfig.yaml")
         
-        self.logger = Logger()
+        self.logger = Logger(root_path)
         self.console_logger = Logger()
         
     #################################### Testing ###################################
@@ -357,7 +348,7 @@ class RichDogTest(RichDog):
         #####################################################
 
         #self.env = GymEnvironment(env_name=self.env_name, render_mode="human")
-        self.env = StockEnvironment(stock_config=self.stock_config)
+        self.env = StockEnvironment(stock_code_path="API/test_datas",stock_config=self.stock_config)
 
         # state space dimension
         self.state_dim = self.env.getObservation().shape[0]
@@ -372,7 +363,7 @@ class RichDogTest(RichDog):
                     self.gamma, self.K_epochs, self.eps_clip, self.has_continuous_action_space, 
                     self.action_std,self. value_loss_coef, self.entropy_coef,self.lamda, self.minibatchsize)
         # preTrained weights directory
-        
+
         if self.checkpoint_path == "":
             #self.console_file.write_append("Error : Not Setting Model path\n")
             self.console_logger.print_wirte_file("console", "Error : Not Setting Model path\n" )
@@ -380,13 +371,10 @@ class RichDogTest(RichDog):
 
         print("loading network from : " + self.checkpoint_path)
         self.console_logger.print_wirte_file("console", "loading network from : " + self.checkpoint_path + "\n")
-        #self.console_file.write_append("loading network from : " + checkpoint_path + "\n")
-        
         
         ppo_agent.load(self.checkpoint_path)
 
         self.console_logger.print_wirte_file("console", "--------------------------------------------------------------------------------------------\n")
-        #self.console_file.write_append("--------------------------------------------------------------------------------------------" + "\n")
 
         test_running_reward = 0
 
@@ -406,7 +394,7 @@ class RichDogTest(RichDog):
                     time.sleep(frame_delay)
 
                 # logging
-                self.logger.list_write_file('action', [t, action[0], reward, info["current_amt"], info["order_qty"]])
+                self.logger.list_write_file('action', [t, action[0], reward, info["price"], info["current_amt"], info["order_qty"], info["sharp_ratio"], info["sortino_ratio"],info["next_day_rate"]])
                 str_state = [str(item) for item in state]
                 self.logger.list_write_file('state', str_state)
 
@@ -417,12 +405,9 @@ class RichDogTest(RichDog):
             ppo_agent.buffer.clear()
 
             test_running_reward +=  ep_reward
-            self.console_logger.print_wirte_file("console", 'Episode: {} \t\t Reward: {}\n'.format(ep, round(ep_reward, 2)))
-            #self.console_file.write_append('Episode: {} \t\t Reward: {}\n'.format(ep, round(ep_reward, 2)))
+            self.console_logger.print_wirte_file("console", 'Episode: {} \t\t Reward: {}\n'.format(ep, np.round(ep_reward, 2)))
 
             ep_reward = 0
-
-            
 
         self.env.close()
         self.logger.close_all()
@@ -434,19 +419,3 @@ class RichDogTest(RichDog):
         self.console_logger.print_wirte_file("console", "average test reward : " + str(avg_test_reward) + "\n")
         self.console_logger.print_wirte_file("console", "============================================================================================\n")
         self.console_logger.close_all()
-        
-
-if __name__ == '__main__':
-    arg = sys.argv
-
-    if len(arg)<= 1:        
-        arg = ["main.py", "train", "PPO_preTrained/Richdog/PPO_Richdog_0_20250403-141334.pth"]
-        
-
-    if len(arg) > 1:
-        richdog = RichDog("train")
-        if arg[1] == 'train':
-            richdog.train()
-        elif arg[1] == 'test':
-            richdog = RichDog('test')
-            richdog.test(arg[2])

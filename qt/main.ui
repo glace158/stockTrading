@@ -1221,7 +1221,7 @@ Button */
                       <string notr="true">background: transparent;</string>
                      </property>
                      <property name="currentIndex">
-                      <number>1</number>
+                      <number>0</number>
                      </property>
                      <widget class="QWidget" name="home">
                       <property name="styleSheet">
@@ -2808,7 +2808,7 @@ border: 2px solid rgb(52, 59, 72);</string>
                                </property>
                                <property name="dateTime">
                                 <datetime>
-                                 <hour>15</hour>
+                                 <hour>6</hour>
                                  <minute>0</minute>
                                  <second>0</second>
                                  <year>2025</year>
@@ -2850,6 +2850,37 @@ border: 2px solid rgb(52, 59, 72);</string>
                                </property>
                                <property name="value">
                                 <number>1500</number>
+                               </property>
+                              </widget>
+                             </item>
+                            </layout>
+                           </widget>
+                          </item>
+                          <item>
+                           <widget class="QFrame" name="frame_14">
+                            <property name="frameShape">
+                             <enum>QFrame::Shape::StyledPanel</enum>
+                            </property>
+                            <property name="frameShadow">
+                             <enum>QFrame::Shadow::Raised</enum>
+                            </property>
+                            <layout class="QHBoxLayout" name="horizontalLayout_30">
+                             <item>
+                              <widget class="QCheckBox" name="isDataFileRemoveCheckBox">
+                               <property name="autoFillBackground">
+                                <bool>false</bool>
+                               </property>
+                               <property name="styleSheet">
+                                <string notr="true"/>
+                               </property>
+                               <property name="text">
+                                <string>Is data File Remove</string>
+                               </property>
+                               <property name="checked">
+                                <bool>true</bool>
+                               </property>
+                               <property name="tristate">
+                                <bool>false</bool>
                                </property>
                               </widget>
                              </item>
@@ -3176,6 +3207,12 @@ QProgressBar::chunk{
                              </item>
                              <item>
                               <widget class="QLineEdit" name="paper_app_lineEdit">
+                               <property name="minimumSize">
+                                <size>
+                                 <width>0</width>
+                                 <height>30</height>
+                                </size>
+                               </property>
                                <property name="styleSheet">
                                 <string notr="true">background-color: rgb(33, 37, 43);</string>
                                </property>
@@ -3205,6 +3242,12 @@ QProgressBar::chunk{
                              </item>
                              <item>
                               <widget class="QLineEdit" name="paper_sec_lineEdit">
+                               <property name="minimumSize">
+                                <size>
+                                 <width>0</width>
+                                 <height>30</height>
+                                </size>
+                               </property>
                                <property name="styleSheet">
                                 <string notr="true">background-color: rgb(33, 37, 43);</string>
                                </property>
@@ -3247,6 +3290,12 @@ QProgressBar::chunk{
                              </item>
                              <item>
                               <widget class="QLineEdit" name="my_app_lineEdit">
+                               <property name="minimumSize">
+                                <size>
+                                 <width>0</width>
+                                 <height>30</height>
+                                </size>
+                               </property>
                                <property name="styleSheet">
                                 <string notr="true">background-color: rgb(33, 37, 43);</string>
                                </property>
@@ -3276,6 +3325,12 @@ QProgressBar::chunk{
                              </item>
                              <item>
                               <widget class="QLineEdit" name="my_sec_lineEdit">
+                               <property name="minimumSize">
+                                <size>
+                                 <width>0</width>
+                                 <height>30</height>
+                                </size>
+                               </property>
                                <property name="styleSheet">
                                 <string notr="true">background-color: rgb(33, 37, 43);</string>
                                </property>
@@ -3318,6 +3373,12 @@ QProgressBar::chunk{
                              </item>
                              <item>
                               <widget class="QLineEdit" name="my_acct_stock_lineEdit">
+                               <property name="minimumSize">
+                                <size>
+                                 <width>0</width>
+                                 <height>30</height>
+                                </size>
+                               </property>
                                <property name="styleSheet">
                                 <string notr="true">background-color: rgb(33, 37, 43);</string>
                                </property>
@@ -3360,6 +3421,12 @@ QProgressBar::chunk{
                              </item>
                              <item>
                               <widget class="QLineEdit" name="my_paper_stock_lineEdit">
+                               <property name="minimumSize">
+                                <size>
+                                 <width>0</width>
+                                 <height>30</height>
+                                </size>
+                               </property>
                                <property name="styleSheet">
                                 <string notr="true">background-color: rgb(33, 37, 43);</string>
                                </property>
@@ -3402,6 +3469,12 @@ QProgressBar::chunk{
                              </item>
                              <item>
                               <widget class="QLineEdit" name="my_prod_lineEdit">
+                               <property name="minimumSize">
+                                <size>
+                                 <width>0</width>
+                                 <height>30</height>
+                                </size>
+                               </property>
                                <property name="styleSheet">
                                 <string notr="true">background-color: rgb(33, 37, 43);</string>
                                </property>
@@ -3588,8 +3661,8 @@ QProgressBar::chunk{
                                  <rect>
                                   <x>0</x>
                                   <y>0</y>
-                                  <width>90</width>
-                                  <height>36</height>
+                                  <width>862</width>
+                                  <height>675</height>
                                  </rect>
                                 </property>
                                 <layout class="QHBoxLayout" name="horizontalLayout_15">
@@ -3697,7 +3770,7 @@ QScrollArea{
                                  <rect>
                                   <x>0</x>
                                   <y>0</y>
-                                  <width>99</width>
+                                  <width>222</width>
                                   <height>232</height>
                                  </rect>
                                 </property>
@@ -4160,7 +4233,7 @@ QScrollArea{
                                 <rect>
                                  <x>0</x>
                                  <y>0</y>
-                                 <width>218</width>
+                                 <width>323</width>
                                  <height>218</height>
                                 </rect>
                                </property>

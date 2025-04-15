@@ -11,9 +11,9 @@ if __name__ == '__main__':
         
 
     if len(arg) > 1:
-        richdog = RichDogTrain()
         if arg[1] == 'train':
+            richdog = RichDogTrain()
             richdog.train()
         elif arg[1] == 'test':
-            richdog = RichDogTest(arg[2])
+            richdog = RichDogTest(checkpoint_path=arg[2])
             richdog.test()
