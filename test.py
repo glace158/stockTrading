@@ -14,4 +14,3 @@ for i in range(30):
     print("================================")
     #print(a.sortino_ratio())
     print(a.get_info('',0.0))
-

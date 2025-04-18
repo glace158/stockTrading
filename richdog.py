@@ -378,6 +378,7 @@ class RichDogTest(RichDog):
 
         test_running_reward = 0
 
+        self.cur_time = str(datetime.now().strftime("%Y%m%d-%H%M%S"))
         for ep in range(1, total_test_episodes+1):
             self.action_file_log(ep, "PPO_test_logs")
             

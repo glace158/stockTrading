@@ -111,9 +111,8 @@ class StockEnvironment(Environment): # 주식 환경
         self.strt_dt = self._get_random_strt_dt() # 시작 날짜 설정
         self.stock_code = self._get_random_stock_code() # 주식코드 설정
         self.count = self._get_random_count() # 에피소드 크기 설정
-        self.stock.init_balance(self._get_random_balance()) # 자산 초기화
-        
-        self.result = self.stock.load_datas(self.stock_code_path + "/" + self.stock_code, inqr_strt_dt=self.strt_dt, count=self.count) # 주식 파일 로드
+
+        self.result = self.stock.load_datas(self.stock_code_path + "/" + self.stock_code, inqr_strt_dt=self.strt_dt, count=self.count, start_amt=self._get_random_balance()) # 주식 파일 로드
         #print(result)
         
         data, _, info = self.stock.get_info(self.stock_code, 0.0) # 주식 정보 가져오기
@@ -128,7 +127,7 @@ class StockEnvironment(Environment): # 주식 환경
 
         nextstate, terminated, info = self.stock.get_info(self.stock_code, action)# 다음 주식 정보 가져오기
 
-        reward = self._get_reward(info["is_order"], info) # 보상 계산
+        reward = info["reward"] # 보상
 
         nextstate = self.normalize(nextstate) # 정규화 
         
@@ -161,18 +160,6 @@ class StockEnvironment(Environment): # 주식 환경
     
     def get_data_label(self): # 데이터 라벨 반환
         return self.stock.get_data_label()
-    
-    def _get_reward(self, is_order, info): # 보상 계산
-        if is_order:
-            total_amt_reward = -1 if info["total_rate"] < -1 else info["total_rate"]
-            #daily_reward = -1 if info["daily_rate"] < -1 else info["daily_rate"]
-            daily_reward = -1 if info["next_day_rate"] < -1 else info["next_day_rate"]
-            sortino_reward = -1 if info["sortino_ratio"] < -1 else info["sortino_ratio"]
-            sharp_reward = -1 if info["sharp_ratio"] < -1 else info["sharp_ratio"]
-            reward = daily_reward #+ 0.1 * sortino_reward + 0.05 * sharp_reward
-        else:
-            reward = -1.0
-        return reward
 
     def _get_random_strt_dt(self):
         days = (datetime.datetime.strptime(self.max_dt, "%Y%m%d") - datetime.datetime.strptime(self.min_dt, "%Y%m%d")).days # 최대 날짜와 최소 날짜를 빼준다
