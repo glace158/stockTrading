@@ -201,7 +201,21 @@ class DailyStockAdaptor(Adaptor):
             rate_reward = 0
 
         total_rate_reward = self.wallet.get_net_income_rate(next_price) # 순이익 계산
+
+        # 지수형 거리 기반 보상 (Exponential reward based on distance)
+        rate_reward = self.get_exp_reward(alpha = 0.1 , reward=rate_reward)
+        total_rate_reward = self.get_exp_reward(alpha = 0.1 , reward=total_rate_reward)
+
         return 0.1 * total_rate_reward + 0.99 * rate_reward
+
+    def get_exp_reward(self, alpha ,reward):
+        exp_reward = 1 - np.exp(-alpha * (reward ** 2))
+        if reward < 0: # 오차가 커질수록 -1에 수렴
+            return -exp_reward
+        elif reward > 0: # 오차가 커질수록 1에 수렴
+            return exp_reward
+        else: # 보상은 0
+            return 0
 
     def next_day_down_reward(self, order_percent, next_day_rate, wait_see_rate): # 다음날 하락할 때
         #rate = self.wallet.get_next_day_evlu_rate(next_price) # 다음날 수익률

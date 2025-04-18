@@ -70,6 +70,9 @@ class TrainStockWallet(Wallet):
         return evlu_rate * 100
 
     def get_daily_evlu_rate(self): # 거래당 증감 비율
+        if len(self.total_amt_list) < 0 or self.total_amt_list[-2] == 0:
+            return 0
+        
         amt_diff = self.total_amt_list[-1] - self.total_amt_list[-2]  # 현재 자산 - 이전 자산
         rate = amt_diff / self.total_amt_list[-2] # (현재 자산 - 이전 자산) / 이전 자산
         return rate * 100
@@ -103,7 +106,7 @@ class TrainStockWallet(Wallet):
         daily_rate = self._np_to_float(self.get_daily_evlu_rate())
         self.rate_list.append(daily_rate) # 수익률 기록
 
-        assert self.current_amt > 0 # 만약 자산이 음수가 되면 에러 발생
+        assert self.current_amt >= 0 # 만약 자산이 음수가 되면 에러 발생
         # 총 자산, 전날 대비 총 자산 증감률 , 주문 수량, 보유 주식 수량, 구매 성공 여부
         return (self.get_total_amt(price), daily_rate, order_qty, self.qty, is_done)  
     
@@ -126,7 +129,10 @@ class TrainStockWallet(Wallet):
         return order_qty, True
 
     def buy(self, order_percent=0.0, price=0): # 매수
-        total_qty = self.current_amt // price # 매수 가능 총 개수
+        # 1주당 수수료 포함된 가격
+        unit_with_fee = price * (1 + self.fee / 100)
+        
+        total_qty = self.current_amt // unit_with_fee # 매수 가능 총 개수
             
         if total_qty == 0: # 구매 가능 수량이 없을 때
             return 0, False
@@ -139,6 +145,10 @@ class TrainStockWallet(Wallet):
             order_fee = self.calculate_fee(order_price) # 수수료 계산
 
             total_price = order_price + order_fee
+
+            if total_price > self.current_amt: # 주문할 가격이 현금 자산보다 많은 경우
+                return 0, False
+
             self.current_amt -= total_price
             self.qty += order_qty
 
@@ -311,7 +321,7 @@ if __name__ == '__main__':
     # 매도 했는데 +인 경우 / 다음날 수익 낼 수 있었던 만큼 페널티 (다음날 예상 수익률 - 만약 관망했을 때 수익률) 
     # 매수 했는데 -인 경우 / x
     # 매수 했는데 +인 경우 / 다음날 수익낸 만큼 보상 (다음날 예상 수익률 - 만약 관망했을 때 수익률) 보상
-    # 관망 했는데 -인 경우(물량이 0 경우) / 가격이 상승한 만큼 페널티 (-price_rate(price, next_price))
+    # 관망 했는데 -인 경우(물량이 0 경우) / 가격이 상승한 만큼 페널티 (- 가격 상승률)
     # 관망 했는데 +인 경우 / (다음날 예상 수익률 - 만약 관망했을 때 수익률) = 0
 
     price = 192000
