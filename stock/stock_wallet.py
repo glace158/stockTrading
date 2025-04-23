@@ -24,6 +24,11 @@ class Wallet:
     def order(self, item_no="005930", order_percent=0.0, price=0):
         pass
 
+    @abc.abstractmethod
+    def get_net_income_rate(self, price): # 순이익 비율 계산
+        pass
+    
+
 class TrainStockWallet(Wallet):
     def __init__(self, start_amt=100000000, init_price=0,fee=0.0142, tax=0.15):
         super().__init__()
@@ -257,7 +262,7 @@ if __name__ == '__main__':
     price = 176000
     next_price = 193500
     init_price = price
-    order_percent = 1
+    order_percent = 0.1
 
     wait_see_rate = t.get_wait_see_next_day_evlu_rate(next_price,t.get_total_amt(price))
     print(f"wait_see_rate: {wait_see_rate}")
@@ -270,11 +275,14 @@ if __name__ == '__main__':
     
     reward = get_reward(t, info[-1],order_percent, price, next_price, next_day_rate, wait_see_rate)
     print(reward)
+
+    print(t.get_net_income_rate(next_price))
+    print(next_day_rate - wait_see_rate)
     print("==========================================") 
 
     price = 193500
-    next_price = 193500
-    order_percent = 1.
+    next_price = 188500
+    order_percent = -0.4
 
     wait_see_rate = t.get_wait_see_next_day_evlu_rate(next_price,t.get_total_amt(price))
     print(f"wait_see_rate: {wait_see_rate}")
@@ -287,6 +295,9 @@ if __name__ == '__main__':
     
     reward = get_reward(t, info[-1],order_percent, price, next_price, next_day_rate, wait_see_rate)
     print(reward)
+    
+    print(t.get_net_income_rate(next_price))
+    print(next_day_rate - wait_see_rate)
     print("==========================================")
     
     # 다음날 가격이 떨어질 때
@@ -300,7 +311,7 @@ if __name__ == '__main__':
 
     price = 188500
     next_price = 192000
-    order_percent = -0.1
+    order_percent = 0
 
     wait_see_rate = t.get_wait_see_next_day_evlu_rate(next_price,t.get_total_amt(price))
     print(f"wait_see_rate: {wait_see_rate}")
@@ -313,6 +324,9 @@ if __name__ == '__main__':
     
     reward = get_reward(t, info[-1],order_percent, price, next_price, next_day_rate, wait_see_rate)
     print(reward)
+    
+    print(t.get_net_income_rate(next_price))
+    print(next_day_rate - wait_see_rate)
     print("==========================================")
     
     # 다음날 가격이 상승할 때
@@ -325,8 +339,8 @@ if __name__ == '__main__':
     # 관망 했는데 +인 경우 / (다음날 예상 수익률 - 만약 관망했을 때 수익률) = 0
 
     price = 192000
-    next_price = 289500
-    order_percent = 1. 
+    next_price = 189500
+    order_percent = 0
 
     wait_see_rate = t.get_wait_see_next_day_evlu_rate(next_price,t.get_total_amt(price))
     print(f"wait_see_rate: {wait_see_rate}")
@@ -339,11 +353,14 @@ if __name__ == '__main__':
     
     reward = get_reward(t, info[-1],order_percent, price, next_price, next_day_rate, wait_see_rate)
     print(reward)
+    
+    print(t.get_net_income_rate(next_price))
+    print(next_day_rate - wait_see_rate)
     print("==========================================")
     
     price = 189500
     next_price = 188000
-    order_percent = 1. 
+    order_percent = 0
 
     wait_see_rate = t.get_wait_see_next_day_evlu_rate(next_price,t.get_total_amt(price))
     print(f"wait_see_rate: {wait_see_rate}")
@@ -356,6 +373,9 @@ if __name__ == '__main__':
     
     reward = get_reward(t, info[-1],order_percent, price, next_price, next_day_rate, wait_see_rate)
     print(reward)
+    
+    print(t.get_net_income_rate(next_price))
+    print(next_day_rate - wait_see_rate)
     print("==========================================")
     #print(t.order(order_percent=0.0065, price=60100))
     #print(t.order(order_percent=0.0035, price=61000))

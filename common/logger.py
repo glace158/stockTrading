@@ -1,4 +1,5 @@
 from common.fileManager import File
+import os
 
 class Logger:
     def __init__(self, root_dir=""):
@@ -27,3 +28,5 @@ class Logger:
         for key in self.file_dict.keys():
             self.file_dict[key].close()
     
+    def is_exists(self, key):
+        return key in self.file_dict

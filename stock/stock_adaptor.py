@@ -4,6 +4,7 @@ from stock.stock_wallet import TrainStockWallet
 import numpy as np
 import datetime
 from common.fileManager import Config
+from PPO.reward import BuySellReward, ExpReward
 
 class Adaptor:
     __metaclass__ = abc.ABCMeta
@@ -103,8 +104,8 @@ class DailyStockAdaptor(Adaptor):
         net_income_rate = self._np_to_float(net_income_rate)
 
         # 보상 계산
-        reward = self.get_reward(is_order, action, self.price, next_price, next_day_rate, wait_see_rate)
-        reward = self._np_to_float(reward)
+        #reward, rate_reward, rate_exp_reward, total_rate_reward, total_rate_exp_reward, reward_log = BuySellReward().get_reward(self.wallet, is_order, action, self.price, next_price, next_day_rate, wait_see_rate)
+        reward, rate_reward, rate_exp_reward, total_rate_reward, total_rate_exp_reward, reward_log = ExpReward().get_reward(self.wallet, is_order, action, self.price, next_price, next_day_rate, wait_see_rate)
 
         data = np.array(data, dtype=np.float32)
         return data, done, {
@@ -118,12 +119,13 @@ class DailyStockAdaptor(Adaptor):
                             "is_order" : is_order, 
                             "sharp_ratio" : sharp_data, 
                             "sortino_ratio" : sortino_data,
-                            "reward" : reward
+                            "reward" : reward,
+                            "rate_reward" : rate_reward,
+                            "rate_exp_reward" : rate_exp_reward,
+                            "reward_log" : reward_log,
+                            "total_rate_reward" : total_rate_reward,
+                            "total_rate_exp_reward" : total_rate_exp_reward
                             }
-
-    def get_price_rate(self, price, next_price):
-        diff = next_price - price
-        return (diff / price) * 100
     
     # 라벨 정보 가져오기
     def get_data_label(self):
@@ -186,93 +188,6 @@ class DailyStockAdaptor(Adaptor):
             ratio  = 0.0
 
         return ratio
-
-    def get_reward(self, is_order, order_percent, price, next_price, next_day_rate, wait_see_rate):
-        if not is_order:
-            return -1
-
-        price_rate = self.get_price_rate(price, next_price) # 다음날 주식 증감률 계산
-        
-        if price_rate > 0:
-            rate_reward = self.next_day_up_reward(order_percent, price, next_day_rate, price_rate, wait_see_rate)
-        elif price_rate < 0:
-            rate_reward = self.next_day_down_reward(order_percent, next_day_rate, wait_see_rate)
-        else:
-            rate_reward = 0
-
-        total_rate_reward = self.wallet.get_net_income_rate(next_price) # 순이익 계산
-
-        # 지수형 거리 기반 보상 (Exponential reward based on distance)
-        rate_reward = self.get_exp_reward(alpha = 0.1 , reward=rate_reward)
-        total_rate_reward = self.get_exp_reward(alpha = 0.1 , reward=total_rate_reward)
-
-        return 0.1 * total_rate_reward + 0.99 * rate_reward
-
-    def get_exp_reward(self, alpha ,reward):
-        exp_reward = 1 - np.exp(-alpha * (reward ** 2))
-        if reward < 0: # 오차가 커질수록 -1에 수렴
-            return -exp_reward
-        elif reward > 0: # 오차가 커질수록 1에 수렴
-            return exp_reward
-        else: # 보상은 0
-            return 0
-
-    def next_day_down_reward(self, order_percent, next_day_rate, wait_see_rate): # 다음날 하락할 때
-        #rate = self.wallet.get_next_day_evlu_rate(next_price) # 다음날 수익률
-        
-        if order_percent == 0.0: # 관망
-            if self.wallet.get_qty() == 0: # 매도할 물량이 없는 경우 관망 / 0
-                reward = 0
-            elif next_day_rate < 0: # 관망 했는데 -인 경우 / 손실한 만큼 페널티 (다음날 예상 수익률)
-                reward = next_day_rate
-            elif next_day_rate >= 0: # 관망 했는데 +인 경우(물량이 0인 경우) / (다음날 예상 수익률 - 만약 관망했을 때 수익률) = 0
-                reward = (next_day_rate - wait_see_rate)
-            else:
-                raise
-        elif order_percent < 0 and order_percent >= -1: # 매도
-            if next_day_rate <= 0: # 매도 했는데 -인 경우 / 손해를 막은 만큼 (다음날 예상 수익률 - 만약 관망했을 때 수익률) 보상
-                reward = (next_day_rate - wait_see_rate)
-            else:
-                raise
-
-        elif order_percent > 0 and order_percent <= 1: # 매수
-            if next_day_rate <= 0: # 매수 했는데 -인 경우 / 손실한 만큼 페널티 (다음날 예상 수익률)
-                reward = next_day_rate
-            else:
-                raise
-        else:
-            reward = -1
-    
-        return reward
-    
-    def next_day_up_reward(self, order_percent, price, next_day_rate, price_rate, wait_see_rate): # 다음날 상승할 때
-        #rate = self.wallet.get_next_day_evlu_rate(next_price) # 다음날 수익률
-        
-        if order_percent == 0.0: # 관망
-            if self.wallet.get_psbl_qty(price) == 0: # 매수할 물량이 없는 경우 관망 / 0
-                reward = 0
-            elif next_day_rate <= 0: # 관망 했는데 -인 경우(물량이 0 경우) / 가격이 상승한 만큼 페널티 (-price_rate)
-                reward = -price_rate
-            elif next_day_rate > 0: # 관망 했는데 +인 경우 / (다음날 예상 수익률 - 만약 관망했을 때 수익률) = 0
-                reward = (next_day_rate - wait_see_rate) 
-            else:
-                raise
-        elif order_percent < 0 and order_percent >= -1: # 매도
-            if next_day_rate >= 0: # 매도 했는데 +인 경우 / 다음날 수익 낼 수 있었던 만큼 페널티 (다음날 예상 수익률 - 만약 관망했을 때 수익률) 
-                reward = (next_day_rate - wait_see_rate)
-            else:
-                raise
-
-        elif order_percent > 0 and order_percent <= 1: # 매수
-            if next_day_rate >= 0: # 매수 했는데 +인 경우 / 다음날 수익낸 만큼 보상 (다음날 예상 수익률 - 만약 관망했을 때 수익률) 보상
-                reward = (next_day_rate - wait_see_rate)
-            else:
-                raise
-        else:
-            reward = -1
-
-        return reward 
-
 
 
     def _np_to_float(self, x):

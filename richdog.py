@@ -131,14 +131,15 @@ class RichDog:
         print("save console path : " + console_dir)
         #####################################################
         
-    def action_file_log(self, num, mode_dir):
+    def action_file_log(self, num, mode_dir, actionlabels):
         ################## action logging ##################
+        
         action_file_name = "PPO_{}_action_{}_{}_{}.csv".format(self.env_name, self.random_seed, self.cur_time, num)
         action_dir = self.log_root_path + mode_dir + "/PPO_action_logs/" + self.env_name + '/' + str(self.cur_time) + '/'
 
         self.logger.add_file("action", action_dir, action_file_name)
-        self.logger.write_file("action", 'timestep,action,reward,price,current_amt,order_qty,sharp_ratio,sortino_ratio,daily_rate\n')
-
+        self.logger.list_write_file("action", actionlabels)
+    
         state_file_name = "PPO_{}_state_{}_{}_{}.csv".format(self.env_name, self.random_seed, self.cur_time, num)
         state_dir = self.log_root_path + mode_dir + "/PPO_state_logs/" + self.env_name + '/' + str(self.cur_time) + '/'
 
@@ -218,7 +219,7 @@ class RichDogTrain(RichDog):
         # training loop
         while time_step <= self.max_training_timesteps:
 
-            state, _ = self.env.reset()
+            state, info = self.env.reset()
 
             current_ep_reward = 0
             next_state = state
@@ -226,7 +227,7 @@ class RichDogTrain(RichDog):
             is_action_log = is_save_model
 
             if is_action_log:
-                self.action_file_log(time_step, "PPO_train_logs")
+                self.action_file_log(time_step, "PPO_train_logs", ['timestep', "action", "reward"]  + list(info.keys()))
 
             for t in range(1, self.max_ep_len+1):
 
@@ -287,7 +288,7 @@ class RichDogTrain(RichDog):
                     is_save_model = True
 
                 if is_action_log:
-                    self.logger.list_write_file('action', [t, action[0], reward, info["price"], info["current_amt"], info["order_qty"], info["sharp_ratio"], info["sortino_ratio"],info["next_day_rate"]])
+                    self.logger.list_write_file('action', [t, action[0], reward] + list(info.values()))
                     str_state = [str(item) for item in state]
                     self.logger.list_write_file('state', str_state)
                     is_save_model = False
@@ -329,6 +330,7 @@ class RichDogTest(RichDog):
         self.config = Config.load_config(root_path + "config/Hyperparameters.yaml")
         self.stock_config = Config.load_config(root_path + "config/StockConfig.yaml")
         
+        self.cur_time = str(datetime.now().strftime("%Y%m%d-%H%M%S")) # 현재 시간 추출
         self.logger = Logger(root_path)
         self.console_logger = Logger()
         
@@ -378,12 +380,11 @@ class RichDogTest(RichDog):
 
         test_running_reward = 0
 
-        self.cur_time = str(datetime.now().strftime("%Y%m%d-%H%M%S"))
         for ep in range(1, total_test_episodes+1):
-            self.action_file_log(ep, "PPO_test_logs")
             
             ep_reward = 0
-            state, _ = self.env.reset()
+            state, info = self.env.reset()
+            self.action_file_log(ep, "PPO_test_logs", ['timestep', "action", "reward"]  + list(info.keys()))
 
             for t in range(1, self.max_ep_len+1):
                 action, action_logprob, state_val = ppo_agent.select_action(state)
@@ -395,7 +396,7 @@ class RichDogTest(RichDog):
                     time.sleep(frame_delay)
 
                 # logging
-                self.logger.list_write_file('action', [t, action[0], reward, info["price"], info["current_amt"], info["order_qty"], info["sharp_ratio"], info["sortino_ratio"],info["next_day_rate"]])
+                self.logger.list_write_file('action', [t, action[0], reward] + list(info.values()))
                 str_state = [str(item) for item in state]
                 self.logger.list_write_file('state', str_state)
 
