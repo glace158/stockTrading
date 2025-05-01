@@ -29,15 +29,17 @@ def save_graph():
     path = str(os.path.dirname(__file__)) + "/" 
 
     # get number of log files in directory
-    log_directory = path + "PPO_logs" + '/' + env_name + '/'
-    log_file_list = next(os.walk(log_directory))[2]
-    log_path = log_directory + log_file_list[-1]
+    #log_directory = "C:/Users/11/Desktop/save/20250422-131323/" 
+    log_directory = "PPO_logs/Richdog/20250501-010212/" 
+    #log_directory = path + "PPO_logs" + '/' + env_name + '/'
+    #log_file_list = next(os.walk(log_directory))[2]
+    log_path = log_directory + "PPO_Richdog_log_20250501-010212" + ".csv"
 
-    fig_num = log_file_list[-1].split('_')[-1]
+    #fig_num = log_file_list[-1].split('_')[-1]
 
     fig_directory = path + "PPO_figs" + '/' + env_name + '/'
 
-    fig_save_path =  '/PPO_' + env_name + '_fig_' + str(fig_num[:-4]) + '.png'
+    fig_save_path =  '/PPO_' + env_name + '_fig_' + str(0) + '.png'
     fig_file = File(fig_directory ,fig_save_path)
 
     all_runs = []

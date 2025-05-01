@@ -1,19 +1,27 @@
-import numpy as np
+from common.fileManager import Config
+import random
+import math
 
-def distance_based_reward_bounded(reward, alpha=5.0):
-    exp_reward = 1 - np.exp(-alpha * (reward ** 2))
-    if reward < 0: # 오차가 커질수록 -1에 수렴
-        return -exp_reward
-    elif reward > 0: # 오차가 커질수록 1에 수렴
-        return exp_reward
-    else: # 보상은 0
-        return 0
+class HyperParameterManager:
+    def __init__(self, config_path=None):
+        if not config_path:
+            config_path = "config/Hyperparameters.yaml"
 
-# 예시: 오차가 0일 때와 1일 때의 보상 계산
-reward_0 = distance_based_reward_bounded(0)
-reward_1 = distance_based_reward_bounded(1)
-reward_2 = distance_based_reward_bounded(-1)
+        self.config = Config.load_config(config_path)
+    
+    def get_data(self, data_name):
+        if data_name in vars(self.config):
+            print(self._get_random(vars(self.config)[data_name]))
 
-print(f"Reward when distance = 0: {reward_0}")  # 0
-print(f"Reward when distance = 1: {reward_1}")  
-print(f"Reward when distance = -1: {reward_2}")  
+    def _get_random(self, data):
+        if '.' in data.value:
+            return random.uniform(float(data.min), float(data.max))
+        else:
+            return random.randint(int(data.min), int(data.max))
+
+
+class StockParameterManager:
+    def __init__(self, config_path=None):
+        if not config_path:
+            config_path = "config/StockConfig.yaml"
+    

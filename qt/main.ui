@@ -1221,7 +1221,7 @@ Button */
                       <string notr="true">background: transparent;</string>
                      </property>
                      <property name="currentIndex">
-                      <number>0</number>
+                      <number>1</number>
                      </property>
                      <widget class="QWidget" name="home">
                       <property name="styleSheet">
@@ -2400,6 +2400,9 @@ border: 2px solid rgb(52, 59, 72);</string>
                             <property name="rowCount">
                              <number>30</number>
                             </property>
+                            <property name="columnCount">
+                             <number>5</number>
+                            </property>
                             <attribute name="horizontalHeaderVisible">
                              <bool>false</bool>
                             </attribute>
@@ -2538,6 +2541,8 @@ border: 2px solid rgb(52, 59, 72);</string>
                               <string>2</string>
                              </property>
                             </column>
+                            <column/>
+                            <column/>
                             <item row="0" column="0">
                              <property name="text">
                               <string>Hyperparameter</string>
@@ -2549,6 +2554,16 @@ border: 2px solid rgb(52, 59, 72);</string>
                              </property>
                             </item>
                             <item row="0" column="2">
+                             <property name="text">
+                              <string>Min</string>
+                             </property>
+                            </item>
+                            <item row="0" column="3">
+                             <property name="text">
+                              <string>Max</string>
+                             </property>
+                            </item>
+                            <item row="0" column="4">
                              <property name="text">
                               <string>Note</string>
                              </property>
@@ -2808,12 +2823,12 @@ border: 2px solid rgb(52, 59, 72);</string>
                                </property>
                                <property name="dateTime">
                                 <datetime>
-                                 <hour>6</hour>
+                                 <hour>21</hour>
                                  <minute>0</minute>
                                  <second>0</second>
                                  <year>2025</year>
                                  <month>1</month>
-                                 <day>30</day>
+                                 <day>29</day>
                                 </datetime>
                                </property>
                               </widget>
@@ -3661,8 +3676,8 @@ QProgressBar::chunk{
                                  <rect>
                                   <x>0</x>
                                   <y>0</y>
-                                  <width>862</width>
-                                  <height>675</height>
+                                  <width>90</width>
+                                  <height>36</height>
                                  </rect>
                                 </property>
                                 <layout class="QHBoxLayout" name="horizontalLayout_15">
@@ -3770,7 +3785,7 @@ QScrollArea{
                                  <rect>
                                   <x>0</x>
                                   <y>0</y>
-                                  <width>222</width>
+                                  <width>99</width>
                                   <height>232</height>
                                  </rect>
                                 </property>
@@ -4233,7 +4248,7 @@ QScrollArea{
                                 <rect>
                                  <x>0</x>
                                  <y>0</y>
-                                 <width>323</width>
+                                 <width>218</width>
                                  <height>218</height>
                                 </rect>
                                </property>

@@ -1,3 +1,8 @@
-Started training at (GMT) : 2025-04-24 01:17:31
+loading network from : C:/Users/11/Documents/Github/RichDog/PPO_preTrained/Richdog/PPO_Richdog_0_20250501-010212.pth
+--------------------------------------------------------------------------------------------
+Episode: 1 		 Reward: 0.41
+Episode: 2 		 Reward: 3.13
+Episode: 3 		 Reward: 2.78
 ============================================================================================
-Episode : 27 		 Timestep : 10000 		 Average Reward : 45.66
+average test reward : 2.1
+============================================================================================

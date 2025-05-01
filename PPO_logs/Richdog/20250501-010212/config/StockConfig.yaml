@@ -1,0 +1,25 @@
+stock_codes:
+- 005930
+- '000660'
+- 083650
+- '010120'
+- '035720'
+- '012450'
+- 098460
+- '064350'
+- 056080
+- 068270
+- 039030
+- 124500
+stock_columns:
+- stck_clpr
+- stck_hgpr
+- stck_lwpr
+- acml_vol
+- prdy_vrss
+- '5'
+- '20'
+- '60'
+- rsi
+- bb_upper
+- bb_lower

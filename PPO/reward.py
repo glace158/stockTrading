@@ -17,31 +17,54 @@ class Reward:
     def get_exp_reward(self, alpha ,reward):
         exp_reward = 1 - np.exp(-alpha * (reward ** 2))
         if reward < 0: # 보상이 음수면 0
-            return 0
+            return -0.01
         elif reward > 0: # 오차가 커질수록 1에 수렴
             return exp_reward
         else: # 보상은 0
             return 0
     
-    def get_exp_reward2(self, alpha, reward):
+    def get_exp_reward2(self, alpha ,reward):
         exp_reward = 1 - np.exp(-alpha * (reward ** 2))
-        if reward < 0: # 오차가 커질수록 -1에 수렴
+        if reward < 0: # 보상이 음수면 0
             return -exp_reward
         elif reward > 0: # 오차가 커질수록 1에 수렴
             return exp_reward
         else: # 보상은 0
             return 0
+        
     
 class ExpReward(Reward):
     def get_reward(self, wallet, is_order, order_percent, price, next_price, next_day_rate, wait_see_rate):
         if not is_order:
-            return (-1, 0, 0, 0, 0, "not_order")
+            return -0.05, {
+                        "rate_reward" : 0, 
+                        "rate_exp_reward" : 0, 
+                        "total_rate_reward" : 0, 
+                        "total_rate_exp_reward" : 0, 
+                        "net_income_rate_reward" : 0,
+                        "net_income_rate_exp_reward" : 0,
+                        "unrealized_gain_loss" : 0,
+                        "unrealized_gain_loss_exp" : 0,
+                        "reward_log" : "not_order"
+                        }
     
-        rate_reward = (next_day_rate - wait_see_rate)
+    
+        if order_percent == 0.0: # 관망
+            rate_reward = wait_see_rate
+        else:                
+            rate_reward = (next_day_rate - wait_see_rate)
+
         rate_reward = self._np_to_float(rate_reward)
         
         rate_exp_reward = self.get_exp_reward(alpha = 5.0 , reward=rate_reward)
         rate_exp_reward = self._np_to_float(rate_exp_reward)        
+
+        # 미실현 수익 기회 손실 계산
+        unrealized_gain_loss = ((next_price - price) * wallet.get_qty()) * 0.00001
+        unrealized_gain_loss = self._np_to_float(unrealized_gain_loss)        
+        
+        unrealized_gain_loss_exp = self.get_exp_reward(alpha = 0.1 , reward=unrealized_gain_loss)
+        unrealized_gain_loss_exp = self._np_to_float(unrealized_gain_loss_exp)
         
         net_income_rate_reward = wallet.get_net_income_rate(next_price) # 순이익 계산
         net_income_rate_reward = self._np_to_float(net_income_rate_reward)        
@@ -49,14 +72,13 @@ class ExpReward(Reward):
         net_income_rate_exp_reward = self.get_exp_reward(alpha = 0.01 , reward=net_income_rate_reward)
         net_income_rate_exp_reward = self._np_to_float(net_income_rate_exp_reward) 
  
-        
         total_rate_reward = wallet.get_total_evlu_rate(next_price) # 총자산 증감 비율
         total_rate_reward = self._np_to_float(total_rate_reward) 
 
-        total_rate_exp_reward = self.get_exp_reward(alpha = 0.01 , reward=total_rate_reward)
+        total_rate_exp_reward = self.get_exp_reward2(alpha = 0.01 , reward=total_rate_reward)
         total_rate_exp_reward = self._np_to_float(total_rate_exp_reward) 
 
-        reward = 0.5 * rate_exp_reward + 0.4 * total_rate_exp_reward + 0.1 * net_income_rate_exp_reward
+        reward = 0.5 * rate_exp_reward + 0.3 * total_rate_exp_reward + 0.2 * net_income_rate_exp_reward; 
         reward = self._np_to_float(reward)
         
         if order_percent == 0.0: # 관망
@@ -67,12 +89,22 @@ class ExpReward(Reward):
             reward_log = "buy"
         else:
             reward_log += "wrong" 
-            reward = -1
+            reward = -0.05
         
         wallet.get_next_day_evlu_rate(next_price) # 다음날 증감률
 
 
-        return (reward, rate_reward, rate_exp_reward, total_rate_reward, total_rate_exp_reward, reward_log)
+        return reward, {
+                        "rate_reward" : rate_reward, 
+                        "rate_exp_reward" : rate_exp_reward, 
+                        "total_rate_reward" : total_rate_reward, 
+                        "total_rate_exp_reward" : total_rate_exp_reward, 
+                        "net_income_rate_reward" : net_income_rate_reward,
+                        "net_income_rate_exp_reward" : net_income_rate_exp_reward,
+                        "unrealized_gain_loss" : unrealized_gain_loss,
+                        "unrealized_gain_loss_exp" : unrealized_gain_loss_exp,
+                        "reward_log" : reward_log
+                        }
 
 class BuySellReward(Reward):
 

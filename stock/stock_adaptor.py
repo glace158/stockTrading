@@ -100,18 +100,16 @@ class DailyStockAdaptor(Adaptor):
         next_day_rate = self.wallet.get_next_day_evlu_rate(next_price)# 다음 날 수익률 계산
         next_day_rate = self._np_to_float(next_day_rate)
 
-        net_income_rate = self.wallet.get_net_income_rate(next_price) # 순이익 비율 계산
-        net_income_rate = self._np_to_float(net_income_rate)
+        #net_income_rate = self.wallet.get_net_income_rate(next_price) # 순이익 비율 계산
+        #net_income_rate = self._np_to_float(net_income_rate)
 
         # 보상 계산
         #reward, rate_reward, rate_exp_reward, total_rate_reward, total_rate_exp_reward, reward_log = BuySellReward().get_reward(self.wallet, is_order, action, self.price, next_price, next_day_rate, wait_see_rate)
-        reward, rate_reward, rate_exp_reward, total_rate_reward, total_rate_exp_reward, reward_log = ExpReward().get_reward(self.wallet, is_order, action, self.price, next_price, next_day_rate, wait_see_rate)
-
+        reward, info = ExpReward().get_reward(self.wallet, is_order, action, self.price, next_price, next_day_rate, wait_see_rate)
         data = np.array(data, dtype=np.float32)
-        return data, done, {
+        return data, done, {**info, **{
                             "price": self.price,
                             "current_amt" : current_total_amt,
-                            "net_income_rate" : net_income_rate, 
                             "total_rate": evlu_rate,
                             "daily_rate": daily_rate,
                             "next_day_rate" : next_day_rate, 
@@ -119,13 +117,8 @@ class DailyStockAdaptor(Adaptor):
                             "is_order" : is_order, 
                             "sharp_ratio" : sharp_data, 
                             "sortino_ratio" : sortino_data,
-                            "reward" : reward,
-                            "rate_reward" : rate_reward,
-                            "rate_exp_reward" : rate_exp_reward,
-                            "reward_log" : reward_log,
-                            "total_rate_reward" : total_rate_reward,
-                            "total_rate_exp_reward" : total_rate_exp_reward
-                            }
+                            "reward" : reward
+                            }}
     
     # 라벨 정보 가져오기
     def get_data_label(self):

@@ -1,9 +1,11 @@
+import os
 import abc
 import gym
 import numpy as np
 import random
 import datetime
-import os
+from sklearn.preprocessing import StandardScaler
+from common.fileManager import Config, File
 
 from typing import (
     TYPE_CHECKING,
@@ -117,7 +119,6 @@ class StockEnvironment(Environment): # 주식 환경
         
         data, _, info = self.stock.get_info(self.stock_code, 0.0) # 주식 정보 가져오기
 
-
         data = self.normalize(data) # 데이터 정규화
 
         data = data.astype(np.float32)
@@ -148,6 +149,13 @@ class StockEnvironment(Environment): # 주식 환경
             return data
         
         return data / norm
+    
+    def z_score(self, data):
+        data = data.reshape(1, -1)
+        self.scaler = StandardScaler()
+        self.scaler.fit(data)
+        normalized = self.scaler.transform(data)
+        return normalized.flatten()
 
     def render(self): 
         pass
@@ -180,10 +188,17 @@ class StockEnvironment(Environment): # 주식 환경
         return random.randrange(300000, 100000001,100000)
         
 if __name__ == '__main__':
-    stock_env= StockEnvironment()
+    config_path = "config/Hyperparameters.yaml"
 
-    print(stock_env.reset()[0].shape)
-    print(stock_env.step(0)[0].shape)
+    config = Config.load_config(config_path)
+    stock_config = Config.load_config("config/StockConfig.yaml")
 
+    stock_env= StockEnvironment(stock_config=stock_config)
+
+    #print(stock_env.reset()[0])
+    print(stock_env.step(0)[0])
+
+    for i, val in enumerate(stock_env.step(0)[0]):
+        print(f"[{i:2}] {val:,.4f}")
     
     print(stock_env.get_data_label())

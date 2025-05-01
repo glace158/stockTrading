@@ -18,7 +18,7 @@ class ParameterPage(QWidget):
         self.widgets.SaveAsPerarametersButton.clicked.connect(self.save_as)
 
         # 파일 화면 초기화
-        self.widgets.tableWidget_2.setColumnCount(3)
+        self.widgets.tableWidget_2.setColumnCount(5)
         self.path = "config" + '/' + "Hyperparameters.yaml"
         self.widgets.filepath_lineEdit.setText(self.path)
         self.load_Hyperparameters_file(self.path)
@@ -46,14 +46,24 @@ class ParameterPage(QWidget):
         self.config = Config.load_config(path)
         
         self.widgets.tableWidget_2.setRowCount(len(vars(self.config)) + 1)
-        self.widgets.tableWidget_2.setHorizontalHeaderLabels(['Hyperparameter', 'Value', 'Note'])
+        self.widgets.tableWidget_2.setHorizontalHeaderLabels(['Hyperparameter', 'Value', 'Max', 'Min','Note'])
         
         for row, (key, item) in enumerate(vars(self.config).items()):
             value_text_edit = QTextEdit()
             value_text_edit.setPlainText(f"{item.value}") 
             self.widgets.tableWidget_2.setItem(row + 1, 0, QTableWidgetItem(key))
             self.widgets.tableWidget_2.setCellWidget(row + 1, 1, value_text_edit)
-            self.widgets.tableWidget_2.setItem(row + 1, 2, QTableWidgetItem(item.note))
+                        
+            value_text_edit = QTextEdit()
+            value_text_edit.setPlainText(f"{item.min}")
+            self.widgets.tableWidget_2.setCellWidget(row + 1, 2, value_text_edit)
+
+            value_text_edit = QTextEdit()
+            value_text_edit.setPlainText(f"{item.max}")
+            self.widgets.tableWidget_2.setCellWidget(row + 1, 3, value_text_edit)
+
+            self.widgets.tableWidget_2.setItem(row + 1, 4, QTableWidgetItem(item.note))
+
 
     # 파일 저장하기
     def read_table_data(self):
@@ -67,15 +77,23 @@ class ParameterPage(QWidget):
             if value == "No Value":
                 continue
 
+            # QTextEdit 데이터 읽기 (Cell Widget)
+            text_edit = self.widgets.tableWidget_2.cellWidget(row, 2)
+            min_value = text_edit.toPlainText() if text_edit else "None"
+
+            # QTextEdit 데이터 읽기 (Cell Widget)
+            text_edit = self.widgets.tableWidget_2.cellWidget(row, 3)
+            max_value = text_edit.toPlainText() if text_edit else "None"
+
             # Key 데이터 읽기 (QTableWidgetItem)
             key_item = self.widgets.tableWidget_2.item(row, 0)
             key = key_item.text() if key_item else "No Key"
 
             # note 데이터 읽기 (QTableWidgetItem)
-            note_item = self.widgets.tableWidget_2.item(row, 2)
+            note_item = self.widgets.tableWidget_2.item(row, 4)
             note = note_item.text() if note_item else "No Note"
 
-            config_dict[key] = {"value" : value, "note" : note}
+            config_dict[key] = {"value" : value, "min" : min_value, "max" : max_value, "note" : note}
 
         self.config = SimpleNamespace(**config_dict)
 
