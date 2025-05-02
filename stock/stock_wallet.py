@@ -43,56 +43,64 @@ class TrainStockWallet(Wallet):
         
         self.qty = 0.0 # 보유한 주식 개수
 
-        self.total_amt_list = [start_amt]
-        self.rate_list = []
+        #self.total_amt_list = [start_amt]
+        #self.rate_list = []
 
         self.init_price = init_price
 
+    def get_total_amt(self, price):
+        total_amt = self.current_amt + (price * self.qty) # 총 자산 계산
+        return self._np_to_float(total_amt)
+
+    def get_balance(self): # 현재 현금 자산
+        return self._np_to_float(self.current_amt)
+
+    def get_psbl_qty(self, price): # 구매가능 개수
+        return self._np_to_float(self.current_amt // price)
+    
+    def get_qty(self): # 현재 보유 수량
+        return self._np_to_float(self.qty)
+    """
     def get_net_income_rate(self, price): # 순이익 비율 계산
         diff = price - self.init_price
         price_rate = (diff / self.init_price) * 100
         
         evlu_rate = self.get_total_evlu_rate(price)
-        return evlu_rate - price_rate
 
-    def get_total_amt(self, price):
-        return self.current_amt + (price * self.qty) # 총 자산 계산
-
-    def get_balance(self): # 현재 현금 자산
-        return self.current_amt
-
-    def get_psbl_qty(self, price): # 구매가능 개수
-        return self.current_amt // price
-    
-    def get_qty(self):
-        return self.qty
+        net_income_rate = evlu_rate - price_rate
+        return self._np_to_float(net_income_rate)
     
     def get_total_evlu_rate(self, price): # 총자산 증감 비율
         total_amt = self.current_amt + (price * self.qty) # 총 자산 계산
         amt_diff = total_amt - self.start_amt # 초기 자산 차이 계산
-        evlu_rate = amt_diff / self.start_amt # 비율 계산
+        evlu_rate = (amt_diff / self.start_amt) * 100 # 비율 계산
 
-        return evlu_rate * 100
+        return self._np_to_float(evlu_rate)
 
     def get_daily_evlu_rate(self): # 거래당 증감 비율
         if len(self.total_amt_list) < 0 or self.total_amt_list[-2] == 0:
             return 0
         
         amt_diff = self.total_amt_list[-1] - self.total_amt_list[-2]  # 현재 자산 - 이전 자산
-        rate = amt_diff / self.total_amt_list[-2] # (현재 자산 - 이전 자산) / 이전 자산
-        return rate * 100
+        rate = (amt_diff / self.total_amt_list[-2]) * 100 # (현재 자산 - 이전 자산) / 이전 자산
+        return self._np_to_float(rate)
     
     def get_next_day_evlu_rate(self, next_price): # 다음날 증감 비율
         next_day_total_amt = self.get_total_amt(next_price)
         amt_diff = next_day_total_amt - self.total_amt_list[-1]  # 예측 다음날 자산 - 현재 자산
-        rate = amt_diff / self.total_amt_list[-1] # (예측 다음날 자산 - 현재 자산) / 현재 자산
-        return rate * 100
+        rate = (amt_diff / self.total_amt_list[-1]) * 100 # (예측 다음날 자산 - 현재 자산) / 현재 자산
+        return self._np_to_float(rate) 
     
-    def get_wait_see_next_day_evlu_rate(self, next_price, total_amt):
+    def get_wait_see_next_day_evlu_rate(self, next_price, total_amt): # 관망 시 증감비율
         next_day_total_amt = self.get_total_amt(next_price)
         amt_diff = next_day_total_amt - total_amt  # 예측 다음날 자산 - 현재 자산
-        rate = amt_diff / total_amt # (예측 다음날 자산 - 현재 자산) / 현재 자산
-        return rate * 100
+        rate = (amt_diff / total_amt) * 100 # (예측 다음날 자산 - 현재 자산) / 현재 자산
+        return self._np_to_float(rate)
+    
+    def get_unrealized_gain_loss(self, price, next_price): # 미실현 수익 계산
+        ((next_price - price) * self.get_qty()) * 0.00001
+        unrealized_gain_loss = self._np_to_float(unrealized_gain_loss) 
+    """
     
     def order(self, item_no="005930", order_percent=0.0, price=0):
 
@@ -100,22 +108,22 @@ class TrainStockWallet(Wallet):
             order_qty = 0
             is_done = True
         elif order_percent < 0 and order_percent >= -1: # 매도
-            order_qty, is_done = self.sell(order_percent, price)
+            order_qty, is_done = self._sell(order_percent, price)
         elif order_percent > 0 and order_percent <= 1: # 매수
-            order_qty, is_done = self.buy(order_percent, price)
+            order_qty, is_done = self._buy(order_percent, price)
         else:
             order_qty = 0
             is_done = False
 
-        self.total_amt_list.append(self._np_to_float(self.get_total_amt(price))) # 현재 자산 기록
-        daily_rate = self._np_to_float(self.get_daily_evlu_rate())
-        self.rate_list.append(daily_rate) # 수익률 기록
+        #self.total_amt_list.append(self._np_to_float(self.get_total_amt(price))) # 현재 자산 기록
+        #daily_rate = self._np_to_float(self.get_daily_evlu_rate())
+        #self.rate_list.append(daily_rate) # 수익률 기록
 
         assert self.current_amt >= 0 # 만약 자산이 음수가 되면 에러 발생
         # 총 자산, 전날 대비 총 자산 증감률 , 주문 수량, 보유 주식 수량, 구매 성공 여부
-        return (self.get_total_amt(price), daily_rate, order_qty, self.qty, is_done)  
+        return (self.get_total_amt(price), order_qty, self.get_qty(), is_done)  
     
-    def sell(self, order_percent=0.0, price=0): # 매도
+    def _sell(self, order_percent=0.0, price=0): # 매도
         if self.qty == 0: # 보유 수량이 없을 때
             return 0, False
         
@@ -124,16 +132,16 @@ class TrainStockWallet(Wallet):
         if order_qty != 0:
             order_price = price * order_qty # 주문 가격 계산
             
-            order_fee = self.calculate_fee(order_price) # 수수료 계산
-            order_tax = self.calculate_tax(order_price) # 매도 수수료 계산
+            order_fee = self._calculate_fee(order_price) # 수수료 계산
+            order_tax = self._calculate_tax(order_price) # 매도 수수료 계산
 
             total_price = order_price - order_fee - order_tax
             self.current_amt += total_price
             self.qty -= order_qty
 
-        return order_qty, True
+        return self._np_to_float(order_qty), True
 
-    def buy(self, order_percent=0.0, price=0): # 매수
+    def _buy(self, order_percent=0.0, price=0): # 매수
         # 1주당 수수료 포함된 가격
         unit_with_fee = price * (1 + self.fee / 100)
         
@@ -147,7 +155,7 @@ class TrainStockWallet(Wallet):
         if order_qty != 0:
             order_price = price * order_qty # 주문 가격 계산
 
-            order_fee = self.calculate_fee(order_price) # 수수료 계산
+            order_fee = self._calculate_fee(order_price) # 수수료 계산
 
             total_price = order_price + order_fee
 
@@ -157,19 +165,18 @@ class TrainStockWallet(Wallet):
             self.current_amt -= total_price
             self.qty += order_qty
 
-        return order_qty, True
+        return self._np_to_float(order_qty), True
     
-    def calculate_fee(self, order_price):
+    def _calculate_fee(self, order_price):
         return int(order_price * (self.fee / 100))
     
-    def calculate_tax(self, order_price):
+    def _calculate_tax(self, order_price):
         return int(order_price * (self.tax / 100))
     
     def _np_to_float(self, x):
         if isinstance(x, np.ndarray): # numpy 자료형 바꾸기
             return float(x[0])
         return x
-    
 
 def get_price_rate(price, next_price):
     diff = next_price - price
@@ -256,6 +263,7 @@ def next_day_up_reward(wallet, order_percent, price, next_day_rate, price_rate, 
 
     return reward 
    
+    
 if __name__ == '__main__':
     t = TrainStockWallet(init_price=176000)
 
