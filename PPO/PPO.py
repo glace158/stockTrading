@@ -184,7 +184,7 @@ class PPO:
             self.set_action_std(self.action_std)
     
     # 현재 에포크에서 표준편차 계산 함수
-    def get_stepwise_std(current_epoch, step_interval, initial_std, action_std_decay_rate, min_action_st):
+    def get_stepwise_std(self, current_epoch, step_interval, initial_std, action_std_decay_rate, min_action_st):
         current_step = current_epoch // step_interval
         return max(initial_std - current_step * action_std_decay_rate, min_action_st)  # 최종 표준편차보다 작아지지 않도록 제한
 
@@ -300,3 +300,24 @@ class PPO:
     def load(self, checkpoint_path):
         self.policy_old.load_state_dict(torch.load(checkpoint_path, map_location=lambda storage, loc: storage))
         self.policy.load_state_dict(torch.load(checkpoint_path, map_location=lambda storage, loc: storage))
+
+class CNN(nn.Module):
+    def __init__(self, input_channels, img_height, img_width):
+        super(CNN, self).__init__()
+
+        self.cnn_base = nn.Sequential(
+            nn.Conv2d(input_channels, 32, kernel_size=8, stride=4),
+            nn.ReLU(),
+            nn.Conv2d(32, 64, kernel_size=4, stride=2),
+            nn.ReLU(),
+            nn.Conv2d(64, 64, kernel_size=3, stride=1),
+            nn.ReLU(),
+            nn.Flatten()
+        )
+
+        # CNN 출력 크기 계산
+        dummy_input = torch.zeros(1, input_channels, img_height, img_width)
+        with torch.no_grad():
+            # Ensure dummy input is on the same device model will be on
+            dummy_input = dummy_input.to(next(self.cnn_base.parameters()).device if next(self.cnn_base.parameters(), None) is not None else device)
+            cnn_out_dim = self.cnn_base(dummy_input).shape[1]

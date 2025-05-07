@@ -227,7 +227,7 @@ class RichDogTrain(RichDog):
             is_action_log = is_save_model
 
             if is_action_log:
-                self.action_file_log(time_step, "PPO_train_logs", ['timestep', "action", "reward"]  + list(info.keys()))
+                self.action_file_log(time_step, "PPO_train_logs", ['timestep', "action"]  + list(info.keys()))
 
             for t in range(1, self.max_ep_len+1):
 
@@ -288,7 +288,7 @@ class RichDogTrain(RichDog):
                     is_save_model = True
 
                 if is_action_log:
-                    self.logger.list_write_file('action', [t, action[0], reward] + list(info.values()))
+                    self.logger.list_write_file('action', [t, action[0]] + list(info.values()))
                     str_state = [str(item) for item in state]
                     self.logger.list_write_file('state', str_state)
                     is_save_model = False

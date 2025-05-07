@@ -1,19 +1,17 @@
-Started training at (GMT) : 2025-05-02 18:56:58
+Started training at (GMT) : 2025-05-03 01:50:47
 ============================================================================================
-Episode : 27 		 Timestep : 10000 		 Average Reward : 91.86
-Episode : 55 		 Timestep : 20000 		 Average Reward : 108.57
-Episode : 83 		 Timestep : 30000 		 Average Reward : 101.61
-Episode : 111 		 Timestep : 40000 		 Average Reward : 112.51
-Episode : 139 		 Timestep : 50000 		 Average Reward : 112.41
-Episode : 167 		 Timestep : 60000 		 Average Reward : 114.5
-Episode : 194 		 Timestep : 70000 		 Average Reward : 106.8
-Episode : 222 		 Timestep : 80000 		 Average Reward : 111.85
-Episode : 250 		 Timestep : 90000 		 Average Reward : 110.84
-Episode : 278 		 Timestep : 100000 		 Average Reward : 107.17
+Episode : 27 		 Timestep : 10000 		 Average Reward : 209.72
+Episode : 55 		 Timestep : 20000 		 Average Reward : 213.1
+Episode : 83 		 Timestep : 30000 		 Average Reward : 208.31
+Episode : 111 		 Timestep : 40000 		 Average Reward : 209.07
+Episode : 139 		 Timestep : 50000 		 Average Reward : 218.04
+Episode : 167 		 Timestep : 60000 		 Average Reward : 211.63
+Episode : 194 		 Timestep : 70000 		 Average Reward : 207.35
+Episode : 222 		 Timestep : 80000 		 Average Reward : 216.73
+Episode : 250 		 Timestep : 90000 		 Average Reward : 208.3
+Episode : 278 		 Timestep : 100000 		 Average Reward : 207.46
 --------------------------------------------------------------------------------------------
-saving model at : PPO_preTrained/Richdog/PPO_Richdog_0_20250502-185658.pth
-model savedElapsed Time  : 0:02:57
+saving model at : PPO_preTrained/Richdog/PPO_Richdog_0_20250503-015046.pth
+model savedElapsed Time  : 0:04:22
 --------------------------------------------------------------------------------------------
-Episode : 306 		 Timestep : 110000 		 Average Reward : 117.94
-Episode : 334 		 Timestep : 120000 		 Average Reward : 113.81
-Episode : 362 		 Timestep : 130000 		 Average Reward : 112.15
+Episode : 306 		 Timestep : 110000 		 Average Reward : 215.74

@@ -13,6 +13,7 @@ from typing import (
     Tuple
 )
 
+from gym import Env
 from gym import spaces
 from stock.stock_adaptor import DailyStockAdaptor
 from stock.stock_wallet import TrainStockWallet

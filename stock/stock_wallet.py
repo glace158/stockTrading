@@ -48,6 +48,9 @@ class TrainStockWallet(Wallet):
 
         self.init_price = init_price
 
+    def get_current_amt(self): # 현재 현금 자산
+        return self._np_to_float(self.current_amt)
+
     def get_total_amt(self, price):
         total_amt = self.current_amt + (price * self.qty) # 총 자산 계산
         return self._np_to_float(total_amt)

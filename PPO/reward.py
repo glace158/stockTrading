@@ -49,17 +49,19 @@ class ExpReward(Reward):
 
         self.total_amt_list = [self.start_amt]
         self.rate_list = []
+        self.current_amt_list = []
         self.qty_list = [0]
 
-    def get_reward(self, current_date, is_order, order_percent, price, next_price, current_total_amt, qty):
-        price_rate = self.get_price_rate(next_price) # 초기 대비 가격 증감률
-        next_day_total_amt = self.get_next_day_total_amt(next_price, qty) # 다음날 총 자산
-
-        wait_see_rate = self.get_wait_see_next_day_evlu_rate(next_price) # 만약 관망 했을 때 수익률
-        evlu_rate = self.get_total_evlu_rate(next_day_total_amt) # 현재 총자산 증감률
-        next_total_evlu_rate = self.get_total_evlu_rate(next_day_total_amt) # 다음날 총자산 증감률
-        net_income_rate = self.get_net_income_rate(price_rate, next_total_evlu_rate) # 다음날 순이익 비율
+    def get_reward(self, current_date, is_order, order_percent, price, next_price, current_total_amt, current_amt, qty):
+        init_price_rate = self.get_init_price_rate(next_price) # 초기 대비 가격 증감률
+        next_day_total_amt = current_amt + (next_price * qty)
+        
+        evlu_rate = self.get_total_evlu_rate(current_total_amt) # 현재 총자산 증감률
         daily_evlu_rate = self.get_daily_evlu_rate(current_total_amt) # 거래당 자산 증감 비율 (현재 기준)
+        wait_see_rate = self.get_wait_see_next_day_evlu_rate(next_price) # 만약 관망 했을 때 수익률
+        
+        next_total_evlu_rate = self.get_total_evlu_rate(next_day_total_amt) # 다음날 총자산 증감률
+        net_income_rate = self.get_net_income_rate(init_price_rate, next_total_evlu_rate) # 다음날 순이익 비율
         next_day_evlu_rate = self.get_next_day_evlu_rate(next_day_total_amt, current_total_amt) # 다음날 자산 증감률
         unrealized_gain_loss = self.get_unrealized_gain_loss(price, next_price, qty) #  미실현 수익 기회 손실 계산
         rate_reward = self.get_rate_reward(order_percent, wait_see_rate, next_day_evlu_rate) # 수익 증감 보상
@@ -73,6 +75,7 @@ class ExpReward(Reward):
         # 현재 데이터 저장
         self.total_amt_list.append(current_total_amt)
         self.rate_list.append(daily_evlu_rate)
+        self.current_amt_list.append(current_amt)
         self.qty_list.append(qty)
 
         sharp_data = self.sharpe_ratio(current_date, evlu_rate) # 샤프 지수
@@ -83,7 +86,7 @@ class ExpReward(Reward):
         else:
             reward = -0.05
 
-        reward_log = self.get_reward_log(order_percent) # 보상 로그
+        reward_log = self.get_reward_log(order_percent, is_order) # 보상 로그
 
         return self._np_to_float(reward), {
                                             "wait_see_rate" : wait_see_rate,
@@ -104,9 +107,11 @@ class ExpReward(Reward):
                                             "reward_log" : reward_log
                                             }
 
-    def get_reward_log(self, order_percent):
+    def get_reward_log(self, order_percent, is_order):
         reward_log = ''
-        if order_percent == 0.0: # 관망
+        if not is_order:
+            reward_log = "wrong"
+        elif order_percent == 0.0: # 관망
             reward_log = "wait"
         elif order_percent < 0 and order_percent >= -1: # 매도
             reward_log = "sell"
@@ -120,19 +125,15 @@ class ExpReward(Reward):
         if order_percent == 0.0: # 관망
                 rate_reward = wait_see_rate
         else:                
-            rate_reward = (next_day_evlu_rate - wait_see_rate)
+            rate_reward = (next_day_evlu_rate - wait_see_rate) 
 
         return self._np_to_float(rate_reward)
 
-    def get_price_rate(self, price): # 초기 대비 가격 증감률
+    def get_init_price_rate(self, price): # 초기 대비 가격 증감률
         diff = price - self.init_price
         price_rate = (diff / self.init_price) * 100
         return self._np_to_float(price_rate)
     
-    def get_next_day_total_amt(self, next_price, qty):
-        next_day_total_amt = next_price * qty # 다음날 가격 * 수량
-        return self._np_to_float(next_day_total_amt)
-
     def get_total_evlu_rate(self, total_amt): # 총자산 증감 비율 
         amt_diff = total_amt - self.start_amt # 초기 자산 차이 계산
         evlu_rate = (amt_diff / self.start_amt) * 100 # 비율 계산
@@ -157,7 +158,8 @@ class ExpReward(Reward):
         return self._np_to_float(rate) 
     
     def get_wait_see_next_day_evlu_rate(self, next_price): # 관망 시 증감비율
-        next_day_total_amt = next_price * self.qty_list[-1] # 다음날 가격 * 수량
+        next_day_total_amt = self.current_amt_list[-1] + (next_price * self.qty_list[-1]) # 관망 시 다음날 자산
+
         amt_diff = next_day_total_amt - self.total_amt_list[-1]  # 예측 다음날 자산 - 거래하기 전의 자산
         rate = (amt_diff / self.total_amt_list[-1]) * 100 # (예측 다음날 자산 - 현재 자산) / 현재 자산
         return self._np_to_float(rate)
@@ -168,16 +170,7 @@ class ExpReward(Reward):
         
     # 샤프 지수
     def sharpe_ratio(self, current_date, total_evlu_rate):
-        index = self.bond_yield_datas[self.bond_yield_datas["stck_bsop_date"] == np.float64(current_date)].index.to_list()[0] # 해당하는 날짜 인덱스 찾기
-
-        i = 0
-        while True: # 국채 금리 데이터 가져오기
-            bond_yield = self.bond_yield_datas["Treasury_Bond_Yield(10Year)"][index + i]
-            
-            if bond_yield != -1: # 해당 날짜의 데이터가 -1이 아니면 
-                break
-            
-            i -= 1 # 해당 날짜의 데이터가 -1이면 이전 데이터 확인
+        bond_yield = self.get_valid_bond_yield(current_date)
         
         if len(self.rate_list) < 2:
             rate_std = 0
@@ -194,17 +187,8 @@ class ExpReward(Reward):
     
     # 소르티노 지수
     def sortino_ratio(self, current_date, total_evlu_rate):
-        index = self.bond_yield_datas[self.bond_yield_datas["stck_bsop_date"] == np.float64(current_date)].index.to_list()[0] # 해당하는 날짜 인덱스 찾기
-
-        i = 0
-        while True: # 국채 금리 데이터 가져오기
-            bond_yield = self.bond_yield_datas["Treasury_Bond_Yield(10Year)"][index + i]
-            
-            if bond_yield != -1: # 해당 날짜의 데이터가 -1이 아니면 
-                break
-            
-            i -= 1 # 해당 날짜의 데이터가 -1이면 이전 데이터 확인
-
+        bond_yield = self.get_valid_bond_yield(current_date)
+        
         minus_rate_list = list(filter(lambda x: x<0, self.rate_list)) # 마이너스 수익률
 
         if len(minus_rate_list) < 2: # 마이너스 수익률이 없는 경우
@@ -219,7 +203,18 @@ class ExpReward(Reward):
 
         return self._np_to_float(ratio)
 
+    def get_valid_bond_yield(self, current_date):
+        index = self.bond_yield_datas[self.bond_yield_datas["stck_bsop_date"] == np.float64(current_date)].index.to_list()[0] # 해당하는 날짜 인덱스 찾기
 
+        i = 0
+        while True: # 국채 금리 데이터 가져오기
+            bond_yield = self.bond_yield_datas["Treasury_Bond_Yield(10Year)"][index + i]
+            
+            if bond_yield != -1: # 해당 날짜의 데이터가 -1이 아니면 
+                break
+            
+            i -= 1 # 해당 날짜의 데이터가 -1이면 이전 데이터 확인
+        return bond_yield
 
 class BuySellReward(Reward):
 

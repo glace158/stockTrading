@@ -73,8 +73,7 @@ class DailyStockAdaptor(Adaptor):
         # 총 자산, 전날, 주문 수량, 보유 주식 수량, 구매 성공 여부 
         current_total_amt, order_qty , qty, is_order = self.wallet.order(stock_code, action, self.price) 
  
-        #evlu_rate = self.wallet.get_total_evlu_rate(self.price) # 현재 주식 수익률 계산
-        reward, reward_info = self.reward_cls.get_reward(current_date, is_order, action, self.price, next_price, current_total_amt, qty)
+        reward, reward_info = self.reward_cls.get_reward(current_date, is_order, action, self.price, next_price, current_total_amt, self.wallet.get_current_amt(), qty)
         
         # 정보 추가
         data.insert(0, reward_info["evlu_rate"]) # 주식 수익률
