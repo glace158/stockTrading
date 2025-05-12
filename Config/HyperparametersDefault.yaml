@@ -1,5 +1,5 @@
 ####### initialize environment hyperparameters ######
-env_name : "Richdog"
+env_name : "MountainCarContinuous-v0"
 
 has_continuous_action_space : True  # continuous action space; else discrete (연속 환경 유무)
 

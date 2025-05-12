@@ -3,8 +3,6 @@ import torch.nn as nn
 from torch.distributions import MultivariateNormal
 from torch.distributions import Categorical
 import numpy as np
-from gym import spaces
-from typing import Union, Dict, List
 
 ################################## set device ##################################
 print("============================================================================================")
@@ -37,186 +35,44 @@ class RolloutBuffer:
         del self.state_values[:]
         del self.is_terminals[:]
 
-class CnnExtractor(nn.Module):
-    def __init__(self, observation_space: spaces.Box, features_dim: int = 64): # SB3 CnnExtractor의 기본 features_dim은 512
-        super().__init__()
 
-        n_input_channels = observation_space.shape[0] # (C, H, W) 가정
-        # 만약 입력이 (H, W, C)라면, forward에서 transpose 필요 또는 여기서 shape 조정
-        if len(observation_space.shape) == 3 and observation_space.shape[0] > observation_space.shape[2] and observation_space.shape[2] <=4 : # H,W,C일 가능성
-             print(f"Warning: SimpleCnnExtractor input shape {observation_space.shape} might be HWC. Assuming CHW for Conv2d.")
-             # 실제로는 환경 래퍼에서 CHW로 바꾸는 것이 좋음
-        
-        self.cnn = nn.Sequential(
-            nn.Conv2d(n_input_channels, 16, kernel_size=3, stride=1, padding=1), # 채널 수, 필터 크기 등은 데이터에 맞게 조절
-            nn.ReLU(),
-            nn.Conv2d(16, 32, kernel_size=3, stride=1, padding=1),
-            nn.ReLU(),
-            nn.Flatten(),
-        )
-
-        # CNN 출력 크기 계산
-        with torch.no_grad():
-            dummy_input = torch.as_tensor(observation_space.sample()[None]).float()
-            cnn_out_dim = self.cnn(dummy_input).shape[1]
-
-        self.linear = nn.Sequential(nn.Linear(cnn_out_dim, features_dim), nn.ReLU())
-        self._features_dim = features_dim
-
-    def forward(self, observations: torch.Tensor) -> torch.Tensor:
-        return self.linear(self.cnn(observations))
-
-    @property
-    def features_dim(self):
-        return self._features_dim
-
-class MlpExtractor(nn.Module):
-    """단일 벡터 입력을 위한 간단한 MLP 특징 추출기"""
-    def __init__(self, observation_space: spaces.Box, features_dim: int = 64):
-        super().__init__()
-        self.flatten = nn.Flatten()
-        input_dim = np.prod(observation_space.shape)
-        self.linear = nn.Sequential(
-            nn.Linear(input_dim, features_dim),
-            nn.ReLU(),
-            # 필요시 레이어 추가
-        )
-        self._features_dim = features_dim
-
-    def forward(self, observations: torch.Tensor) -> torch.Tensor:
-        return self.linear(self.flatten(observations))
-
-    @property
-    def features_dim(self):
-        return self._features_dim
-
-class CombinedFeaturesExtractor(nn.Module):
-    def __init__(self, observation_space: spaces.Dict, cnn_features_dim: int = 64, mlp_features_dim: int = 32):
-        super().__init__()
-        extractors = {}
-        total_features_dim = 0
-
-        for key, subspace in observation_space.spaces.items():
-            if isinstance(subspace, spaces.Box) and len(subspace.shape) >= 2: # 보통 이미지 (C,H,W) or (H,W) 등
-                 # 이미지 subspace의 채널 수가 1이고 shape이 (H,W)이면 (1,H,W)로 간주
-                if len(subspace.shape) == 2: # (H,W) -> (1,H,W)로 가정
-                    img_obs_space = spaces.Box(low=subspace.low.reshape(1, *subspace.shape),
-                                               high=subspace.high.reshape(1, *subspace.shape),
-                                               shape=(1, *subspace.shape),
-                                               dtype=subspace.dtype)
-                    extractors[key] = CnnExtractor(img_obs_space, features_dim=cnn_features_dim)
-                else:
-                    extractors[key] = CnnExtractor(subspace, features_dim=cnn_features_dim)
-
-                total_features_dim += extractors[key].features_dim
-            elif isinstance(subspace, spaces.Box) and len(subspace.shape) == 1: # 수치형 벡터
-                extractors[key] = MlpExtractor(subspace, features_dim=mlp_features_dim)
-                total_features_dim += extractors[key].features_dim
-            else: # 기타 (예: Discrete) - 여기서는 Flatten 후 사용
-                extractors[key] = nn.Flatten()
-                total_features_dim += np.prod(subspace.shape)
-
-        self.extractors = nn.ModuleDict(extractors)
-        self._features_dim = total_features_dim
-    def forward(self, observations: Dict[str, torch.Tensor]) -> torch.Tensor:
-        encoded_tensor_list = []
-        for key, extractor in self.extractors.items():
-            encoded_tensor_list.append(extractor(observations[key]))
-        return torch.cat(encoded_tensor_list, dim=1)
-
-    @property
-    def features_dim(self):
-        return self._features_dim
-    
-    
 class ActorCritic(nn.Module):
-    def __init__(self, observation_space: Union[spaces.Dict, spaces.Box],
-                 action_space: spaces.Space,
-                 has_continuous_action_space: bool, action_std_init: float,
-                 cnn_features_dim: int = 64, # CNN용
-                 mlp_features_dim: int = 32, # MLP용
-                ):
+    def __init__(self, state_dim, action_space, has_continuous_action_space, action_std_init):
         super(ActorCritic, self).__init__()
 
-        self.observation_space = observation_space
         self.has_continuous_action_space = has_continuous_action_space
         
         self.action_dim = action_space.shape[0] if has_continuous_action_space else action_space.n
-        
-        mlp_extractor_input_dim = self._set_features(observation_space, cnn_features_dim, mlp_features_dim)
-        # Actor head
-        actor_hidden_dim = 64
         if has_continuous_action_space:
+            self.action_var = torch.full((self.action_dim,), action_std_init * action_std_init).to(device)
+        # actor
+        if has_continuous_action_space :
             self.actor = nn.Sequential(
-                            nn.Linear(mlp_extractor_input_dim, actor_hidden_dim), nn.Tanh(),
-                            nn.Linear(actor_hidden_dim, actor_hidden_dim), nn.Tanh(),
-                            nn.Linear(actor_hidden_dim, self.action_dim), nn.Tanh()
+                            nn.Linear(state_dim, 64),
+                            nn.Tanh(),
+                            nn.Linear(64, 64),
+                            nn.Tanh(),
+                            nn.Linear(64, self.action_dim),
+                            nn.Tanh()
                         )
-            self.log_std = nn.Parameter(torch.ones(self.action_dim, device=device) * np.log(action_std_init))
         else:
             self.actor = nn.Sequential(
-                            nn.Linear(mlp_extractor_input_dim, actor_hidden_dim), nn.Tanh(),
-                            nn.Linear(actor_hidden_dim, actor_hidden_dim), nn.Tanh(),
-                            nn.Linear(actor_hidden_dim, self.action_dim),nn.Softmax(dim=-1)
+                            nn.Linear(state_dim, 64),
+                            nn.Tanh(),
+                            nn.Linear(64, 64),
+                            nn.Tanh(),
+                            nn.Linear(64, self.action_dim),
+                            nn.Softmax(dim=-1)
                         )
-
-        # Critic head
-        critic_hidden_dim = 64
+        # critic
         self.critic = nn.Sequential(
-                        nn.Linear(mlp_extractor_input_dim, critic_hidden_dim), nn.Tanh(),
-                        nn.Linear(critic_hidden_dim, critic_hidden_dim), nn.Tanh(),
-                        nn.Linear(critic_hidden_dim, 1)
+                        nn.Linear(state_dim, 64),
+                        nn.Tanh(),
+                        nn.Linear(64, 64),
+                        nn.Tanh(),
+                        nn.Linear(64, 1)
                     )
-    
-    # features 설정
-    def _set_features(self, observation_space: Union[spaces.Dict, spaces.Box], 
-                 cnn_features_dim: int = 64, # CNN용
-                 mlp_features_dim: int = 32, # MLP용
-                 ):
-        # Feature Extractor
-        if isinstance(observation_space, spaces.Dict): # 상태 데이터가 딕셔너리이면
-            self.features_extractor = CombinedFeaturesExtractor(observation_space,
-                                                                cnn_features_dim=cnn_features_dim,
-                                                                mlp_features_dim=mlp_features_dim)
-        elif isinstance(observation_space, spaces.Box): # 단일 데이터이면
-            if len(observation_space.shape) >= 2: # 이미지 또는 2D 이상 데이터
-                 # (H,W) -> (1,H,W) 처리
-                if len(observation_space.shape) == 2:
-                    img_obs_space = spaces.Box(low=np.expand_dims(observation_space.low, axis=0),
-                                               high=np.expand_dims(observation_space.high, axis=0),
-                                               shape=(1, *observation_space.shape),
-                                               dtype=observation_space.dtype)
-                    self.features_extractor = CnnExtractor(img_obs_space, features_dim=cnn_features_dim)
-                else: # (C,H,W)
-                    self.features_extractor = CnnExtractor(observation_space, features_dim=cnn_features_dim)
-
-            elif len(observation_space.shape) == 1: # 1D 벡터
-                self.features_extractor = MlpExtractor(observation_space, features_dim=mlp_features_dim)
-            else:
-                raise ValueError(f"Unsupported Box observation space shape: {observation_space.shape}")
-        else:
-            raise ValueError(f"Unsupported observation space type: {type(observation_space)}")
-
-        mlp_extractor_input_dim = self.features_extractor.features_dim
-        return mlp_extractor_input_dim
-
-    def _get_features(self, observations: Union[Dict[str, torch.Tensor], torch.Tensor]) -> torch.Tensor:
-        return self.features_extractor(observations)
-
-    def _get_actor_dist_from_features(self, features: torch.Tensor) -> torch.distributions.Distribution:
-        if self.has_continuous_action_space:
-            action_mean = self.actor(features)
-            action_std_unbatched = torch.exp(self.log_std)
-            action_std_batched = action_std_unbatched.expand_as(action_mean)
-            # MultivariateNormal은 cov_mat 또는 scale_tril을 사용
-            # scale_tril=torch.diag_embed(action_std_batched) 가 더 안정적일 수 있음
-            cov_mat = torch.diag_embed(action_std_batched.pow(2)) # 배치 크기 고려하여 각 항목에 대해 대각행렬 생성
-            dist = MultivariateNormal(action_mean, covariance_matrix=cov_mat)
-        else:
-            action_logits = self.actor(features)
-            dist = Categorical(logits=action_logits)
-        return dist
-
+        
     def set_action_std(self, new_action_std):
         if self.has_continuous_action_space:
             self.action_var = torch.full((self.action_dim,), new_action_std * new_action_std).to(device)
@@ -228,47 +84,51 @@ class ActorCritic(nn.Module):
     def forward(self):
         raise NotImplementedError
     
-    def act(self, observations: Union[Dict[str, torch.Tensor], torch.Tensor], deterministic: bool = False):
-        features = self._get_features(observations)
-        dist = self._get_actor_dist_from_features(features)
-
-        if deterministic: # 결정론적 행동
-            if self.has_continuous_action_space: 
-                action = dist.mean
-            else:
-                action = torch.argmax(dist.probs, dim=-1) # dim=1 -> dim=-1 for robustness
+    def act(self, state): # 행동
+        #print(state)
+        if self.has_continuous_action_space:
+            action_mean = self.actor(state)
+            cov_mat = torch.diag(self.action_var).unsqueeze(dim=0)
+            dist = MultivariateNormal(action_mean, cov_mat)
         else:
-            action = dist.sample()
+            action_probs = self.actor(state)
+            dist = Categorical(action_probs)
 
+        action = dist.sample()
         action_logprob = dist.log_prob(action)
-        state_val = self.critic(features)
+        state_val = self.critic(state)
 
         return action.detach(), action_logprob.detach(), state_val.detach()
+    
+    def evaluate(self, state, action): # 평가
 
-    def evaluate(self, observations: Union[Dict[str, torch.Tensor], torch.Tensor], actions: torch.Tensor): # 평가
-        features = self._get_features(observations)
-        dist = self._get_actor_dist_from_features(features)
-        state_values = self.critic(features)
+        if self.has_continuous_action_space:
+            action_mean = self.actor(state)
+            
+            action_var = self.action_var.expand_as(action_mean)
+            cov_mat = torch.diag_embed(action_var).to(device)
 
-        action_logprobs = dist.log_prob(actions)
+            dist = MultivariateNormal(action_mean, cov_mat)
+            
+            # For Single Action Environments.
+            if self.action_dim == 1:
+                action = action.reshape(-1, self.action_dim)
+        else:
+            action_probs = self.actor(state)
+            dist = Categorical(action_probs)
+
+        action_logprobs = dist.log_prob(action)
         dist_entropy = dist.entropy()
-
-        return action_logprobs, torch.squeeze(state_values, -1), dist_entropy
-
+        state_values = self.critic(state)
+        
+        return action_logprobs, state_values, dist_entropy
 
 
 class PPO:
-    def __init__(self, observation_space: Union[spaces.Dict, spaces.Box],
-                 action_space: spaces.Space,
-                 lr_actor, lr_critic, gamma, K_epochs, eps_clip,
-                 has_continuous_action_space, action_std_init=0.6,
-                 value_loss_coef=0.5, entropy_coef=0.01,
-                 lambda_gae=0.95, minibatch_size=64,
-                 # ActorCritic 내부 특징 추출기 크기 제어용 파라미터 추가
-                 cnn_features_dim: int = 64,
-                 mlp_features_dim: int = 32):
+    def __init__(self, state_dim, action_space, lr_actor, lr_critic, 
+                 gamma, K_epochs, eps_clip, has_continuous_action_space, 
+                 action_std_init=0.6, value_loss_coef =0.1, entropy_coef= 0.5, lambda_gae=0.95, minibatchsize=32):
 
-        self.observation_space = observation_space
         self.has_continuous_action_space = has_continuous_action_space
 
         if has_continuous_action_space:
@@ -282,95 +142,20 @@ class PPO:
         self.value_loss_coef = value_loss_coef
         self.entropy_coef = entropy_coef
 
-        self.minibatchsize = minibatch_size # 미니 배치 사이즈 설정
-
         self.buffer = RolloutBuffer()
+        self.minibatchsize = minibatchsize # 이니 배치 사이즈 설정
 
-        self.policy = ActorCritic(observation_space, action_space, has_continuous_action_space, action_std_init,
-                                  cnn_features_dim, mlp_features_dim).to(device)
+        self.policy = ActorCritic(state_dim, action_space, has_continuous_action_space, action_std_init).to(device)
         self.optimizer = torch.optim.Adam([
-                        {'params': self.policy.features_extractor.parameters(), 'lr': lr_actor},
                         {'params': self.policy.actor.parameters(), 'lr': lr_actor},
                         {'params': self.policy.critic.parameters(), 'lr': lr_critic}
                     ])
-        if self.has_continuous_action_space:
-             self.optimizer.add_param_group({'params': self.policy.log_std, 'lr': lr_actor})
 
-        self.policy_old = ActorCritic(observation_space, action_space, has_continuous_action_space, action_std_init,
-                                      cnn_features_dim, mlp_features_dim).to(device)
+        self.policy_old = ActorCritic(state_dim, action_space, has_continuous_action_space, action_std_init).to(device)
         self.policy_old.load_state_dict(self.policy.state_dict())
         
         self.MseLoss = nn.MSELoss()
 
-    def _obs_to_tensor(self, obs: Union[Dict[str, np.ndarray], np.ndarray]) -> Union[Dict[str, torch.Tensor], torch.Tensor]:
-        """ 관찰(딕셔너리 또는 단일 Numpy 배열)을 텐서로 변환하고 배치 차원 추가 """
-        if isinstance(obs, dict):
-            tensor_dict = {}
-            for key, value in obs.items():
-                # Gymnasium 환경은 보통 float32 또는 uint8 로 관찰을 반환
-                # 이미지는 uint8일 경우 /255.0 정규화 필요
-                if value.dtype == np.uint8 and (key == "image" or "img" in key or (value.ndim >=2 and value.shape[-1] <=4)): # 이미지로 추정
-                    tensor_val = torch.as_tensor(value, device=device).float() / 255.0
-                else:
-                    tensor_val = torch.as_tensor(value, device=device).float()
-
-                # 현재 observation_space의 해당 subspace를 참조하여 원래 차원과 비교
-                # 예: obs_space_shape = self.observation_space[key].shape
-                # if tensor_val.ndim == len(obs_space_shape): # 배치 차원 없을 시
-                # gymnasium의 Box.sample()은 배치 차원 없이 반환, env.step()도 마찬가지
-                if len(tensor_val.shape) == len(self.observation_space[key].shape):
-                     tensor_val = tensor_val.unsqueeze(0)
-                tensor_dict[key] = tensor_val
-            return tensor_dict
-        else: # 단일 Numpy 배열
-            if obs.dtype == np.uint8 and obs.ndim >=2 : # (H,W) 또는 (H,W,C) 이미지로 추정
-                 tensor_obs = torch.as_tensor(obs, device=device).float() / 255.0
-            else:
-                 tensor_obs = torch.as_tensor(obs, device=device).float()
-
-            # gymnasium의 Box.sample()은 배치 차원 없이 반환, env.step()도 마찬가지
-            if len(tensor_obs.shape) == len(self.observation_space.shape):
-                 tensor_obs = tensor_obs.unsqueeze(0)
-
-            # 단일 관찰이 이미지이고 (H,W) 이며 CNN이 (C,H,W)를 기대한다면 여기서 채널 차원 추가
-            # 예: if tensor_obs.ndim == 3 and self.policy.features_extractor is SimpleCnnExtractor and tensor_obs.shape[0] != 1 and tensor_obs.shape[0]!=3: # N, H, W
-            #    tensor_obs = tensor_obs.unsqueeze(1) # N, 1, H, W (만약 SimpleCnnExtractor의 n_input_channels=1 가정)
-
-            return tensor_obs
-        
-    def _obs_to_tensor_batch(self):
-        # Convert list to tensor
-        if isinstance(self.buffer.states[0], dict):
-            batched_observations = {}
-            # 첫 번째 관찰의 키를 기준으로 모든 관찰을 묶음
-            dict_keys = self.buffer.states[0].keys()
-            for key in dict_keys:
-                obs_list_for_key = []
-                for obs_dict_item in self.buffer.states:
-                    val = obs_dict_item[key]
-                    # 이미지 정규화 (uint8 -> float / 255.0)
-                    if val.dtype == np.uint8 and (key == "image" or "img" in key or (val.ndim >=2 and val.shape[-1] <=4)):
-                        val = val.astype(np.float32) / 255.0
-                    # 이미지 채널 순서 (H,W,C) -> (C,H,W) 변경 (필요시)
-                    # 예: if key == "image" and val.ndim == 3 and val.shape[0] > val.shape[2]:
-                    #    val = np.transpose(val, (2, 0, 1))
-                    obs_list_for_key.append(val)
-                batched_observations[key] = torch.as_tensor(np.stack(obs_list_for_key), device=device).float()
-        else: # 단일 Numpy 배열 리스트
-            obs_list = []
-            for obs_item in self.buffer.states:
-                val = obs_item
-                if val.dtype == np.uint8 and val.ndim >=2: # 이미지로 추정
-                    val = val.astype(np.float32) / 255.0
-                # 채널 순서 변경 또는 채널 차원 추가 (필요시)
-                # 예: if val.ndim == 2 and self.observation_space.shape==(1, *val.shape): # (H,W)고 (1,H,W) 기대
-                #    val = np.expand_dims(val, axis=0)
-                obs_list.append(val)
-            batched_observations = torch.as_tensor(np.stack(obs_list), device=device).float()
-
-        return batched_observations
-
-        
     def set_action_std(self, new_action_std): # 표준편차 설정
         if self.has_continuous_action_space:
             self.action_std = new_action_std
@@ -381,11 +166,12 @@ class PPO:
             print("WARNING : Calling PPO::set_action_std() on discrete action space policy")
             print("--------------------------------------------------------------------------------------------")
 
-    def decay_action_std(self, current_epoch, action_std_decay_freq, initial_std, action_std_decay_rate, min_action_std): # 행동 분포의 표준편차 감소
+    def decay_action_std(self, action_std_decay_rate, min_action_std): # 행동 분포의 표준편차 감소
         print("--------------------------------------------------------------------------------------------")
         if self.has_continuous_action_space:
-            current_step = current_epoch // action_std_decay_freq
-            self.action_std = initial_std - current_step * action_std_decay_rate
+            #current_step = current_epoch // action_std_decay_freq
+            #self.action_std = initial_std - current_step * action_std_decay_rate
+            self.action_std = self.action_std - action_std_decay_rate
             self.action_std = round(self.action_std, 4) # 소수점 4자리까지 반올림
 
             # action_std가 최소값보다 작아지면 최소값으로 설정
@@ -397,142 +183,129 @@ class PPO:
 
             # 새로운 action_std 값을 정책에 반영
             self.set_action_std(self.action_std)
-    
-    # 현재 에포크에서 표준편차 계산 함수
-    def get_stepwise_std(self, current_epoch, step_interval, initial_std, action_std_decay_rate, min_action_st):
-        current_step = current_epoch // step_interval
-        return max(initial_std - current_step * action_std_decay_rate, min_action_st)  # 최종 표준편차보다 작아지지 않도록 제한
+        else:
+            print("WARNING : Calling PPO::decay_action_std() on discrete action space policy")
+        print("--------------------------------------------------------------------------------------------")
 
-    def select_action(self, observation: Union[Dict[str, np.ndarray], np.ndarray], deterministic: bool = False): # 행동 선택
-        with torch.no_grad():
-            state = self._obs_to_tensor(observation)
-            action, action_logprob, state_val = self.policy_old.act(state, deterministic)
-
-        self.buffer.states.append(state)
-        self.buffer.actions.append(action)
-        self.buffer.logprobs.append(action_logprob)
-        self.buffer.state_values.append(state_val)
-
+    def select_action(self, state): # 행동 선택
         if self.has_continuous_action_space:
+            with torch.no_grad():
+                state = torch.FloatTensor(state).to(device)
+                action, action_logprob, state_val = self.policy_old.act(state)
+            
+            #print(state.shape) # 2
+            #print(action.shape) # 1,1
+            #print(action_logprob.shape) # 1
+            #print(state_val.shape)# 1
+            #print("==========================")
+            self.buffer.states.append(state)
+            self.buffer.actions.append(action)
+            self.buffer.logprobs.append(action_logprob)
+            self.buffer.state_values.append(state_val)
+
             return action.detach().cpu().numpy().flatten(), action_logprob, state_val
         else:
-            # 배치 차원이 있다면 squeeze, 없다면 item() (단일 환경에서 단일 행동)
-            return action.squeeze().item() if action.numel() == 1 else action.detach().cpu().numpy(), action_logprob, state_val
-           
+            with torch.no_grad():
+                state = torch.FloatTensor(state).to(device)
+                action, action_logprob, state_val = self.policy_old.act(state)
+            
+            self.buffer.states.append(state)
+            self.buffer.actions.append(action)
+            self.buffer.logprobs.append(action_logprob)
+            self.buffer.state_values.append(state_val)
+
+            return action.item(), action_logprob, state_val
     
-    def calculate_gae(self, state_values: torch.Tensor, rewards: torch.Tensor, is_terminals: torch.Tensor):
+    def calculate_gae(self, state_values, rewards):
         """ Generalized Advantage Estimation (GAE) """
-        advantages = torch.zeros_like(rewards).to(device)
+        advantages = []
         last_gae_lam = 0
 
         for step in reversed(range(len(rewards))):
             if step == len(rewards) - 1:
-                next_non_terminal = 1.0 - is_terminals[step]
+                next_non_terminal = 1.0 - self.buffer.is_terminals[step]
                 next_value = state_values[step]
             else:
-                next_non_terminal = 1.0 - is_terminals[step + 1]
+                next_non_terminal = 1.0 - self.buffer.is_terminals[step + 1]
                 next_value = state_values[step + 1]
             
             delta = rewards[step] + self.gamma * next_value * next_non_terminal - state_values[step]
             last_gae_lam = delta + self.gamma * self.lambda_gae * last_gae_lam
-            advantages[step] = last_gae_lam
-        
-        returns = advantages + state_values
-        return advantages, returns
+            advantages.insert(0, last_gae_lam)
+            
+        return torch.squeeze(torch.stack(advantages, dim=0)).detach().to(device)
 
     def update(self): # 정책 업데이트
 
         # convert list to tensor
-        #old_states = torch.squeeze(torch.stack(self.buffer.states, dim=0)).detach().to(device) # 상태 (환경)
-        #old_actions = torch.squeeze(torch.stack(self.buffer.actions, dim=0)).detach().to(device) # 행동
-        #old_logprobs = torch.squeeze(torch.stack(self.buffer.logprobs, dim=0)).detach().to(device) # 행동 확률
-        #old_state_values = torch.squeeze(torch.stack(self.buffer.state_values, dim=0)).detach().to(device) # 상태 가치 값
+        old_states = torch.squeeze(torch.stack(self.buffer.states, dim=0)).detach().to(device) # 상태 (환경)
+        old_actions = torch.squeeze(torch.stack(self.buffer.actions, dim=0)).detach().to(device) # 행동
+        old_logprobs = torch.squeeze(torch.stack(self.buffer.logprobs, dim=0)).detach().to(device) # 행동 확률
+        old_state_values = torch.squeeze(torch.stack(self.buffer.state_values, dim=0)).detach().to(device) # 상태 가치 값
 
-        #old_states_list = [s.to(device) for s in self.buffer.actions]
-        batched_states = self._obs_to_tensor_batch()
-
-        old_actions_list = [a.to(device) for a in self.buffer.actions]
-        old_logprobs_list = [lp.to(device) for lp in self.buffer.logprobs]
-        old_state_values_list = [sv.to(device) for sv in self.buffer.state_values]
+        rewards = torch.tensor(self.buffer.rewards, dtype=torch.float32).to(device) # 보상
         
-        #old_states = torch.cat(old_states_list, dim=0).squeeze(-1)
-        old_actions = torch.cat(old_actions_list, dim=0)
-        old_logprobs = torch.cat(old_logprobs_list, dim=0).squeeze(-1)
-        old_state_values = torch.cat(old_state_values_list, dim=0).squeeze(-1)
-
-        if not self.has_continuous_action_space and old_actions.ndim > 1 and old_actions.shape[-1] == 1:
-            old_actions = old_actions.squeeze(-1)
-
-        rewards = torch.tensor(self.buffer.rewards, dtype=torch.float32, device=device)
-        is_terminals = torch.tensor(self.buffer.is_terminals, dtype=torch.float32, device=device)
-        
-        #rewards = torch.tensor(self.buffer.rewards, dtype=torch.float32).to(device) # 보상
-        
+        print(old_states.shape)
+        print(old_actions.shape)
+        print(old_logprobs.shape)
+        print(old_state_values.shape)
+        print("=====================================================")
         # calculate advantages
-        advantages, returns = self.calculate_gae(old_state_values, rewards, is_terminals) # GAE 어드밴티지 계산 
+        advantages = self.calculate_gae(old_state_values, rewards) # GAE 어드밴티지 계산 
+
         advantages = (advantages - advantages.mean()) / (advantages.std() + 1e-8) # 어드밴티지 정규화
 
-
         # Optimize policy for K epochs
-        num_samples = len(self.buffer.states) # 버퍼 샘플링
-        inds = np.arange(num_samples)
-
+        inds = np.arange(len(old_states)) # 미니 배치 인덱스 
+        nbatch = len(old_states) # 배치 사이즈 설정
+        
         for _ in range(self.K_epochs):
             np.random.shuffle(inds) # 인덱스 섞기
-            for start in range(0, num_samples, self.minibatchsize): # 0부터 배치 사이즈까지 학습 배치 간격으로 반복
+            for start in range(0, nbatch, self.minibatchsize): # 0부터 배치 사이즈까지 학습 배치 간격으로 반복
                 end = start + self.minibatchsize # minibatchsize 간격만큼 설정
                 mbinds = inds[start:end] # 학습 배치 사이즈에 맞게 인덱스 슬라이싱
 
-                if isinstance(batched_states, dict):
-                    old_states_mini = {
-                        key: batched_states[key][mbinds] for key in batched_states
-                    }
-                else:
-                    old_states_mini = batched_states[mbinds]
-
                 # 미니 배치 추출
+                old_states_mini = old_states[mbinds]
                 old_actions_mini = old_actions[mbinds]
                 old_logprobs_mini = old_logprobs[mbinds]
-                advantages_mini = advantages[mbinds]
-                returns_mini = returns[mbinds]
+                old_state_values_mini = old_state_values[mbinds]
+                rewards_mini = rewards[mbinds]
 
                 # Evaluating old actions and values
                 logprobs, state_values, dist_entropy = self.policy.evaluate(old_states_mini, old_actions_mini)
 
+                # match state_values tensor dimensions with rewards tensor (불필요한 차원 삭제)
+                state_values = torch.squeeze(state_values) 
+                
                 # Finding the ratio (pi_theta / pi_theta__old) (정책 확률 계산)
                 ratios = torch.exp(logprobs - old_logprobs_mini.detach())
 
                 # Finding Surrogate Loss  
-                surr1 = ratios * advantages_mini 
-                surr2 = torch.clamp(ratios, 1-self.eps_clip, 1+self.eps_clip) * advantages_mini
-
-                #returns = advantages[mbinds] + old_state_values_mini
-
-                policy_loss = -torch.min(surr1, surr2).mean() # 정책 손실
-                value_loss = self.MseLoss(state_values, returns_mini) # 가치 손실
-                entropy_loss = -dist_entropy.mean() # 엔트로피
-
+                surr1 = ratios * advantages[mbinds] 
+                surr2 = torch.clamp(ratios, 1-self.eps_clip, 1+self.eps_clip) * advantages[mbinds]
+                
+                
+                returns = advantages[mbinds] + old_state_values_mini
                 # final loss of clipped objective PPO
-                loss = policy_loss + self.value_loss_coef * value_loss + self.entropy_coef * entropy_loss
+                loss = -torch.min(surr1, surr2) + self.value_loss_coef * self.MseLoss(state_values, returns) - self.entropy_coef * dist_entropy
                 
                 # take gradient step
                 self.optimizer.zero_grad()
-                loss.backward()
-                torch.nn.utils.clip_grad_norm_(self.policy.parameters(), 0.5) # 그래디언트 클래핑
+                loss.mean().backward()
                 self.optimizer.step()
             
         # Copy new weights into old policy
         self.policy_old.load_state_dict(self.policy.state_dict())
+
         # clear buffer
         self.buffer.clear()
 
-        return policy_loss.item(), value_loss.item(), entropy_loss.item()
+        return np.mean(loss.detach().cpu().numpy()), np.mean(dist_entropy.detach().cpu().numpy())
     
     def save(self, checkpoint_path): 
         torch.save(self.policy_old.state_dict(), checkpoint_path)
-        print(f"Saved model to {checkpoint_path}")
    
     def load(self, checkpoint_path):
         self.policy_old.load_state_dict(torch.load(checkpoint_path, map_location=lambda storage, loc: storage))
         self.policy.load_state_dict(torch.load(checkpoint_path, map_location=lambda storage, loc: storage))
-        print(f"Loaded model from {checkpoint_path}")

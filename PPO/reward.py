@@ -49,7 +49,7 @@ class ExpReward(Reward):
 
         self.total_amt_list = [self.start_amt]
         self.rate_list = []
-        self.current_amt_list = []
+        self.current_amt_list = [self.start_amt]
         self.qty_list = [0]
 
     def get_reward(self, current_date, is_order, order_percent, price, next_price, current_total_amt, current_amt, qty):

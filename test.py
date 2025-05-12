@@ -25,3 +25,12 @@ class StockParameterManager:
         if not config_path:
             config_path = "config/StockConfig.yaml"
     
+import torch
+import torch.nn as nn
+x = torch.tensor([1,2,3,4]).unsqueeze(0)
+
+print(len(x.shape))
+flatten = nn.Flatten()
+x_flatten = flatten(x)
+print(x.shape)
+print(x)

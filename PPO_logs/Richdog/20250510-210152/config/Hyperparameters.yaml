@@ -7,32 +7,32 @@ action_std:
   max: '0.4'
   min: '0.7'
   note: starting std for action distribution (Multivariate Normal) (행동 표준 편차)
-  value: '0.6'
+  value: '0.5'
 action_std_decay_freq:
   max: '1000000'
   min: '100000'
   note: action_std decay frequency (in num timesteps) (표준 편차 감소 주기)
-  value: '250000'
+  value: '500000'
 count:
   max: '360'
   min: '360'
   note: count of data to use per training
   value: '360'
 entropy_coef:
-  max: '0.2'
-  min: '0.01'
+  max: '0.1'
+  min: '0.001'
   note: 엔트로피 계수
   value: '0.01'
 env_name:
   max: None
   min: None
   note: environment name
-  value: MountainCarContinuous-v0
+  value: Richdog
 eps_clip:
   max: '0.3'
   min: '0.01'
   note: clip parameter for PPO (클리핑)
-  value: '0.2'
+  value: '0.1'
 frame_delay:
   max: None
   min: None
@@ -63,12 +63,12 @@ lr_actor:
   max: '0.0003'
   min: '0.00005'
   note: learning rate for actor network (액터의 학습률)
-  value: '0.0003'
+  value: '0.00003'
 lr_critic:
   max: '0.003'
   min: '0.00005'
   note: learning rate for critic network (크리틱 학습률)
-  value: '0.001'
+  value: '0.00005'
 max_dt:
   max: None
   min: None
@@ -78,18 +78,18 @@ max_ep_len:
   max: None
   min: None
   note: max timesteps in one episode (에피소드 당 최대 타임 스텝)
-  value: '1000'
+  value: '400'
 max_training_timesteps:
   max: None
   min: None
   note: break training loop if timeteps > max_training_timesteps (총 학습 타임스텝)
-  value: '1000000'
+  value: '10000000'
 min_action_std:
   max: '0.3'
   min: '0.05'
   note: minimum action_std (stop decay after action_std <= min_action_std) (0.05 ~
     0.1) (최소 행동 표준 편차 값)
-  value: '0.1'
+  value: '0.2'
 min_dt:
   max: None
   min: None
@@ -99,7 +99,7 @@ minibatchsize:
   max: '128'
   min: '32'
   note: mini batch size
-  value: '32'
+  value: '64'
 print_freq:
   max: None
   min: None
@@ -135,9 +135,9 @@ update_timestep:
   max: 2,880
   min: '720'
   note: (Defult = max_ep_len * 4) update policy every n timesteps (정책 업데이트 주기)
-  value: '4000'
+  value: '1600'
 value_loss_coef:
   max: '1.0'
   min: '0.3'
   note: 가치 손실 계수
-  value: '0.5'
+  value: '0.8'

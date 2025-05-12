@@ -7,7 +7,7 @@ import abc
 import torch
 import numpy as np
 
-from PPO.PPO import PPO
+from PPO.PPO2 import PPO
 from PPO.environment import GymEnvironment, StockEnvironment
 from common.fileManager import Config, File
 from common.logger import Logger
@@ -68,16 +68,17 @@ class RichDog:
         self.random_seed = int(self.config.random_seed.value)         # set random seed if required (0 = no random seed) (랜덤 시드)
         #####################################################
 
-        #self.env = GymEnvironment(env_name=self.env_name)
-        self.env = StockEnvironment(self.config.stock_code_path.value, self.stock_config, self.config.min_dt.value, self.config.max_dt.value, int(self.config.count.value))
+        self.env = GymEnvironment(env_name=self.env_name)
+        #self.env = StockEnvironment(self.config.stock_code_path.value, self.stock_config, self.config.min_dt.value, self.config.max_dt.value, int(self.config.count.value))
 
         # state space dimension
-        self.state_dim = self.env.getObservation().shape[0]
+        self.state_dim = self.env.getObservation()#.shape[0]
         # action space dimension
-        if self.has_continuous_action_space:
-            self.action_dim = self.env.getActon().shape[0]
-        else:
-            self.action_dim = self.env.getActon().n
+        self.action_dim = self.env.getActon()
+        #if self.has_continuous_action_space:
+        #    self.action_dim = self.env.getActon().shape[0]
+        #else:
+        #    self.action_dim = self.env.getActon().n
 
 
     def print_parameters(self):
@@ -191,7 +192,7 @@ class RichDogTrain(RichDog):
         # initialize a PPO agent
         ppo_agent = PPO(self.state_dim, self.action_dim, self.lr_actor, self.lr_critic, 
                         self.gamma, self.K_epochs, self.eps_clip, self.has_continuous_action_space, 
-                        self.action_std,self. value_loss_coef, self.entropy_coef,self.lamda, self.minibatchsize)
+                        self.action_std, self.value_loss_coef, self.entropy_coef,self.lamda, self.minibatchsize)
 
         # track total training time
         start_time = datetime.now().replace(microsecond=0)
@@ -227,7 +228,8 @@ class RichDogTrain(RichDog):
             is_action_log = is_save_model
 
             if is_action_log:
-                self.action_file_log(time_step, "PPO_train_logs", ['timestep', "action"]  + list(info.keys()))
+                pass
+                #self.action_file_log(time_step, "PPO_train_logs", ['timestep', "action"]  + list(info.keys()))
 
             for t in range(1, self.max_ep_len+1):
 
@@ -246,11 +248,12 @@ class RichDogTrain(RichDog):
 
                 # update PPO agent
                 if time_step % self.update_timestep == 0:
-                    loss, dist_entropy = ppo_agent.update()
+                    #loss,_,_,dist_entropy = ppo_agent.update()
+                    loss,dist_entropy = ppo_agent.update()
 
                 # if continuous action space; then decay action std of ouput action distribution (액션 분포의 표준편차 감소)
                 if self.has_continuous_action_space and time_step % self.action_std_decay_freq == 0:
-                    ppo_agent.decay_action_std(time_step, self.action_std_decay_freq, self.action_std, self.action_std_decay_rate, self.min_action_std)
+                    ppo_agent.decay_action_std(self.action_std_decay_rate, self.min_action_std)
 
                 # log in logging file
                 if time_step % self.log_freq == 0:
@@ -272,7 +275,7 @@ class RichDogTrain(RichDog):
                     print_avg_reward = np.round(print_avg_reward, 2)
 
                     self.console_logger.print_wirte_file("console", "Episode : {} \t\t Timestep : {} \t\t Average Reward : {}\n".format(i_episode, time_step, print_avg_reward))
-                    
+
                     print_running_reward = 0
                     print_running_episodes = 0
 
@@ -288,9 +291,9 @@ class RichDogTrain(RichDog):
                     is_save_model = True
 
                 if is_action_log:
-                    self.logger.list_write_file('action', [t, action[0]] + list(info.values()))
-                    str_state = [str(item) for item in state]
-                    self.logger.list_write_file('state', str_state)
+                    #self.logger.list_write_file('action', [t, action[0]] + list(info.values()))
+                    #str_state = [str(item) for item in state]
+                    #self.logger.list_write_file('state', str_state)
                     is_save_model = False
 
                 # break; if the episode is over
@@ -408,7 +411,7 @@ class RichDogTest(RichDog):
 
             test_running_reward +=  ep_reward
             self.console_logger.print_wirte_file("console", 'Episode: {} \t\t Reward: {}\n'.format(ep, np.round(ep_reward, 2)))
-
+            
             ep_reward = 0
 
         self.env.close()
