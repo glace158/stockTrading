@@ -248,12 +248,14 @@ class RichDogTrain(RichDog):
 
                 # update PPO agent
                 if time_step % self.update_timestep == 0:
-                    #loss,_,_,dist_entropy = ppo_agent.update()
-                    loss,dist_entropy = ppo_agent.update()
+                    loss,policy_loss,value_loss,dist_entropy = ppo_agent.update()
+                    #loss,dist_entropy = ppo_agent.update()
+                    ppo_agent.schedule_action_std(self.min_action_std, self.action_std, time_step, self.max_training_timesteps)
 
                 # if continuous action space; then decay action std of ouput action distribution (액션 분포의 표준편차 감소)
                 if self.has_continuous_action_space and time_step % self.action_std_decay_freq == 0:
-                    ppo_agent.decay_action_std(self.action_std_decay_rate, self.min_action_std)
+                    pass
+                    #ppo_agent.decay_action_std(self.action_std_decay_rate, self.min_action_std)
 
                 # log in logging file
                 if time_step % self.log_freq == 0:
@@ -387,10 +389,10 @@ class RichDogTest(RichDog):
             
             ep_reward = 0
             state, info = self.env.reset()
-            self.action_file_log(ep, "PPO_test_logs", ['timestep', "action", "reward"]  + list(info.keys()))
+            #self.action_file_log(ep, "PPO_test_logs", ['timestep', "action", "reward"]  + list(info.keys()))
 
             for t in range(1, self.max_ep_len+1):
-                action, action_logprob, state_val = ppo_agent.select_action(state)
+                action, action_logprob, state_val = ppo_agent.select_action(state, True)
                 state, reward, done, _, info = self.env.step(action)
                 ep_reward += reward
 
@@ -399,9 +401,9 @@ class RichDogTest(RichDog):
                     time.sleep(frame_delay)
 
                 # logging
-                self.logger.list_write_file('action', [t, action[0], reward] + list(info.values()))
-                str_state = [str(item) for item in state]
-                self.logger.list_write_file('state', str_state)
+                #self.logger.list_write_file('action', [t, action[0], reward] + list(info.values()))
+                #str_state = [str(item) for item in state]
+                #self.logger.list_write_file('state', str_state)
 
                 if done:
                     break

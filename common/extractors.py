@@ -107,8 +107,11 @@ class CombinedFeaturesExtractor(nn.Module):
                 total_features_dim += extractors[key].features_dim
 
             elif isinstance(subspace, spaces.Box) and len(subspace.shape) == 1: # 수치형 벡터
-                extractors[key] = MlpExtractor(subspace, features_dim=mlp_features_dim) # MLP 신경망 설정
-                total_features_dim += extractors[key].features_dim
+                if mlp_features_dim != 0:
+                    extractors[key] = MlpExtractor(subspace, features_dim=mlp_features_dim) # MLP 신경망 설정
+                    total_features_dim += extractors[key].features_dim
+                else:
+                    total_features_dim += subspace.shape[0]
 
             else: # 기타 (예: Discrete) - 여기서는 Flatten 후 사용
                 extractors[key] = nn.Flatten() 
@@ -119,8 +122,13 @@ class CombinedFeaturesExtractor(nn.Module):
         
     def forward(self, observations: Dict[str, torch.Tensor]) -> torch.Tensor:
         encoded_tensor_list = []
-        for key, extractor in self.extractors.items():
-            encoded_tensor_list.append(extractor(observations[key]))
+        
+        for key, observation in observations.items():
+            if key in self.extractors.keys():
+                encoded_tensor_list.append(self.extractors[key](observation))
+            else:
+                encoded_tensor_list.append(observation)
+                
         return torch.cat(encoded_tensor_list, dim=1)
 
     @property

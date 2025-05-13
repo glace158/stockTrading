@@ -125,10 +125,11 @@ class ActorCritic(nn.Module):
 
 
 class PPO:
-    def __init__(self, state_dim, action_space, lr_actor, lr_critic, 
+    def __init__(self, observation_space, action_space, lr_actor, lr_critic, 
                  gamma, K_epochs, eps_clip, has_continuous_action_space, 
                  action_std_init=0.6, value_loss_coef =0.1, entropy_coef= 0.5, lambda_gae=0.95, minibatchsize=32):
 
+        state_dim = observation_space.shape[0]
         self.has_continuous_action_space = has_continuous_action_space
 
         if has_continuous_action_space:
@@ -193,11 +194,6 @@ class PPO:
                 state = torch.FloatTensor(state).to(device)
                 action, action_logprob, state_val = self.policy_old.act(state)
             
-            #print(state.shape) # 2
-            #print(action.shape) # 1,1
-            #print(action_logprob.shape) # 1
-            #print(state_val.shape)# 1
-            #print("==========================")
             self.buffer.states.append(state)
             self.buffer.actions.append(action)
             self.buffer.logprobs.append(action_logprob)
@@ -245,11 +241,6 @@ class PPO:
 
         rewards = torch.tensor(self.buffer.rewards, dtype=torch.float32).to(device) # 보상
         
-        print(old_states.shape)
-        print(old_actions.shape)
-        print(old_logprobs.shape)
-        print(old_state_values.shape)
-        print("=====================================================")
         # calculate advantages
         advantages = self.calculate_gae(old_state_values, rewards) # GAE 어드밴티지 계산 
 

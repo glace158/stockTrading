@@ -1,46 +1,68 @@
-Started training at (GMT) : 2025-05-12 16:42:12
+Started training at (GMT) : 2025-05-13 13:31:25
 ============================================================================================
-Episode : 9 		 Timestep : 10000 		 Average Reward : -36.75
-Episode : 19 		 Timestep : 20000 		 Average Reward : -35.79
-Episode : 29 		 Timestep : 30000 		 Average Reward : -34.79
-Episode : 39 		 Timestep : 40000 		 Average Reward : -36.05
-Episode : 49 		 Timestep : 50000 		 Average Reward : -36.88
-Episode : 59 		 Timestep : 60000 		 Average Reward : -35.51
-Episode : 69 		 Timestep : 70000 		 Average Reward : -35.41
-Episode : 79 		 Timestep : 80000 		 Average Reward : -36.22
-Episode : 89 		 Timestep : 90000 		 Average Reward : -36.41
-Episode : 99 		 Timestep : 100000 		 Average Reward : -35.7
+Episode : 9 		 Timestep : 10000 		 Average Reward : -36.79
+Episode : 9 		 Timestep : 10000 		 Average Reward : -36.45
+Episode : 19 		 Timestep : 20000 		 Average Reward : -35.2
+Episode : 19 		 Timestep : 20000 		 Average Reward : -34.89
+Episode : 29 		 Timestep : 30000 		 Average Reward : -35.02
+Episode : 29 		 Timestep : 30000 		 Average Reward : -35.86
+Episode : 39 		 Timestep : 40000 		 Average Reward : -34.64
+Episode : 39 		 Timestep : 40000 		 Average Reward : -34.22
+Episode : 49 		 Timestep : 50000 		 Average Reward : -34.08
+Episode : 49 		 Timestep : 50000 		 Average Reward : -33.85
+Episode : 59 		 Timestep : 60000 		 Average Reward : -33.57
+Episode : 59 		 Timestep : 60000 		 Average Reward : -34.29
+Episode : 69 		 Timestep : 70000 		 Average Reward : -33.67
+Episode : 69 		 Timestep : 70000 		 Average Reward : -33.42
+Episode : 79 		 Timestep : 80000 		 Average Reward : -32.76
+Episode : 79 		 Timestep : 80000 		 Average Reward : -31.37
+Episode : 89 		 Timestep : 90000 		 Average Reward : -31.86
+Episode : 89 		 Timestep : 90000 		 Average Reward : -31.56
+Episode : 99 		 Timestep : 100000 		 Average Reward : -30.45
 --------------------------------------------------------------------------------------------
-saving model at : PPO_preTrained/MountainCarContinuous-v0/PPO_MountainCarContinuous-v0_0_20250512-164212.pth
-model savedElapsed Time  : 0:03:33
+saving model at : PPO_preTrained/MountainCarContinuous-v0/PPO_MountainCarContinuous-v0_0_20250513-133122.pth
+model savedElapsed Time  : 0:04:23
 --------------------------------------------------------------------------------------------
-Episode : 109 		 Timestep : 110000 		 Average Reward : -34.92
-Episode : 119 		 Timestep : 120000 		 Average Reward : -36.68
-Episode : 129 		 Timestep : 130000 		 Average Reward : -36.11
-Episode : 139 		 Timestep : 140000 		 Average Reward : -35.2
-Episode : 149 		 Timestep : 150000 		 Average Reward : -35.61
-Episode : 159 		 Timestep : 160000 		 Average Reward : -36.33
-Episode : 169 		 Timestep : 170000 		 Average Reward : -37.07
-Episode : 179 		 Timestep : 180000 		 Average Reward : -36.82
-Episode : 189 		 Timestep : 190000 		 Average Reward : -36.23
-Episode : 199 		 Timestep : 200000 		 Average Reward : -35.91
+Episode : 99 		 Timestep : 100000 		 Average Reward : -30.72
 --------------------------------------------------------------------------------------------
-saving model at : PPO_preTrained/MountainCarContinuous-v0/PPO_MountainCarContinuous-v0_0_20250512-164212.pth
-model savedElapsed Time  : 0:07:06
+saving model at : PPO_preTrained/MountainCarContinuous-v0/PPO_MountainCarContinuous-v0_0_20250513-133124.pth
+model savedElapsed Time  : 0:04:24
 --------------------------------------------------------------------------------------------
-Episode : 209 		 Timestep : 210000 		 Average Reward : -35.77
-Episode : 219 		 Timestep : 220000 		 Average Reward : -35.75
-Episode : 229 		 Timestep : 230000 		 Average Reward : -36.24
-Episode : 239 		 Timestep : 240000 		 Average Reward : -36.86
-Episode : 250 		 Timestep : 250000 		 Average Reward : -16.1
-Episode : 264 		 Timestep : 260000 		 Average Reward : 69.44
-Episode : 283 		 Timestep : 270000 		 Average Reward : 88.48
-Episode : 308 		 Timestep : 280000 		 Average Reward : 90.31
-Episode : 340 		 Timestep : 290000 		 Average Reward : 91.63
-Episode : 379 		 Timestep : 300000 		 Average Reward : 92.19
+Episode : 109 		 Timestep : 110000 		 Average Reward : -30.42
+Episode : 109 		 Timestep : 110000 		 Average Reward : -31.56
+Episode : 119 		 Timestep : 120000 		 Average Reward : -29.86
+Episode : 119 		 Timestep : 120000 		 Average Reward : -29.37
+Episode : 129 		 Timestep : 130000 		 Average Reward : -29.18
+Episode : 129 		 Timestep : 130000 		 Average Reward : -29.67
+Episode : 139 		 Timestep : 140000 		 Average Reward : -28.81
+Episode : 139 		 Timestep : 140000 		 Average Reward : -28.23
+Episode : 149 		 Timestep : 150000 		 Average Reward : -27.72
+Episode : 149 		 Timestep : 150000 		 Average Reward : -28.38
+Episode : 159 		 Timestep : 160000 		 Average Reward : -27.62
+Episode : 159 		 Timestep : 160000 		 Average Reward : -27.48
+Episode : 169 		 Timestep : 170000 		 Average Reward : -27.48
+Episode : 169 		 Timestep : 170000 		 Average Reward : -26.9
+Episode : 179 		 Timestep : 180000 		 Average Reward : -26.22
+Episode : 179 		 Timestep : 180000 		 Average Reward : -27.33
+Episode : 189 		 Timestep : 190000 		 Average Reward : -25.81
+Episode : 190 		 Timestep : 190000 		 Average Reward : -16.16
+Episode : 199 		 Timestep : 200000 		 Average Reward : -25.45
 --------------------------------------------------------------------------------------------
-saving model at : PPO_preTrained/MountainCarContinuous-v0/PPO_MountainCarContinuous-v0_0_20250512-164212.pth
-model savedElapsed Time  : 0:10:40
+saving model at : PPO_preTrained/MountainCarContinuous-v0/PPO_MountainCarContinuous-v0_0_20250513-133122.pth
+model savedElapsed Time  : 0:08:53
 --------------------------------------------------------------------------------------------
-Episode : 429 		 Timestep : 310000 		 Average Reward : 92.08
-Episode : 487 		 Timestep : 320000 		 Average Reward : 91.64
+Episode : 200 		 Timestep : 200000 		 Average Reward : -25.81
+--------------------------------------------------------------------------------------------
+saving model at : PPO_preTrained/MountainCarContinuous-v0/PPO_MountainCarContinuous-v0_0_20250513-133124.pth
+model savedElapsed Time  : 0:08:52
+--------------------------------------------------------------------------------------------
+Episode : 209 		 Timestep : 210000 		 Average Reward : -24.7
+Episode : 210 		 Timestep : 210000 		 Average Reward : -15.22
+Episode : 219 		 Timestep : 220000 		 Average Reward : -24.95
+Episode : 220 		 Timestep : 220000 		 Average Reward : -14.32
+Episode : 229 		 Timestep : 230000 		 Average Reward : -23.83
+Episode : 232 		 Timestep : 230000 		 Average Reward : 45.45
+Episode : 239 		 Timestep : 240000 		 Average Reward : -23.94
+Episode : 245 		 Timestep : 240000 		 Average Reward : 58.25
+Episode : 250 		 Timestep : 250000 		 Average Reward : -4.57
+Episode : 262 		 Timestep : 250000 		 Average Reward : 79.17
