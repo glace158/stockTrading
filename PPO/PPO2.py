@@ -36,11 +36,12 @@ class ActorCritic(nn.Module):
         
         self.action_dim = action_space.shape[0] if has_continuous_action_space else action_space.n
         
-        mlp_extractor_input_dim = self._set_features(observation_space, cnn_features_dim, mlp_features_dim)
+        self.input_dim = self._set_features(observation_space, cnn_features_dim, mlp_features_dim)
+
         # actor
         if has_continuous_action_space :
             self.actor = nn.Sequential(
-                            nn.Linear(mlp_extractor_input_dim, 64),
+                            nn.Linear(self.input_dim, 64),
                             nn.Tanh(),
                             nn.Linear(64, 64),
                             nn.Tanh(),
@@ -51,7 +52,7 @@ class ActorCritic(nn.Module):
             self.action_var = torch.full((self.action_dim,), action_std_init * action_std_init).to(device) # 행동 표준 편차 설정
         else:
             self.actor = nn.Sequential(
-                            nn.Linear(mlp_extractor_input_dim, 64),
+                            nn.Linear(self.input_dim, 64),
                             nn.Tanh(),
                             nn.Linear(64, 64),
                             nn.Tanh(),
@@ -60,7 +61,7 @@ class ActorCritic(nn.Module):
                         )
         # critic
         self.critic = nn.Sequential(
-                        nn.Linear(mlp_extractor_input_dim, 64),
+                        nn.Linear(self.input_dim, 64),
                         nn.Tanh(),
                         nn.Linear(64, 64),
                         nn.Tanh(),
@@ -110,11 +111,11 @@ class ActorCritic(nn.Module):
             raise ValueError(f"Unsupported observation space type: {type(observation_space)}")
 
         if self.features_extractor != None:
-            mlp_extractor_input_dim = self.features_extractor.features_dim
+            input_dim = self.features_extractor.features_dim
         else:
-            mlp_extractor_input_dim = observation_space.shape[0]
+            input_dim = observation_space.shape[0]
 
-        return mlp_extractor_input_dim
+        return input_dim
 
     def _get_features(self, observations: Union[Dict[str, torch.Tensor], torch.Tensor]) -> torch.Tensor:
         """
@@ -237,7 +238,7 @@ class PPO:
         self.policy_old.load_state_dict(self.policy.state_dict())
         
         self.MseLoss = nn.MSELoss()
-
+    
     def set_action_std(self, new_action_std): # 표준편차 설정
         """
             행동 분포의 표준편차 적용
@@ -246,7 +247,7 @@ class PPO:
         if self.has_continuous_action_space:
             self.action_std = new_action_std
             self.policy.set_action_std(new_action_std)
-            self.policy_old.set_action_std(new_action_std)
+            self.policy_old.set_action_std(new_action_std)       
         else:
             print("--------------------------------------------------------------------------------------------")
             print("WARNING : Calling PPO::set_action_std() on discrete action space policy")

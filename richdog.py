@@ -6,11 +6,12 @@ import abc
 
 import torch
 import numpy as np
+import random
 
 from PPO.PPO2 import PPO
 from PPO.environment import GymEnvironment, StockEnvironment
 from common.fileManager import Config, File
-from common.logger import Logger
+from common.logger import Logger, DataRecorder
 
 class RichDog:
     __metaclass__ = abc.ABCMeta
@@ -22,11 +23,10 @@ class RichDog:
 
         self.config = Config.load_config(config_path)
         self.stock_config = Config.load_config("config/StockConfig.yaml")
-        self.log_root_path = ""
         self.cur_time = str(datetime.now().strftime("%Y%m%d-%H%M%S"))
 
-        self.logger = Logger()
-        self.console_logger = Logger()
+        self.data_recorder: DataRecorder = None 
+        self.random_mode = False
 
     def init_parameters(self):
         print("============================================================================================")
@@ -34,7 +34,7 @@ class RichDog:
         self.env_name = self.config.env_name.value
 
         self.has_continuous_action_space = bool(self.config.has_continuous_action_space.value)  # continuous action space; else discrete
-
+        
         self.max_ep_len = int(self.config.max_ep_len.value)      # max timesteps in one episode (에피소드 당 최대 타임 스텝)
         self.max_training_timesteps = int(self.config.max_training_timesteps.value)   # break training loop if timeteps > max_training_timesteps (총 학습 타임스텝)
     
@@ -42,43 +42,46 @@ class RichDog:
         self.log_freq = int(self.config.log_freq.value)            # log avg reward in the interval (in num timesteps) (로그 파일 생성 주기)
         self.save_model_freq = int(self.config.save_model_freq.value)          # save model frequency (in num timesteps) (모델 저장 주기)
 
-        self.action_std = float(self.config.action_std.value)                  # starting std for action distribution (Multivariate Normal) (행동 표준 편차)
-        self.min_action_std = float(self.config.min_action_std.value)                # minimum action_std (stop decay after action_std <= min_action_std) (0.05 ~ 0.1) (최소 행동 표준 편차 값)
-        self.action_std_decay_freq = int(self.config.action_std_decay_freq.value)  # action_std decay frequency (in num timesteps) (표준 편차 감소 주기)
+        self.action_std = self._get_random_or_fixed_value(self.config.action_std, float, random_mode=self.random_mode)                # starting std for action distribution (Multivariate Normal) (행동 표준 편차)
+        self.min_action_std = self._get_random_or_fixed_value(self.config.min_action_std, float, random_mode=self.random_mode)                # minimum action_std (stop decay after action_std <= min_action_std) (0.05 ~ 0.1) (최소 행동 표준 편차 값)
+        
+        # min_action_std가 action_std보다 크지 않도록 보정
+        if self.action_std < self.min_action_std:
+            self.min_action_std = self.action_std
+
+        self.action_std_decay_freq = self._get_random_or_fixed_value(self.config.action_std_decay_freq, int, random_mode=self.random_mode)  # action_std decay frequency (in num timesteps) (표준 편차 감소 주기)
         self.action_std_decay_rate = (self.action_std - self.min_action_std) / ((self.max_training_timesteps - self.action_std_decay_freq)  // self.action_std_decay_freq)     # linearly decay action_std (action_std = action_std - action_std_decay_rate) (행동 표준 편차 감소 값)
         #####################################################
 
         ## Note : print/log frequencies should be > than max_ep_len
 
         ################ PPO hyperparameters ################
-        self.update_timestep = int(self.config.update_timestep.value)      # update policy every n timesteps (정책 업데이트 주기)
-        self.K_epochs = int(self.config.K_epochs.value)               # update policy for K epochs in one PPO update (최적화 횟수)
+        self.update_timestep = self._get_random_or_fixed_value(self.config.update_timestep, int, random_mode=self.random_mode)      # update policy every n timesteps (정책 업데이트 주기)
+        self.K_epochs = self._get_random_or_fixed_value(self.config.K_epochs, int, random_mode=self.random_mode)               # update policy for K epochs in one PPO update (최적화 횟수)
 
-        self.eps_clip = float(self.config.eps_clip.value)          # clip parameter for PPO (클리핑)
-        self.gamma = float(self.config.gamma.value)            # discount factor (감가율)
-        self.lamda = float(self.config.lamda.value)              # 어드벤티지 감가율
-        self.minibatchsize = int(self.config.minibatchsize.value)
+        self.eps_clip = self._get_random_or_fixed_value(self.config.eps_clip, float, random_mode=self.random_mode)          # clip parameter for PPO (클리핑)
+        self.gamma = self._get_random_or_fixed_value(self.config.gamma, float, random_mode=self.random_mode)            # discount factor (감가율)
+        self.lamda = self._get_random_or_fixed_value(self.config.lamda, float, random_mode=self.random_mode)              # 어드벤티지 감가율
+        self.minibatchsize = self._get_random_or_fixed_value(self.config.minibatchsize, int, random_mode=self.random_mode)
 
-        self.lr_actor = float(self.config.lr_actor.value)       # learning rate for actor network (액터의 학습률)
-        self.lr_critic = float(self.config.lr_critic.value)       # learning rate for critic network (크리틱 학습률)
+        self.lr_actor = self._get_random_or_fixed_value(self.config.lr_actor, float, random_mode=self.random_mode)       # learning rate for actor network (액터의 학습률)
+        self.lr_critic = self._get_random_or_fixed_value(self.config.lr_critic, float, random_mode=self.random_mode)      # learning rate for critic network (크리틱 학습률)
 
-        self.value_loss_coef = float(self.config.value_loss_coef.value)     # 가치 손실 계수
-        self.entropy_coef = float(self.config.entropy_coef.value)       # 엔트로피 계수
+        self.value_loss_coef = self._get_random_or_fixed_value(self.config.value_loss_coef, float, random_mode=self.random_mode)     # 가치 손실 계수
+        self.entropy_coef = self._get_random_or_fixed_value(self.config.entropy_coef, float, random_mode=self.random_mode)       # 엔트로피 계수
 
         self.random_seed = int(self.config.random_seed.value)         # set random seed if required (0 = no random seed) (랜덤 시드)
         #####################################################
 
-        self.env = GymEnvironment(env_name=self.env_name)
-        #self.env = StockEnvironment(self.config.stock_code_path.value, self.stock_config, self.config.min_dt.value, self.config.max_dt.value, int(self.config.count.value))
+        if self.env_name == "RichDog":
+            self.env = StockEnvironment(self.stock_config.stock_code_path.value, self.stock_config, self.stock_config.min_dt.value, self.stock_config.max_dt.value, int(self.stock_config.count.value))
+        else:
+            self.env = GymEnvironment(env_name=self.env_name)
 
         # state space dimension
-        self.state_dim = self.env.getObservation()#.shape[0]
+        self.observation_space = self.env.getObservation()
         # action space dimension
-        self.action_dim = self.env.getActon()
-        #if self.has_continuous_action_space:
-        #    self.action_dim = self.env.getActon().shape[0]
-        #else:
-        #    self.action_dim = self.env.getActon().n
+        self.action_space = self.env.getActon()
 
 
     def print_parameters(self):
@@ -91,8 +94,8 @@ class RichDog:
         print("log frequency : " + str(self.log_freq) + " timesteps")
         print("printing average reward over episodes in last : " + str(self.print_freq) + " timesteps")
         print("--------------------------------------------------------------------------------------------")
-        print("state space dimension : ", self.state_dim)
-        print("action space dimension : ", self.action_dim)
+        print("state space dimension : ", self.observation_space)
+        print("action space dimension : ", self.action_space)
         print("--------------------------------------------------------------------------------------------")
         if self.has_continuous_action_space:
             print("Initializing a continuous action space policy")
@@ -123,84 +126,107 @@ class RichDog:
 
         print("============================================================================================")
 
-    def console_file_log(self):
-        ################## console logging ##################
-        self.console_file_name = "PPO_console_log.txt"
-        console_dir = "PPO_console/"
-        self.console_logger.add_file("console", console_dir, self.console_file_name)
-
-        print("save console path : " + console_dir)
-        #####################################################
-        
-    def action_file_log(self, num, mode_dir, actionlabels):
-        ################## action logging ##################
-        
-        action_file_name = "PPO_{}_action_{}_{}_{}.csv".format(self.env_name, self.random_seed, self.cur_time, num)
-        action_dir = self.log_root_path + mode_dir + "/PPO_action_logs/" + self.env_name + '/' + str(self.cur_time) + '/'
-
-        self.logger.add_file("action", action_dir, action_file_name)
-        self.logger.list_write_file("action", actionlabels)
+    def capture_print_parameters(self) -> str:
+        """print_parameters 메서드의 출력을 문자열로 캡처하여 로깅에 사용합니다."""
+        import io
+        old_stdout = sys.stdout
+        sys.stdout = captured_output = io.StringIO()
+        self.print_parameters() # 이 메서드의 출력이 captured_output으로 들어감
+        sys.stdout = old_stdout # 표준 출력 복원
+        return captured_output.getvalue()
     
-        state_file_name = "PPO_{}_state_{}_{}_{}.csv".format(self.env_name, self.random_seed, self.cur_time, num)
-        state_dir = self.log_root_path + mode_dir + "/PPO_state_logs/" + self.env_name + '/' + str(self.cur_time) + '/'
+    def _get_random_or_fixed_value(self, param_obj, target_type, random_mode = False):
+        """
+        Config에서 읽어온 파라미터 객체(min, max, value)로 랜덤 값 또는 고정 값을 반환
+        """
 
-        self.logger.add_file("state", state_dir, state_file_name)
-        self.logger.list_write_file("state", self.env.get_data_label())
+        min_val_str = getattr(param_obj, 'min', None) # 최대 값
+        max_val_str = getattr(param_obj, 'max', None) # 최소 값
+        default_val_str = getattr(param_obj, 'value', None) # 기본 값
 
-        print("save action logs path : " + action_dir)
-        #####################################################
+        # min 또는 max 값이 None이 아니고 유효한 문자열일 때 랜덤 값 생성 시도
+        if min_val_str is not None and max_val_str is not None and random_mode:
+            try:
+                if target_type == int:
+                    min_v = int(min_val_str)
+                    max_v = int(max_val_str)
 
+                    if min_v > max_v:
+                        print(f"경고: 파라미터 '{param_obj.name}'의 min ({min_v})이 max ({max_v})보다 큽니다. 값을 교체합니다.")
+                        min_v, max_v = max_v, min_v
+
+                    return random.randint(min_v, max_v)
+                
+                elif target_type == float:
+                    min_v = float(min_val_str)
+                    max_v = float(max_val_str)
+
+                    if min_v > max_v:
+                        print(f"경고: 파라미터 '{param_obj.name}'의 min ({min_v})이 max ({max_v})보다 큽니다. 값을 교체합니다.")
+                        min_v, max_v = max_v, min_v
+
+                    return random.uniform(min_v, max_v)
+                
+            except ValueError:
+                print(f"경고: 파라미터 '{param_obj.name}'의 min/max 값을 {target_type}으로 변환 중 오류 발생. 기본값을 사용합니다.")
+                # 오류 발생 시 기본값 사용 로직으로 넘어감
+        
+        # 랜덤 값 생성이 안됐거나, min/max가 설정되지 않은 경우 기본값 사용
+        if default_val_str is None:
+            raise ValueError(f"파라미터 '{param_obj.name}' 기본값(value)이 없습니다.")
+
+        if target_type == int:
+            return int(default_val_str)
+        elif target_type == float:
+            return float(default_val_str)
+        elif target_type == bool:
+            return bool(default_val_str)
+        else: 
+            return str(default_val_str)
+    
 class RichDogTrain(RichDog):
     def __init__(self, config_path=None):
         super().__init__(config_path)
         
-        self.log_root_path = 'PPO_logs/' + self.config.env_name.value + "/" + self.cur_time + '/'
-        self.logger = Logger()
-        self.console_logger = Logger()
+        # DataRecorder의 random_seed는 경로 일관성을 위해 설정 파일의 것을 사용하는 것이 좋음
+        self.data_recorder = DataRecorder(
+            env_name=self.config.env_name.value, 
+            random_seed=int(self.config.random_seed.value), # 설정된 시드를 경로 일관성을 위해 사용
+            base_log_dir_prefix="PPO_logs" # 훈련 로그를 위한 최상위 디렉토리 (선호에 따라 변경 가능)
+        )
         
-        Config.save_config( self.config, self.log_root_path + "config/Hyperparameters.yaml")
-        Config.save_config( self.stock_config, self.log_root_path + "config/StockConfig.yaml")
+        # DataRecorder를 사용하여 설정 파일 저장
+        self.data_recorder.setup_config_logging(self.config, self.stock_config)
     
     def init_files(self):
-        ###################### logging ######################
-        #### log files for multiple runs are NOT overwritten
-        log_file_name = 'PPO_' + self.env_name + "_log_" + self.cur_time + ".csv"
-        log_file_dir = self.log_root_path
-        self.logger.add_file("log_file", log_file_dir, log_file_name)
-        
-        self.logger.write_file("log_file", 'episode,timestep,reward,loss,dist_entropy\n')
+        # 메인 훈련 로그 설정
+        self.data_recorder.setup_training_log()
 
-        print("current logging run number for " + self.env_name + " : ", self.cur_time)
-        print("logging at : " + log_file_dir + log_file_name)
-        #####################################################
-
-        ################### checkpointing ###################
-        checkpoint_file_name = "PPO_{}_{}_{}.pth".format(self.env_name, self.random_seed, self.cur_time)
-        checkpoint_dir = "PPO_preTrained/" + self.env_name + '/'
-        self.logger.add_file("checkpoint", checkpoint_dir, checkpoint_file_name)
-        
-        print("save checkpoint path : " + checkpoint_dir + checkpoint_file_name)
-        #####################################################
-
+        # 체크포인트 경로 설정
+        # 체크포인트 이름 일관성을 위해 설정 파일의 random_seed 전달
+        self.data_recorder.setup_checkpointing(trained_random_seed=int(self.config.random_seed.value))
+        self.data_recorder.setup_console_log(file_name="PPO_console_log.txt")
 
     ################################### Training ###################################
     def train(self):
         self.init_parameters()
         self.print_parameters()
+        self.init_files()
+        # print_parameters 출력을 문자열로 캡처하여 콘솔 로그에 기록
+        param_str = self.capture_print_parameters()
+        self.data_recorder.log_to_console(param_str)
         
         ################# training procedure ################
         # initialize a PPO agent
-        ppo_agent = PPO(self.state_dim, self.action_dim, self.lr_actor, self.lr_critic, 
+        ppo_agent = PPO(self.observation_space, self.action_space, self.lr_actor, self.lr_critic, 
                         self.gamma, self.K_epochs, self.eps_clip, self.has_continuous_action_space, 
                         self.action_std, self.value_loss_coef, self.entropy_coef,self.lamda, self.minibatchsize)
 
         # track total training time
         start_time = datetime.now().replace(microsecond=0)
-        self.init_files()
-        self.console_file_log()
 
-        self.console_logger.print_wirte_file("console", "Started training at (GMT) : " + str(start_time) + "\n")
-        self.console_logger.print_wirte_file("console", "============================================================================================\n")
+        self.data_recorder.log_to_console("Started training at (GMT) : " + str(start_time) + "\n")
+        self.data_recorder.log_to_console("============================================================================================\n")
         
         # printing and logging variables
         print_running_reward = 0
@@ -212,44 +238,56 @@ class RichDogTrain(RichDog):
         time_step = 0
         i_episode = 0
 
-        is_save_model = False
-
         loss = 0
         dist_entropy = 0
+        policy_loss = 0
+        value_loss = 0
 
+        is_save_model = False
         # training loop
         while time_step <= self.max_training_timesteps:
 
             state, info = self.env.reset()
 
             current_ep_reward = 0
-            next_state = state
+
+            # 에피소드/타임스텝별 행동/상태 로깅
+            
 
             is_action_log = is_save_model
 
             if is_action_log:
-                pass
-                #self.action_file_log(time_step, "PPO_train_logs", ['timestep', "action"]  + list(info.keys()))
+                self.data_recorder.log_to_console("Start episode logging\n")
+                action_labels = ['timestep', "action", "reward"] + (list(info.keys()) if info else [])
+                state_labels = self.env.get_data_label() if hasattr(self.env, 'get_data_label') else [f"state_{i}" for i in range(ppo_agent.policy.input_dim)]
+                
+                self.data_recorder.setup_run_data_logs(
+                    mode_dir_suffix="train_episode_data", # 훈련 중 에피소드 상세 데이터 저장용 하위폴더
+                    run_id=f"{time_step}", # 이 특정 실행 데이터 로그를 위한 ID (예: "ts10000")
+                    action_labels=action_labels,
+                    state_labels=state_labels
+                )
 
             for t in range(1, self.max_ep_len+1):
 
                 # select action with policy
                 action, action_logprob, state_val = ppo_agent.select_action(state)
                 
-                next_state, reward, done, _, info = self.env.step(action)
-                
+                next_state, reward, done, truncated, info = self.env.step(action)
+                done = done or truncated # truncated도 에피소드 종료로 간주
+
                 # saving buffer
                 ppo_agent.buffer.rewards.append(reward)
                 ppo_agent.buffer.is_terminals.append(done)
                 
-                state = next_state
                 time_step +=1
                 current_ep_reward += reward
 
                 # update PPO agent
                 if time_step % self.update_timestep == 0:
                     loss,policy_loss,value_loss,dist_entropy = ppo_agent.update()
-                    #loss,dist_entropy = ppo_agent.update()
+                    
+                    # 서서히 액션 분포의 표준편차 감소
                     ppo_agent.schedule_action_std(self.min_action_std, self.action_std, time_step, self.max_training_timesteps)
 
                 # if continuous action space; then decay action std of ouput action distribution (액션 분포의 표준편차 감소)
@@ -258,13 +296,12 @@ class RichDogTrain(RichDog):
                     #ppo_agent.decay_action_std(self.action_std_decay_rate, self.min_action_std)
 
                 # log in logging file
-                if time_step % self.log_freq == 0:
-
+                if time_step % self.log_freq == 0 and time_step > 0:
                     # log average reward till last episode
                     log_avg_reward = log_running_reward / log_running_episodes
                     log_avg_reward = np.round(log_avg_reward, 4)
 
-                    self.logger.list_write_file("log_file", [i_episode, time_step, log_avg_reward, loss, dist_entropy])
+                    self.data_recorder.log_to_training_file([i_episode, time_step, log_avg_reward, loss, policy_loss, value_loss, dist_entropy])
 
                     log_running_reward = 0
                     log_running_episodes = 0
@@ -276,27 +313,40 @@ class RichDogTrain(RichDog):
                     print_avg_reward = print_running_reward / print_running_episodes
                     print_avg_reward = np.round(print_avg_reward, 2)
 
-                    self.console_logger.print_wirte_file("console", "Episode : {} \t\t Timestep : {} \t\t Average Reward : {}\n".format(i_episode, time_step, print_avg_reward))
+                    self.data_recorder.log_to_console("Episode : {} \t\t Timestep : {} \t\t Average Reward : {}\n".format(i_episode, time_step, print_avg_reward))
 
                     print_running_reward = 0
                     print_running_episodes = 0
 
                 # save model weights
                 if time_step % self.save_model_freq == 0:
-                    self.console_logger.print_wirte_file("console", "--------------------------------------------------------------------------------------------\n")
-                    self.console_logger.print_wirte_file("console", "saving model at : " + self.logger.get_file_path("checkpoint") + "\n")
-                    ppo_agent.save(self.logger.get_file_path("checkpoint"))
-                    self.console_logger.print_wirte_file("console", "model saved")
-                    self.console_logger.print_wirte_file("console", "Elapsed Time  : " + str(datetime.now().replace(microsecond=0) - start_time) + "\n")
-                    self.console_logger.print_wirte_file("console", "--------------------------------------------------------------------------------------------\n")
-
+                    chk_path = self.data_recorder.get_checkpoint_path()
+                    self.data_recorder.log_to_console("--------------------------------------------------------------------------------------------\n")
+                    self.data_recorder.log_to_console("saving model at : " + chk_path + "\n")
+                    ppo_agent.save(chk_path)
+                    self.data_recorder.log_to_console("model saved")
+                    self.data_recorder.log_to_console("Elapsed Time  : " + str(datetime.now().replace(microsecond=0) - start_time) + "\n")
+                    self.data_recorder.log_to_console("--------------------------------------------------------------------------------------------\n")
+                    self.data_recorder.log_to_console("std : {}\n".format(ppo_agent.action_std))
+                    self.data_recorder.log_to_console("--------------------------------------------------------------------------------------------\n")
+                    
                     is_save_model = True
 
                 if is_action_log:
-                    #self.logger.list_write_file('action', [t, action[0]] + list(info.values()))
-                    #str_state = [str(item) for item in state]
-                    #self.logger.list_write_file('state', str_state)
+                    # 에피소드의 스텝당 행동값 저장
+                    action_value = action.item() if not self.has_continuous_action_space and hasattr(action, 'item') else (action[0] if self.has_continuous_action_space else action)
+                    action_data_to_log = [t, action_value, reward] 
+                    if info: 
+                        action_data_to_log.extend(list(info.values()))
+                    self.data_recorder.log_to_action_file(action_data_to_log)
+                    
+                    # 에피소드의 스텝당 상태값 저장
+                    state_data_to_log = state.tolist() if isinstance(state, np.ndarray) else [state] # 리스트 형태 보장
+                    self.data_recorder.log_to_state_file(state_data_to_log)
+                    
                     is_save_model = False
+
+                state = next_state
 
                 # break; if the episode is over
                 if done:
@@ -309,40 +359,59 @@ class RichDogTrain(RichDog):
             log_running_episodes += 1
 
             i_episode += 1
-        
-        self.logger.close_all()
+            
+
         self.env.close()
 
         # print total training time
         end_time = datetime.now().replace(microsecond=0)
-        self.console_logger.print_wirte_file("console", "============================================================================================\n")
-        self.console_logger.print_wirte_file("console", "Started training at (GMT) : " + str(start_time) + "\n")
-        self.console_logger.print_wirte_file("console", "Finished training at (GMT) : " + str(end_time) + "\n")
-        self.console_logger.print_wirte_file("console", "Total training time  : " + str(end_time - start_time) + "\n")
-        self.console_logger.print_wirte_file("console", "============================================================================================\n")
-        self.console_logger.close_all()
+        final_console_messages = [
+            "============================================================================================\n",
+            f"Started training at (GMT) : {start_time}\n",
+            f"Finished training at (GMT) : {end_time}\n",
+            f"Total training time  : {end_time - start_time}\n",
+            "============================================================================================\n"
+        ]
+        
+        for msg in final_console_messages:
+            self.data_recorder.log_to_console(msg) # 화면에도 출력
 
+        self.data_recorder.close_all() # 모든 로그 파일 닫기
 
 class RichDogTest(RichDog):
     def __init__(self, config_path=None, checkpoint_path=""):
         super().__init__(config_path)
         self.checkpoint_path = checkpoint_path
-        file_name, file_extension = os.path.splitext(os.path.basename(self.checkpoint_path)) # 모델 파일 이름 추출
-        self.cur_time = file_name.split('_')[-1] # 모델파일 시간 추출
 
-        root_path = 'PPO_logs/' + self.config.env_name.value + "/" + self.cur_time + '/'
+        try:
+            filename = os.path.basename(self.checkpoint_path)
+            # 파일명 형식: PPO_{env_name}_{random_seed}_{cur_time}.pth
+            parts = filename.split('_') 
+            model_env_name = parts[1]
+            # model_random_seed = parts[2] # 필요하다면 사용 가능
+            self.model_creation_time = parts[3].split('.')[0] # .pth 확장자 제거
+        except IndexError:
+            print(f"오류: 체크포인트 파일명을 파싱할 수 없습니다: {self.checkpoint_path}")
+            print("예상 형식: PPO_환경이름_랜덤시드_타임스탬프.pth")
+            sys.exit(1)
+            
+        model_config_dir_base = os.path.join("PPO_logs", model_env_name, self.model_creation_time, "config")
         
-        self.config = Config.load_config(root_path + "config/Hyperparameters.yaml")
-        self.stock_config = Config.load_config(root_path + "config/StockConfig.yaml")
+        print(f"Model config load path: {model_config_dir_base}")
         
-        self.cur_time = str(datetime.now().strftime("%Y%m%d-%H%M%S")) # 현재 시간 추출
-        self.logger = Logger(root_path)
-        self.console_logger = Logger()
+        # 테스트용 DataRecorder 초기화, 로그는 테스트별 디렉토리에 저장됨
+        self.data_recorder = DataRecorder(
+            env_name=model_env_name, # 로드된 설정의 env_name 사용
+            random_seed=int(datetime.now().timestamp()), # 테스트 로그에는 새로운 시드/ID 사용
+            base_log_dir_prefix="PPO_logs",
+            cur_time= self.model_creation_time
+        )
+        self.cur_time = datetime.now().strftime("%Y%m%d-%H%M%S")
+        self.data_recorder.setup_console_log(file_name="PPO_console_log.txt")
         
     #################################### Testing ###################################
     def test(self):
         print("============================================================================================")
-        self.console_file_log()
 
         ################## hyperparameters ##################
         self.init_parameters()
@@ -350,38 +419,36 @@ class RichDogTest(RichDog):
         frame_delay = float(self.config.frame_delay.value)   # if required; add delay b/w frames
 
         total_test_episodes = int(self.config.total_test_episodes.value)    # total num of testing episodes
-        self.action_std = float(self.config.min_action_std.value)
         self.print_parameters()
+        # print_parameters 출력을 문자열로 캡처하여 콘솔 로그에 기록
+        param_str = self.capture_print_parameters()
+        self.data_recorder.log_to_console(param_str)
         #####################################################
 
-        #self.env = GymEnvironment(env_name=self.env_name, render_mode="human")
-        self.env = StockEnvironment(stock_code_path="API/test_datas",stock_config=self.stock_config)
+        if self.env_name == "RichDog":
+            self.env = StockEnvironment(stock_code_path="API/test_datas",stock_config=self.stock_config)
+        else:
+            self.env = GymEnvironment(env_name=self.env_name, render_mode="human")
 
         # state space dimension
-        self.state_dim = self.env.getObservation().shape[0]
+        self.observation_space = self.env.getObservation()
         # action space dimension
-        if self.has_continuous_action_space:
-            self.action_dim = self.env.getActon().shape[0]
-        else:
-            self.action_dim = self.env.getActon().n
-
+        self.action_space = self.env.getActon()
+        
         # initialize a PPO agent
-        ppo_agent = PPO(self.state_dim, self.action_dim, self.lr_actor, self.lr_critic, 
+        ppo_agent = PPO(self.observation_space, self.action_space, self.lr_actor, self.lr_critic, 
                     self.gamma, self.K_epochs, self.eps_clip, self.has_continuous_action_space, 
                     self.action_std,self. value_loss_coef, self.entropy_coef,self.lamda, self.minibatchsize)
         # preTrained weights directory
 
         if self.checkpoint_path == "":
-            #self.console_file.write_append("Error : Not Setting Model path\n")
-            self.console_logger.print_wirte_file("console", "Error : Not Setting Model path\n" )
+            self.data_recorder.log_to_console("Error : Not Setting Model path\n" )
             return
 
-        print("loading network from : " + self.checkpoint_path)
-        self.console_logger.print_wirte_file("console", "loading network from : " + self.checkpoint_path + "\n")
-        
-        ppo_agent.load(self.checkpoint_path)
 
-        self.console_logger.print_wirte_file("console", "--------------------------------------------------------------------------------------------\n")
+        self.data_recorder.log_to_console(f"loading network from : {self.checkpoint_path}\n")
+        ppo_agent.load(self.checkpoint_path)
+        self.data_recorder.log_to_console("Network load complete.\n--------------------------------------------------------------------------------------------\n")
 
         test_running_reward = 0
 
@@ -389,21 +456,42 @@ class RichDogTest(RichDog):
             
             ep_reward = 0
             state, info = self.env.reset()
-            #self.action_file_log(ep, "PPO_test_logs", ['timestep', "action", "reward"]  + list(info.keys()))
-
+ 
+            # 각 테스트 에피소드별로 상세 행동/상태 로그 설정
+            action_labels = ['timestep', "action", "reward"] + (list(info.keys()) if info else [])
+            state_labels = self.env.get_data_label() if hasattr(self.env, 'get_data_label') else [f"state_{i}" for i in range(ppo_agent.policy.input_dim)]
+            
+            self.data_recorder.setup_run_data_logs(
+                mode_dir_suffix="test_episode_data" + "/" + self.cur_time, # 테스트 중 에피소드 상세 데이터 저장용 하위폴더
+                run_id=f"ep{ep}", # 이 특정 테스트 에피소드 로그를 위한 ID (예: "ep1")
+                action_labels=action_labels,
+                state_labels=state_labels
+            )
+            
             for t in range(1, self.max_ep_len+1):
-                action, action_logprob, state_val = ppo_agent.select_action(state, True)
-                state, reward, done, _, info = self.env.step(action)
-                ep_reward += reward
+                action, action_logprob, state_val = ppo_agent.select_action(state, deterministic=True)
+                next_state, reward, done, truncated, info = self.env.step(action)
+                done = done or truncated
 
+                ep_reward += reward
+                
                 if render:
                     self.env.render()
                     time.sleep(frame_delay)
 
-                # logging
-                #self.logger.list_write_file('action', [t, action[0], reward] + list(info.values()))
-                #str_state = [str(item) for item in state]
-                #self.logger.list_write_file('state', str_state)
+                # 행동 로깅
+                action_value = action.item() if not self.has_continuous_action_space and hasattr(action, 'item') else (action[0] if self.has_continuous_action_space else action)
+                action_data_to_log = [t, action_value, reward]
+                if info: 
+                    action_data_to_log.extend(list(info.values()))
+
+                self.data_recorder.log_to_action_file(action_data_to_log)
+
+                # 상태 로깅
+                state_data_to_log = state.tolist() if isinstance(state, np.ndarray) else [state]
+                self.data_recorder.log_to_state_file(state_data_to_log)
+
+                state = next_state
 
                 if done:
                     break
@@ -412,17 +500,20 @@ class RichDogTest(RichDog):
             ppo_agent.buffer.clear()
 
             test_running_reward +=  ep_reward
-            self.console_logger.print_wirte_file("console", 'Episode: {} \t\t Reward: {}\n'.format(ep, np.round(ep_reward, 2)))
-            
-            ep_reward = 0
+            self.data_recorder.log_to_console(f'Episode: {ep} \t\t Reward: {np.round(ep_reward, 2)}\n')
 
         self.env.close()
-        self.logger.close_all()
 
         avg_test_reward = test_running_reward / total_test_episodes
         avg_test_reward = round(avg_test_reward, 2)
 
-        self.console_logger.print_wirte_file("console", "============================================================================================\n")
-        self.console_logger.print_wirte_file("console", "average test reward : " + str(avg_test_reward) + "\n")
-        self.console_logger.print_wirte_file("console", "============================================================================================\n")
-        self.console_logger.close_all()
+        final_console_messages = [
+            "============================================================================================\n",
+            f"Average test reward : {avg_test_reward}\n",
+            "============================================================================================\n"
+        ]
+        for msg in final_console_messages:
+            self.data_recorder.log_to_console(msg) # 화면에도 출력
+        
+        self.data_recorder.close_all() # 모든 로그 파일 닫기
+        

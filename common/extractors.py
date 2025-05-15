@@ -14,8 +14,10 @@ class CnnExtractor(nn.Module):
         
         self.cnn = nn.Sequential(
             nn.Conv2d(n_input_channels, 16, kernel_size=3, stride=1, padding=1), # 채널 수, 필터 크기 등은 데이터에 맞게 조절
+            nn.MaxPool2d(kernel_size=2),
             nn.ReLU(),
             nn.Conv2d(16, 32, kernel_size=3, stride=1, padding=1),
+            nn.MaxPool2d(kernel_size=2),
             nn.ReLU(),
             nn.Flatten(),
         )
@@ -34,7 +36,7 @@ class CnnExtractor(nn.Module):
             
             # 만약 입력이 (H, W, C)라면, forward에서 transpose 필요 또는 여기서 shape 조정
             if len(image_data.shape) == 3 and image_data.shape[0] > image_data.shape[2] and image_data.shape[2] <=4 : # H,W,C일 가능성
-                print(f"Warning: SimpleCnnExtractor input shape {image_data.shape} might be HWC. Assuming CHW for Conv2d.")
+                print(f"Warning: CnnExtractor input shape {image_data.shape} might be HWC. Assuming CHW for Conv2d.")
                 # 실제로는 환경 래퍼에서 CHW로 바꾸는 것이 좋음
             
             # (H,W) -> (1,H,W) 처리

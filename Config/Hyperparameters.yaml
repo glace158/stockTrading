@@ -13,11 +13,6 @@ action_std_decay_freq:
   min: '100000'
   note: action_std decay frequency (in num timesteps) (표준 편차 감소 주기)
   value: '250000'
-count:
-  max: '360'
-  min: '360'
-  note: count of data to use per training
-  value: '360'
 entropy_coef:
   max: '0.2'
   min: '0.01'
@@ -27,7 +22,7 @@ env_name:
   max: None
   min: None
   note: environment name
-  value: MountainCarContinuous-v0
+  value: RichDog
 eps_clip:
   max: '0.3'
   min: '0.01'
@@ -69,11 +64,6 @@ lr_critic:
   min: '0.00005'
   note: learning rate for critic network (크리틱 학습률)
   value: '0.001'
-max_dt:
-  max: None
-  min: None
-  note: end of the data
-  value: '20250120'
 max_ep_len:
   max: None
   min: None
@@ -90,11 +80,6 @@ min_action_std:
   note: minimum action_std (stop decay after action_std <= min_action_std) (0.05 ~
     0.1) (최소 행동 표준 편차 값)
   value: '0.1'
-min_dt:
-  max: None
-  min: None
-  note: start of the data
-  value: '20160711'
 minibatchsize:
   max: '128'
   min: '32'
@@ -121,11 +106,6 @@ save_model_freq:
   min: None
   note: save model frequency (in num timesteps) (모델 저장 주기)
   value: '100000'
-stock_code_path:
-  max: None
-  min: None
-  note: the path of folder where the data is located
-  value: API/datas
 total_test_episodes:
   max: None
   min: None
