@@ -6,6 +6,7 @@ import random
 import datetime
 from sklearn.preprocessing import StandardScaler
 from common.fileManager import Config, File
+from PPO.reward import BuySellReward, ExpReward
 
 from typing import (
     TYPE_CHECKING,
@@ -87,76 +88,78 @@ class GymEnvironment(Environment): # OpenAI gym 환경
         self.env.close()
 
 class StockEnvironment(Environment): # 주식 환경
-    def __init__(self, stock_code_path = "API/datas", stock_config=None,
-                 min_dt="20190214", max_dt="20250131", defult_count=30):
+    def __init__(self, stock_config=None):
         super().__init__()
+        if stock_config == None:
+            raise ValueError("stock_config is None")
+        
         self.stock_config = stock_config
 
-        self.stock = DailyStockAdaptor(stock_config.stock_columns)
+        self.min_dt = self.stock_config.min_dt.value
+        self.max_dt = self.stock_config.max_dt.value
+        self.stock_code_path = self.stock_config.stock_code_path.value
+        self.defult_count = int(self.stock_config.count.value)
 
-        self.min_dt = min_dt
-        self.max_dt = max_dt
-        self.stock_code_path = stock_code_path
-        self.defult_count = defult_count
+        self.stock = DailyStockAdaptor(self.stock_config.stock_columns, self.stock_code_path)
+
+        self.wallet = TrainStockWallet()
+        self.reward_cls = ExpReward()
 
         self.observation_space = spaces.Box(low = -np.inf, high= np.inf, shape= (len(self.reset()[0]),), dtype=np.float32)
         self.action_space = spaces.Box(low= -1, high= 1, shape=(1,), dtype=np.float32)
 
-    def print_log(self):
-        print("--------------------------------------------------------------------------------------------")
-        print("start date : " + self.strt_dt)
-        print("stock code : " + self.stock_code)
-        print("total count :" + str(self.count))
-        print("start balance :" + str(self.wallet.start_amt))
-        print("--------------------------------------------------------------------------------------------")
-
     def reset(self) -> Tuple[Any, dict]: # ndarray, {None}
-        self.strt_dt = self._get_random_strt_dt() # 시작 날짜 설정
         self.stock_code = self._get_random_stock_code() # 주식코드 설정
         self.count = self._get_random_count() # 에피소드 크기 설정
 
-        self.result = self.stock.load_datas(self.stock_code_path + "/" + self.stock_code, inqr_strt_dt=self.strt_dt, count=self.count, start_amt=self._get_random_balance()) # 주식 파일 로드
+        self.result = self.stock.load_datas(self.stock_code, count=self.count) # 주식 파일 로드
         #print(result)
         
-        data, _, info = self.stock.get_info(self.stock_code, 0.0) # 주식 정보 가져오기
+        data, extra_datas, done, info = self._get_observation_datas() # 주식 정보 가져오기
 
-        data = self.normalize(data) # 데이터 정규화
+        start_amt = self._get_random_balance() 
+        self.wallet.init_balance(start_amt)
+        self.reward_cls.init_datas(self.price, start_amt)
+
+        reward, reward_info = self.reward_cls.get_reward(info["current_date"], 
+                                                         True,
+                                                         0.0, 
+                                                         self.price, 
+                                                         info["next_price"], 
+                                                         self.wallet.get_total_amt(self.price), 
+                                                         self.wallet.get_current_amt(), 
+                                                         self.wallet.get_qty()
+                                                         )
 
         data = data.astype(np.float32)
-        return (data, info) # 데이터 반환
+        return (data, {**info, **reward_info}) # 데이터 반환
     
     def step(self, action) -> Tuple[Any, float, bool, bool, dict]: # (nextstate, reward, terminated, truncated, info) 
 
-        nextstate, terminated, info = self.stock.get_info(self.stock_code, action)# 다음 주식 정보 가져오기
+        total_amt, current_amt, order_qty, qty, is_order = self.wallet.order(self.stock_code, action, self.price)
+        nextstate, extra_datas, terminated, info = self._get_observation_datas() # 주식 정보 가져오기
+        self.price = info["price"]
 
-        reward = info["reward"] # 보상
+        reward, reward_info = self.reward_cls.get_reward(info["current_date"], 
+                                                         is_order, 
+                                                         action, 
+                                                         self.price, 
+                                                         info["next_price"], 
+                                                         total_amt, 
+                                                         current_amt, 
+                                                         qty
+                                                         ) # 보상
 
-        nextstate = self.normalize(nextstate) # 정규화 
-        
         truncated = False
         
         nextstate = nextstate.astype(np.float32)
-        return (nextstate, reward, terminated, truncated, info)
+        return (nextstate, reward, terminated, truncated, {**info, **reward_info})
     
     def getObservation(self) -> spaces.Space: # box
         return self.observation_space
     
     def getActon(self) -> spaces.Space: # box
         return self.action_space
-    
-    def normalize(self, data): # 정규화 
-        norm = np.linalg.norm(data)
-        if norm == 0:
-            return data
-        
-        return data / norm
-    
-    def z_score(self, data):
-        data = data.reshape(1, -1)
-        self.scaler = StandardScaler()
-        self.scaler.fit(data)
-        normalized = self.scaler.transform(data)
-        return normalized.flatten()
 
     def render(self): 
         pass
@@ -166,28 +169,30 @@ class StockEnvironment(Environment): # 주식 환경
 
     def close(self):
         pass
-    
-    def get_data_label(self): # 데이터 라벨 반환
-        return self.stock.get_data_label()
-
-    def _get_random_strt_dt(self):
-        days = (datetime.datetime.strptime(self.max_dt, "%Y%m%d") - datetime.datetime.strptime(self.min_dt, "%Y%m%d")).days # 최대 날짜와 최소 날짜를 빼준다
-        days = random.randrange(0,days-1) # 일 랜덤 뽑기
-        return (datetime.datetime.strptime(self.max_dt, "%Y%m%d") - datetime.timedelta(days=days)).strftime("%Y%m%d") # 최종 시작날짜 계산
 
     def _get_random_stock_code(self):
         stock_file_list = next(os.walk(self.stock_code_path + '/'))[2]
         return random.choice(stock_file_list) # 주식 코드 랜덤 뽑기
 
     def _get_random_count(self):
-        if random.random() > 0.0001:
+        if random.random() > 0.001:
             return self.defult_count
         else:
             return random.randint(10,self.defult_count)
         
     def _get_random_balance(self):
         return random.randrange(300000, 100000001,100000)
-        
+    
+    def _get_observation_datas(self):
+        datas, extra_datas, done, info = self.stock.get_info() # 주식 정보 가져오기
+        self.price = info["price"]
+
+        datas = np.insert(datas, 0, self.wallet.get_qty())
+        datas = np.insert(datas, 0, self.wallet.get_current_amt())
+        datas = np.insert(datas, 0, self.wallet.get_total_amt(self.price))
+
+        return datas, extra_datas, done, info
+    
 if __name__ == '__main__':
     config_path = "config/Hyperparameters.yaml"
 

@@ -74,7 +74,7 @@ class RichDog:
         #####################################################
 
         if self.env_name == "RichDog":
-            self.env = StockEnvironment(self.stock_config.stock_code_path.value, self.stock_config, self.stock_config.min_dt.value, self.stock_config.max_dt.value, int(self.stock_config.count.value))
+            self.env = StockEnvironment(self.stock_config)
         else:
             self.env = GymEnvironment(env_name=self.env_name)
 
@@ -251,9 +251,6 @@ class RichDogTrain(RichDog):
 
             current_ep_reward = 0
 
-            # 에피소드/타임스텝별 행동/상태 로깅
-            
-
             is_action_log = is_save_model
 
             if is_action_log:
@@ -426,7 +423,7 @@ class RichDogTest(RichDog):
         #####################################################
 
         if self.env_name == "RichDog":
-            self.env = StockEnvironment(stock_code_path="API/test_datas",stock_config=self.stock_config)
+            self.env = StockEnvironment(stock_config=self.stock_config)
         else:
             self.env = GymEnvironment(env_name=self.env_name, render_mode="human")
 

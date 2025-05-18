@@ -36,16 +36,15 @@ class Reward:
         
     
 class ExpReward(Reward):
-    def __init__(self, wallet : TrainStockWallet):
+    def __init__(self, init_price=0, start_amt=0):
         super().__init__()
-        self.init_datas(wallet)
+        self.init_datas(init_price, start_amt)
         self.bond_yield_data_directory = "API/extra_datas/" + "TreasuryBondYield" + ".csv"
         self.bond_yield_datas = pd.read_csv(self.bond_yield_data_directory)
 
-    def init_datas(self, wallet : TrainStockWallet):
-        self.wallet = wallet
-        self.init_price = self.wallet.init_price
-        self.start_amt = self.wallet.start_amt
+    def init_datas(self, init_price, start_amt):
+        self.init_price = init_price
+        self.start_amt = start_amt
 
         self.total_amt_list = [self.start_amt]
         self.rate_list = []

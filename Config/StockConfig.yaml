@@ -24,18 +24,12 @@ stock_columns:
 - bb_upper
 - bb_lower
 stock_code_path:
-  max: None
-  min: None
   note: the path of folder where the data is located
   value: API/datas
 max_dt:
-  max: None
-  min: None
   note: end of the data
   value: '20250120'
 min_dt:
-  max: None
-  min: None
   note: start of the data
   value: '20160711'
 count:
