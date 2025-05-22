@@ -1221,7 +1221,7 @@ Button */
                       <string notr="true">background: transparent;</string>
                      </property>
                      <property name="currentIndex">
-                      <number>4</number>
+                      <number>1</number>
                      </property>
                      <widget class="QWidget" name="home">
                       <property name="styleSheet">
@@ -1942,18 +1942,39 @@ border: 2px solid rgb(52, 59, 72);</string>
                       </layout>
                      </widget>
                      <widget class="QWidget" name="parameters_page">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
                       <layout class="QVBoxLayout" name="verticalLayout_11">
+                       <property name="spacing">
+                        <number>0</number>
+                       </property>
                        <item>
-                        <widget class="QFrame" name="row_4">
+                        <widget class="QFrame" name="row_5">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="minimumSize">
+                          <size>
+                           <width>0</width>
+                           <height>0</height>
+                          </size>
+                         </property>
                          <property name="frameShape">
                           <enum>QFrame::Shape::StyledPanel</enum>
                          </property>
                          <property name="frameShadow">
                           <enum>QFrame::Shadow::Raised</enum>
                          </property>
-                         <layout class="QVBoxLayout" name="verticalLayout_21">
+                         <layout class="QVBoxLayout" name="verticalLayout_33">
                           <property name="spacing">
-                           <number>0</number>
+                           <number>10</number>
                           </property>
                           <property name="leftMargin">
                            <number>0</number>
@@ -1969,10 +1990,16 @@ border: 2px solid rgb(52, 59, 72);</string>
                           </property>
                           <item>
                            <widget class="QFrame" name="frame_div_content_2">
+                            <property name="sizePolicy">
+                             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                              <horstretch>0</horstretch>
+                              <verstretch>0</verstretch>
+                             </sizepolicy>
+                            </property>
                             <property name="minimumSize">
                              <size>
                               <width>0</width>
-                              <height>110</height>
+                              <height>0</height>
                              </size>
                             </property>
                             <property name="maximumSize">
@@ -2005,6 +2032,12 @@ border: 2px solid rgb(52, 59, 72);</string>
                              </property>
                              <item>
                               <widget class="QFrame" name="frame_content_wid_2">
+                               <property name="sizePolicy">
+                                <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+                                 <horstretch>0</horstretch>
+                                 <verstretch>0</verstretch>
+                                </sizepolicy>
+                               </property>
                                <property name="frameShape">
                                 <enum>QFrame::Shape::NoFrame</enum>
                                </property>
@@ -2028,12 +2061,15 @@ border: 2px solid rgb(52, 59, 72);</string>
                                  <number>0</number>
                                 </property>
                                 <item>
-                                 <layout class="QGridLayout" name="gridLayout_3">
+                                 <layout class="QGridLayout" name="gridLayout_3" rowminimumheight="0,0">
                                   <property name="bottomMargin">
                                    <number>0</number>
                                   </property>
-                                  <property name="spacing">
+                                  <property name="horizontalSpacing">
                                    <number>0</number>
+                                  </property>
+                                  <property name="verticalSpacing">
+                                   <number>10</number>
                                   </property>
                                   <item row="1" column="1">
                                    <widget class="QPushButton" name="File_Button_3">
@@ -2088,7 +2124,7 @@ border: 2px solid rgb(52, 59, 72);</string>
                                   <item row="0" column="0">
                                    <widget class="QLabel" name="labelBoxBlenderInstalation_2">
                                     <property name="sizePolicy">
-                                     <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+                                     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                                       <horstretch>0</horstretch>
                                       <verstretch>0</verstretch>
                                      </sizepolicy>
@@ -2117,39 +2153,6 @@ border: 2px solid rgb(52, 59, 72);</string>
                             </layout>
                            </widget>
                           </item>
-                         </layout>
-                        </widget>
-                       </item>
-                       <item>
-                        <widget class="QFrame" name="row_5">
-                         <property name="minimumSize">
-                          <size>
-                           <width>0</width>
-                           <height>150</height>
-                          </size>
-                         </property>
-                         <property name="frameShape">
-                          <enum>QFrame::Shape::StyledPanel</enum>
-                         </property>
-                         <property name="frameShadow">
-                          <enum>QFrame::Shadow::Raised</enum>
-                         </property>
-                         <layout class="QVBoxLayout" name="verticalLayout_33">
-                          <property name="spacing">
-                           <number>0</number>
-                          </property>
-                          <property name="leftMargin">
-                           <number>0</number>
-                          </property>
-                          <property name="topMargin">
-                           <number>0</number>
-                          </property>
-                          <property name="rightMargin">
-                           <number>0</number>
-                          </property>
-                          <property name="bottomMargin">
-                           <number>0</number>
-                          </property>
                           <item>
                            <widget class="QTableWidget" name="tableWidget_2">
                             <property name="sizePolicy">
@@ -2157,6 +2160,18 @@ border: 2px solid rgb(52, 59, 72);</string>
                               <horstretch>0</horstretch>
                               <verstretch>0</verstretch>
                              </sizepolicy>
+                            </property>
+                            <property name="minimumSize">
+                             <size>
+                              <width>0</width>
+                              <height>0</height>
+                             </size>
+                            </property>
+                            <property name="maximumSize">
+                             <size>
+                              <width>16777215</width>
+                              <height>300</height>
+                             </size>
                             </property>
                             <property name="palette">
                              <palette>
@@ -2564,14 +2579,23 @@ border: 2px solid rgb(52, 59, 72);</string>
                         </widget>
                        </item>
                        <item>
-                        <widget class="QFrame" name="frame_16">
+                        <widget class="QFrame" name="frame_18">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
                          <property name="frameShape">
                           <enum>QFrame::Shape::StyledPanel</enum>
                          </property>
                          <property name="frameShadow">
                           <enum>QFrame::Shadow::Raised</enum>
                          </property>
-                         <layout class="QVBoxLayout" name="verticalLayout_48">
+                         <layout class="QVBoxLayout" name="verticalLayout_49">
+                          <property name="spacing">
+                           <number>10</number>
+                          </property>
                           <property name="leftMargin">
                            <number>0</number>
                           </property>
@@ -2586,10 +2610,16 @@ border: 2px solid rgb(52, 59, 72);</string>
                           </property>
                           <item>
                            <widget class="QFrame" name="frame_div_content_6">
+                            <property name="sizePolicy">
+                             <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+                              <horstretch>0</horstretch>
+                              <verstretch>0</verstretch>
+                             </sizepolicy>
+                            </property>
                             <property name="minimumSize">
                              <size>
                               <width>0</width>
-                              <height>110</height>
+                              <height>0</height>
                              </size>
                             </property>
                             <property name="maximumSize">
@@ -2622,6 +2652,12 @@ border: 2px solid rgb(52, 59, 72);</string>
                              </property>
                              <item>
                               <widget class="QFrame" name="frame_content_wid_7">
+                               <property name="sizePolicy">
+                                <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+                                 <horstretch>0</horstretch>
+                                 <verstretch>0</verstretch>
+                                </sizepolicy>
+                               </property>
                                <property name="frameShape">
                                 <enum>QFrame::Shape::NoFrame</enum>
                                </property>
@@ -2646,8 +2682,11 @@ border: 2px solid rgb(52, 59, 72);</string>
                                   <property name="bottomMargin">
                                    <number>0</number>
                                   </property>
-                                  <property name="spacing">
+                                  <property name="horizontalSpacing">
                                    <number>0</number>
+                                  </property>
+                                  <property name="verticalSpacing">
+                                   <number>10</number>
                                   </property>
                                   <item row="3" column="0">
                                    <widget class="QLineEdit" name="filepath_lineEdit_6">
@@ -2702,7 +2741,7 @@ border: 2px solid rgb(52, 59, 72);</string>
                                   <item row="2" column="0">
                                    <widget class="QLabel" name="labelBoxBlenderInstalation_7">
                                     <property name="sizePolicy">
-                                     <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+                                     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                                       <horstretch>0</horstretch>
                                       <verstretch>0</verstretch>
                                      </sizepolicy>
@@ -2731,33 +2770,6 @@ border: 2px solid rgb(52, 59, 72);</string>
                             </layout>
                            </widget>
                           </item>
-                         </layout>
-                        </widget>
-                       </item>
-                       <item>
-                        <widget class="QFrame" name="frame_18">
-                         <property name="frameShape">
-                          <enum>QFrame::Shape::StyledPanel</enum>
-                         </property>
-                         <property name="frameShadow">
-                          <enum>QFrame::Shadow::Raised</enum>
-                         </property>
-                         <layout class="QVBoxLayout" name="verticalLayout_49">
-                          <property name="spacing">
-                           <number>0</number>
-                          </property>
-                          <property name="leftMargin">
-                           <number>0</number>
-                          </property>
-                          <property name="topMargin">
-                           <number>0</number>
-                          </property>
-                          <property name="rightMargin">
-                           <number>0</number>
-                          </property>
-                          <property name="bottomMargin">
-                           <number>0</number>
-                          </property>
                           <item>
                            <widget class="QTableWidget" name="tableWidget_3">
                             <property name="sizePolicy">
@@ -2765,6 +2777,18 @@ border: 2px solid rgb(52, 59, 72);</string>
                               <horstretch>0</horstretch>
                               <verstretch>0</verstretch>
                              </sizepolicy>
+                            </property>
+                            <property name="minimumSize">
+                             <size>
+                              <width>0</width>
+                              <height>0</height>
+                             </size>
+                            </property>
+                            <property name="maximumSize">
+                             <size>
+                              <width>16777215</width>
+                              <height>300</height>
+                             </size>
                             </property>
                             <property name="palette">
                              <palette>
@@ -3173,6 +3197,18 @@ border: 2px solid rgb(52, 59, 72);</string>
                        </item>
                        <item>
                         <widget class="QFrame" name="row_7">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="minimumSize">
+                          <size>
+                           <width>0</width>
+                           <height>250</height>
+                          </size>
+                         </property>
                          <property name="frameShape">
                           <enum>QFrame::Shape::StyledPanel</enum>
                          </property>
@@ -3262,37 +3298,6 @@ border: 2px solid rgb(52, 59, 72);</string>
                           <enum>QFrame::Shadow::Raised</enum>
                          </property>
                          <layout class="QHBoxLayout" name="horizontalLayout_6">
-                          <item>
-                           <widget class="QPushButton" name="SaveAsPerarametersButton">
-                            <property name="minimumSize">
-                             <size>
-                              <width>150</width>
-                              <height>30</height>
-                             </size>
-                            </property>
-                            <property name="font">
-                             <font>
-                              <family>Segoe UI</family>
-                              <pointsize>10</pointsize>
-                              <italic>false</italic>
-                              <bold>false</bold>
-                             </font>
-                            </property>
-                            <property name="cursor">
-                             <cursorShape>PointingHandCursor</cursorShape>
-                            </property>
-                            <property name="styleSheet">
-                             <string notr="true">background-color: rgb(52, 59, 72);</string>
-                            </property>
-                            <property name="text">
-                             <string>Save As Hyperparameters</string>
-                            </property>
-                            <property name="icon">
-                             <iconset resource="resources.qrc">
-                              <normaloff>:/icons/images/icons/cil-save.png</normaloff>:/icons/images/icons/cil-save.png</iconset>
-                            </property>
-                           </widget>
-                          </item>
                           <item>
                            <widget class="QPushButton" name="SavePerarametersButton">
                             <property name="minimumSize">
@@ -3450,12 +3455,12 @@ border: 2px solid rgb(52, 59, 72);</string>
                                </property>
                                <property name="dateTime">
                                 <datetime>
-                                 <hour>12</hour>
+                                 <hour>18</hour>
                                  <minute>0</minute>
                                  <second>0</second>
                                  <year>2025</year>
                                  <month>1</month>
-                                 <day>29</day>
+                                 <day>28</day>
                                 </datetime>
                                </property>
                               </widget>
@@ -4413,7 +4418,7 @@ QScrollArea{
                                   <x>0</x>
                                   <y>0</y>
                                   <width>222</width>
-                                  <height>232</height>
+                                  <height>238</height>
                                  </rect>
                                 </property>
                                 <property name="sizePolicy">
@@ -4875,8 +4880,8 @@ QScrollArea{
                                 <rect>
                                  <x>0</x>
                                  <y>0</y>
-                                 <width>218</width>
-                                 <height>218</height>
+                                 <width>322</width>
+                                 <height>224</height>
                                 </rect>
                                </property>
                                <property name="styleSheet">

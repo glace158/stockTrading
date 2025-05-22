@@ -25,8 +25,9 @@ class RichDog:
         self.stock_config = Config.load_config("config/StockConfig.yaml")
         self.cur_time = str(datetime.now().strftime("%Y%m%d-%H%M%S"))
 
-        self.data_recorder: DataRecorder = None 
-        self.random_mode = False
+        self.data_recorder: DataRecorder = None
+        self.random_search = int(self.config.random_search.value) # 랜덤 파라미터 학습
+
 
     def init_parameters(self):
         print("============================================================================================")
@@ -34,7 +35,7 @@ class RichDog:
         self.env_name = self.config.env_name.value
 
         self.has_continuous_action_space = bool(self.config.has_continuous_action_space.value)  # continuous action space; else discrete
-        
+
         self.max_ep_len = int(self.config.max_ep_len.value)      # max timesteps in one episode (에피소드 당 최대 타임 스텝)
         self.max_training_timesteps = int(self.config.max_training_timesteps.value)   # break training loop if timeteps > max_training_timesteps (총 학습 타임스텝)
     
@@ -42,33 +43,34 @@ class RichDog:
         self.log_freq = int(self.config.log_freq.value)            # log avg reward in the interval (in num timesteps) (로그 파일 생성 주기)
         self.save_model_freq = int(self.config.save_model_freq.value)          # save model frequency (in num timesteps) (모델 저장 주기)
 
-        self.action_std = self._get_random_or_fixed_value(self.config.action_std, float, random_mode=self.random_mode)                # starting std for action distribution (Multivariate Normal) (행동 표준 편차)
-        self.min_action_std = self._get_random_or_fixed_value(self.config.min_action_std, float, random_mode=self.random_mode)                # minimum action_std (stop decay after action_std <= min_action_std) (0.05 ~ 0.1) (최소 행동 표준 편차 값)
+        self.action_std = self._get_random_or_fixed_value(self.config.action_std, float)                # starting std for action distribution (Multivariate Normal) (행동 표준 편차)
+        self.min_action_std = self._get_random_or_fixed_value(self.config.min_action_std, float)                # minimum action_std (stop decay after action_std <= min_action_std) (0.05 ~ 0.1) (최소 행동 표준 편차 값)
         
         # min_action_std가 action_std보다 크지 않도록 보정
         if self.action_std < self.min_action_std:
             self.min_action_std = self.action_std
 
-        self.action_std_decay_freq = self._get_random_or_fixed_value(self.config.action_std_decay_freq, int, random_mode=self.random_mode)  # action_std decay frequency (in num timesteps) (표준 편차 감소 주기)
+        self.action_std_decay_freq = self._get_random_or_fixed_value(self.config.action_std_decay_freq, int)  # action_std decay frequency (in num timesteps) (표준 편차 감소 주기)
         self.action_std_decay_rate = (self.action_std - self.min_action_std) / ((self.max_training_timesteps - self.action_std_decay_freq)  // self.action_std_decay_freq)     # linearly decay action_std (action_std = action_std - action_std_decay_rate) (행동 표준 편차 감소 값)
+        self.action_std_method = self.config.action_std_method.value
         #####################################################
 
         ## Note : print/log frequencies should be > than max_ep_len
 
         ################ PPO hyperparameters ################
-        self.update_timestep = self._get_random_or_fixed_value(self.config.update_timestep, int, random_mode=self.random_mode)      # update policy every n timesteps (정책 업데이트 주기)
-        self.K_epochs = self._get_random_or_fixed_value(self.config.K_epochs, int, random_mode=self.random_mode)               # update policy for K epochs in one PPO update (최적화 횟수)
+        self.update_timestep = self._get_random_or_fixed_value(self.config.update_timestep, int)      # update policy every n timesteps (정책 업데이트 주기)
+        self.K_epochs = self._get_random_or_fixed_value(self.config.K_epochs, int)               # update policy for K epochs in one PPO update (최적화 횟수)
 
-        self.eps_clip = self._get_random_or_fixed_value(self.config.eps_clip, float, random_mode=self.random_mode)          # clip parameter for PPO (클리핑)
-        self.gamma = self._get_random_or_fixed_value(self.config.gamma, float, random_mode=self.random_mode)            # discount factor (감가율)
-        self.lamda = self._get_random_or_fixed_value(self.config.lamda, float, random_mode=self.random_mode)              # 어드벤티지 감가율
-        self.minibatchsize = self._get_random_or_fixed_value(self.config.minibatchsize, int, random_mode=self.random_mode)
+        self.eps_clip = self._get_random_or_fixed_value(self.config.eps_clip, float)          # clip parameter for PPO (클리핑)
+        self.gamma = self._get_random_or_fixed_value(self.config.gamma, float)            # discount factor (감가율)
+        self.lamda = self._get_random_or_fixed_value(self.config.lamda, float)              # 어드벤티지 감가율
+        self.minibatchsize = self._get_random_or_fixed_value(self.config.minibatchsize, int)
 
-        self.lr_actor = self._get_random_or_fixed_value(self.config.lr_actor, float, random_mode=self.random_mode)       # learning rate for actor network (액터의 학습률)
-        self.lr_critic = self._get_random_or_fixed_value(self.config.lr_critic, float, random_mode=self.random_mode)      # learning rate for critic network (크리틱 학습률)
+        self.lr_actor = self._get_random_or_fixed_value(self.config.lr_actor, float)       # learning rate for actor network (액터의 학습률)
+        self.lr_critic = self._get_random_or_fixed_value(self.config.lr_critic, float)      # learning rate for critic network (크리틱 학습률)
 
-        self.value_loss_coef = self._get_random_or_fixed_value(self.config.value_loss_coef, float, random_mode=self.random_mode)     # 가치 손실 계수
-        self.entropy_coef = self._get_random_or_fixed_value(self.config.entropy_coef, float, random_mode=self.random_mode)       # 엔트로피 계수
+        self.value_loss_coef = self._get_random_or_fixed_value(self.config.value_loss_coef, float)     # 가치 손실 계수
+        self.entropy_coef = self._get_random_or_fixed_value(self.config.entropy_coef, float)       # 엔트로피 계수
 
         self.random_seed = int(self.config.random_seed.value)         # set random seed if required (0 = no random seed) (랜덤 시드)
         #####################################################
@@ -135,7 +137,7 @@ class RichDog:
         sys.stdout = old_stdout # 표준 출력 복원
         return captured_output.getvalue()
     
-    def _get_random_or_fixed_value(self, param_obj, target_type, random_mode = False):
+    def _get_random_or_fixed_value(self, param_obj, target_type):
         """
         Config에서 읽어온 파라미터 객체(min, max, value)로 랜덤 값 또는 고정 값을 반환
         """
@@ -145,7 +147,7 @@ class RichDog:
         default_val_str = getattr(param_obj, 'value', None) # 기본 값
 
         # min 또는 max 값이 None이 아니고 유효한 문자열일 때 랜덤 값 생성 시도
-        if min_val_str is not None and max_val_str is not None and random_mode:
+        if min_val_str is not None and max_val_str is not None and self.random_search > 0:
             try:
                 if target_type == int:
                     min_v = int(min_val_str)
@@ -185,8 +187,9 @@ class RichDog:
             return str(default_val_str)
     
 class RichDogTrain(RichDog):
-    def __init__(self, config_path=None):
+    def __init__(self, config_path=None, checkpoint_path=""):
         super().__init__(config_path)
+        self.checkpoint_path = checkpoint_path
         
         # DataRecorder의 random_seed는 경로 일관성을 위해 설정 파일의 것을 사용하는 것이 좋음
         self.data_recorder = DataRecorder(
@@ -208,6 +211,15 @@ class RichDogTrain(RichDog):
         self.data_recorder.setup_console_log(file_name="PPO_console_log.txt")
 
     ################################### Training ###################################
+    def random_train(self):
+        if self.random_search > 0:
+            for i in range(self.random_search):
+                self.data_recorder.log_to_console(f"Random Traing Count : {i}")
+                self.data_recorder.log_to_console("============================================================================================\n")
+                self.train()
+        else:
+            self.train()
+
     def train(self):
         self.init_parameters()
         self.print_parameters()
@@ -221,6 +233,14 @@ class RichDogTrain(RichDog):
         ppo_agent = PPO(self.observation_space, self.action_space, self.lr_actor, self.lr_critic, 
                         self.gamma, self.K_epochs, self.eps_clip, self.has_continuous_action_space, 
                         self.action_std, self.value_loss_coef, self.entropy_coef,self.lamda, self.minibatchsize)
+
+
+        # 만약 모델 데이터 경로가 있으면
+        if self.checkpoint_path != "":
+            self.data_recorder.log_to_console(f"loading network from : {self.checkpoint_path}\n")
+            ppo_agent.load(self.checkpoint_path)
+            self.data_recorder.log_to_console("Network load complete.\n--------------------------------------------------------------------------------------------\n")
+
 
         # track total training time
         start_time = datetime.now().replace(microsecond=0)
@@ -285,12 +305,13 @@ class RichDogTrain(RichDog):
                     loss,policy_loss,value_loss,dist_entropy = ppo_agent.update()
                     
                     # 서서히 액션 분포의 표준편차 감소
-                    ppo_agent.schedule_action_std(self.min_action_std, self.action_std, time_step, self.max_training_timesteps)
+                    if self.action_std_method == "schedule":
+                        ppo_agent.schedule_action_std(self.min_action_std, self.action_std, time_step, self.max_training_timesteps)
 
                 # if continuous action space; then decay action std of ouput action distribution (액션 분포의 표준편차 감소)
-                if self.has_continuous_action_space and time_step % self.action_std_decay_freq == 0:
-                    pass
-                    #ppo_agent.decay_action_std(self.action_std_decay_rate, self.min_action_std)
+                
+                if self.has_continuous_action_space and time_step % self.action_std_decay_freq == 0 and self.action_std_method == "freq":
+                    ppo_agent.decay_action_std(self.action_std_decay_rate, self.min_action_std)
 
                 # log in logging file
                 if time_step % self.log_freq == 0 and time_step > 0:
@@ -415,6 +436,7 @@ class RichDogTest(RichDog):
         render = bool(self.config.render.value)              # render environment on screen
         frame_delay = float(self.config.frame_delay.value)   # if required; add delay b/w frames
 
+        self.action_std = float(self.config.min_action_std)
         total_test_episodes = int(self.config.total_test_episodes.value)    # total num of testing episodes
         self.print_parameters()
         # print_parameters 출력을 문자열로 캡처하여 콘솔 로그에 기록
