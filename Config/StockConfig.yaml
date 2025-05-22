@@ -23,9 +23,26 @@ stock_columns:
 - rsi
 - bb_upper
 - bb_lower
+visualization_columns:
+- stck_clpr
+- acml_vol
+- '5'
+- '20'
+- '60'
+- rsi
+- bb_upper
+- bb_lower
+visualization_format:
+  value: GASF
+  note: visualization image format for extra datas
 stock_code_path:
   note: the path of folder where the data is located
   value: API/datas
+extra_datas:
+  max: '60'
+  min: '60'
+  note: count of extra data to use per visualiza
+  value: '60'
 max_dt:
   note: end of the data
   value: '20250120'

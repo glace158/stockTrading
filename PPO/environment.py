@@ -1,12 +1,10 @@
 import os
 import abc
 import gym
+import pandas as pd
 import numpy as np
 import random
-import datetime
-from sklearn.preprocessing import StandardScaler
-from common.fileManager import Config, File
-from PPO.reward import BuySellReward, ExpReward
+from gym import spaces
 
 from typing import (
     TYPE_CHECKING,
@@ -14,8 +12,9 @@ from typing import (
     Tuple
 )
 
-from gym import Env
-from gym import spaces
+from PPO.reward import BuySellReward, ExpReward
+from common.fileManager import Config
+from common.image_tools import get_time_series_image,get_multiple_time_series_images
 from stock.stock_adaptor import DailyStockAdaptor
 from stock.stock_wallet import TrainStockWallet
 
@@ -99,20 +98,32 @@ class StockEnvironment(Environment): # 주식 환경
         self.max_dt = self.stock_config.max_dt.value
         self.stock_code_path = self.stock_config.stock_code_path.value
         self.defult_count = int(self.stock_config.count.value)
+        self.extra_count = int(self.stock_config.extra_datas.value)
+        self.visualization_columns = self.stock_config.visualization_columns
+        self.visualization_format = self.stock_config.visualization_format.value
 
         self.stock = DailyStockAdaptor(self.stock_config.stock_columns, self.stock_code_path)
 
         self.wallet = TrainStockWallet()
         self.reward_cls = ExpReward()
 
-        self.observation_space = spaces.Box(low = -np.inf, high= np.inf, shape= (len(self.reset()[0]),), dtype=np.float32)
+        observation, _ = self.reset()
+        
+        if isinstance(observation, dict):
+            self.observation_space = spaces.Dict({
+                "img": spaces.Box(low = 0, high= 1, shape= observation["img"].shape, dtype=np.float32),
+                "num": spaces.Box(low = -np.inf, high= np.inf, shape= observation["num"].shape, dtype=np.float32) 
+                })
+        else:
+            self.observation_space = spaces.Box(low = -np.inf, high= np.inf, shape= (len(observation),), dtype=np.float32)
+        
         self.action_space = spaces.Box(low= -1, high= 1, shape=(1,), dtype=np.float32)
 
     def reset(self) -> Tuple[Any, dict]: # ndarray, {None}
         self.stock_code = self._get_random_stock_code() # 주식코드 설정
         self.count = self._get_random_count() # 에피소드 크기 설정
 
-        self.result = self.stock.load_datas(self.stock_code, count=self.count) # 주식 파일 로드
+        self.result = self.stock.load_datas(self.stock_code, count=self.count, extra_count=self.extra_count) # 주식 파일 로드
         #print(result)
         
         data, extra_datas, done, info = self._get_observation_datas() # 주식 정보 가져오기
@@ -131,7 +142,6 @@ class StockEnvironment(Environment): # 주식 환경
                                                          self.wallet.get_qty()
                                                          )
 
-        data = data.astype(np.float32)
         return (data, {**info, **reward_info}) # 데이터 반환
     
     def step(self, action) -> Tuple[Any, float, bool, bool, dict]: # (nextstate, reward, terminated, truncated, info) 
@@ -152,7 +162,6 @@ class StockEnvironment(Environment): # 주식 환경
 
         truncated = False
         
-        nextstate = nextstate.astype(np.float32)
         return (nextstate, reward, terminated, truncated, {**info, **reward_info})
     
     def getObservation(self) -> spaces.Space: # box
@@ -185,14 +194,29 @@ class StockEnvironment(Environment): # 주식 환경
     
     def _get_observation_datas(self):
         datas, extra_datas, done, info = self.stock.get_info() # 주식 정보 가져오기
+        datas = datas.values # 데이터프레임에서 값만 가져오기
         self.price = info["price"]
 
-        datas = np.insert(datas, 0, self.wallet.get_qty())
-        datas = np.insert(datas, 0, self.wallet.get_current_amt())
-        datas = np.insert(datas, 0, self.wallet.get_total_amt(self.price))
+        qty = self.wallet.get_qty()
+        current_amt = self.wallet.get_current_amt()
+        total_amt = self.wallet.get_total_amt(self.price)
+        datas = np.insert(datas, 0, qty)
+        datas = np.insert(datas, 0, current_amt)
+        datas = np.insert(datas, 0, total_amt)
 
-        return datas, extra_datas, done, info
+        if not extra_datas.empty:
+            time_series_images = self._get_visualization_data(self.visualization_columns, extra_datas)
+            datas = dict({"img": time_series_images, "num": datas})
+        else:
+            datas = datas.astype(np.float32)
+
+        return datas, extra_datas, done, {**info, **{"qty": qty, "current_amt": current_amt, "total_amt": total_amt}}
     
+    def _get_visualization_data(self, target_column_list : list, extra_datas : pd.DataFrame): # 시계열 데이터로 변환
+        time_series_image = get_multiple_time_series_images(self.visualization_format, target_column_list, extra_datas)
+        return time_series_image 
+        
+
 if __name__ == '__main__':
     config_path = "config/Hyperparameters.yaml"
 

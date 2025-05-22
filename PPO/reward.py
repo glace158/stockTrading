@@ -18,7 +18,7 @@ class Reward:
     
     def get_exp_reward(self, alpha ,reward): # 지수함수 보상 계산
         exp_reward = 1 - np.exp(-alpha * (reward ** 2))
-        if reward < 0: # 보상이 음수면 0
+        if reward < 0: # 보상이 음수면 
             return -0.01
         elif reward > 0: # 오차가 커질수록 1에 수렴
             return self._np_to_float(exp_reward)

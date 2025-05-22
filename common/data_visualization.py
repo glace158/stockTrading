@@ -57,7 +57,6 @@ class TimeSeriesDataGenerator:
         
         return self.original_series_scaled, self.X_ts_pyts, self.X_ts_1d, self.time_steps
 
-# --- (이하 다른 클래스들은 이전과 동일하게 유지) ---
 class GramianAngularFieldConverter:
     """Gramian Angular Fields (GASF, GADF) 이미지를 생성하는 클래스."""
     def __init__(self, image_size):

@@ -22,9 +22,6 @@ class DailyStockAdaptor(Adaptor):
         self.data_filter = data_filter
         self.path = path 
 
-        filename = os.path.basename(path) # 주식 파일 추출
-        self.stock_code = filename.split('.')[0] # 주식 코드 추출
-
         self.index = 0
         self.extra_index = 0
 
@@ -34,6 +31,7 @@ class DailyStockAdaptor(Adaptor):
         """
             저장된 주식데이터를 count만큼 가지고 옵니다.
         """
+        self.stock_code = stock_code
         self.index = extra_count
         self.extra_index = extra_count
         count += 1
@@ -59,11 +57,11 @@ class DailyStockAdaptor(Adaptor):
         next_price = float(self.filtering_datas["stck_clpr"].iloc[self.index + 1])# 다음 날 가격 추출
         current_date = self.silce_datas["stck_bsop_date"][self.index] # 현재 날짜 가져오기
 
-        data = self.filtering_datas.iloc[self.index].values
+        data = self.filtering_datas.iloc[self.index]
         
         done = len(self.filtering_datas) - 2 == self.index # 환경 종료 여부
 
-        extra_datas = self.filtering_datas.iloc[self.index - self.extra_index : self.index].values # 추가 데이터 슬라이싱
+        extra_datas = self.filtering_datas.iloc[self.index - self.extra_index : self.index] # 추가 데이터 슬라이싱
         
         self.index += 1 # 다음 인덱스로 
         

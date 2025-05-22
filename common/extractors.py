@@ -47,7 +47,7 @@ class CnnExtractor(nn.Module):
                                             dtype=image_data.dtype)
                 return img_obs_space
             else: # (C,H,W)
-                return img_obs_space
+                return image_data
         else:       
             raise ValueError(f"Unsupported Box observation space shape: {image_data.shape}")
 
@@ -126,11 +126,31 @@ class CombinedFeaturesExtractor(nn.Module):
         encoded_tensor_list = []
         
         for key, observation in observations.items():
+            #print(f"[{key}] observation shape: {observation.shape}")
             if key in self.extractors.keys():
-                encoded_tensor_list.append(self.extractors[key](observation))
-            else:
-                encoded_tensor_list.append(observation)
+
+                if observation.dim() == 3 and key == "img":  # (C,H,W)인 이미지에 배치 차원 추가
+                    observation = observation.unsqueeze(0)
+                elif observation.dim() == 1:  # 벡터 형태는 배치 차원 추가
+                    observation = observation.unsqueeze(0)
                 
+                #print(f"[{key}] extractor: {self.extractors[key].__class__.__name__}")
+                encoded = self.extractors[key](observation)
+                #print(f"[{key}] encoded shape: {encoded.shape}")
+                encoded_tensor_list.append(encoded)
+            else:
+                if observation.dim() == 1 and self.extractors.keys():  # (C,H,W)인 이미지에 배치 차원 추가
+                    observation = observation.unsqueeze(0)
+                    #print(f"[{key}] encoded shape: {observation.shape}")
+                    encoded_tensor_list.append(observation)
+                else:
+                    encoded_tensor_list.append(observation)
+                
+                
+        for t in encoded_tensor_list:
+            #print(f"Encoded tensor shape for concat: {t.shape}")
+            assert t.dim() == 2, "All tensors must be 2D for concat(dim=1)"
+            
         return torch.cat(encoded_tensor_list, dim=1)
 
     @property

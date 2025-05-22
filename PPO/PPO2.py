@@ -5,7 +5,7 @@ from torch.distributions import Categorical
 import numpy as np
 
 from typing import Union, Dict
-from common.buffers import RolloutBuffer
+from common.buffers import RolloutBuffer, DictRolloutBuffer
 from common.extractors import * 
 
 ################################## set device ##################################
@@ -193,8 +193,8 @@ class ActorCritic(nn.Module):
 
 
 class PPO:
-    def __init__(self, observation_space, 
-                 action_space, 
+    def __init__(self, observation_space: Union[spaces.Dict, spaces.Box], 
+                 action_space: spaces.Box, 
                  lr_actor, lr_critic, gamma, K_epochs, eps_clip, 
                  has_continuous_action_space, action_std_init=0.6, 
                  value_loss_coef =0.1, entropy_coef= 0.5, lambda_gae=0.95, minibatchsize=32,
@@ -217,6 +217,9 @@ class PPO:
         self.value_loss_coef = value_loss_coef
         self.entropy_coef = entropy_coef
 
+        #if isinstance(observation_space, spaces.Dict): # 상태 데이터가 딕셔너리이면
+        #    self.buffer = DictRolloutBuffer(self.observation_space.keys())
+        #else:
         self.buffer = RolloutBuffer()
 
         self.minibatchsize = minibatchsize # 이니 배치 사이즈 설정
@@ -316,7 +319,7 @@ class PPO:
 
                 # value.ndim >= 2: 최소 2차원 (예: H, W)
                 # value.shape[-1] <= 4: 마지막 차원의 크기가 4 이하 (예: 채널 수 R, G, B, Alpha)
-                if value.dtype == np.uint8 and (key == "image" or "img" in key or (value.ndim >=2 and value.shape[-1] <=4)): # 이미지로 추정
+                if value.dtype == np.uint8 and np.max(value) > 1 and (key == "image" or "img" in key or (value.ndim >=2 and value.shape[-1] <=4)): # 이미지로 추정
                     # 이미지는 uint8 타입일 경우 0-1 사이로 정규화하기 위해 255.0로 나눔
                     tensor_val = torch.as_tensor(value, device=device).float() / 255.0
                 else: # 이미지가 아닌 일반 데이터
@@ -326,7 +329,7 @@ class PPO:
             return tensor_dict # 텐서로 채워진 딕셔너리 반환
         
         else: # 단일 Numpy 배열
-            if obs.dtype == np.uint8 and obs.ndim >=2 : # (H,W) 또는 (H,W,C) 이미지로 추정
+            if obs.dtype == np.uint8 and obs.ndim >=2 and np.max(obs) > 1: # (H,W) 또는 (H,W,C) 이미지로 추정
                 tensor_obs = torch.as_tensor(obs, device=device).float() / 255.0 # 0~1 사이의 값으로 정규화
             else: # 일반 데이터
                 tensor_obs = torch.as_tensor(obs, device=device).float() # 텐서로 변환, float
@@ -338,7 +341,10 @@ class PPO:
             state = self._obs_to_tensor(observation)
             action, action_logprob, state_val = self.policy_old.act(state, deterministic)
 
-        self.buffer.states.append(state)
+        #if isinstance(self.buffer, DictRolloutBuffer):
+        #    for key, val in state.item():
+        #        self.buffer.states[key].append(val)
+        self.buffer.states.append(state)               
         self.buffer.actions.append(action)
         self.buffer.logprobs.append(action_logprob)
         self.buffer.state_values.append(state_val)
@@ -383,10 +389,9 @@ class PPO:
                 for obs_dict_item in states:
                     val = obs_dict_item[key]
                     # 이미지 정규화 (uint8 -> float / 255.0)
-                    if val.dtype == np.uint8 and (key == "image" or "img" in key or (val.ndim >=2 and val.shape[-1] <=4)):
+                    if val.dtype == np.uint8 and np.max(val) > 1 and (key == "image" or "img" in key or (val.ndim >=2 and val.shape[-1] <=4)):
                         # 이미지는 uint8 타입일 경우 0-1 사이로 정규화하기 위해 255.0로 나눔
                         val = val.astype(np.float32) / 255.0
-
                     obs_list_for_key.append(val.cpu().numpy())
 
                 batched_observations[key] = torch.as_tensor(np.stack(obs_list_for_key), device=device).detach().float()
@@ -396,14 +401,17 @@ class PPO:
                 for obs_item in states:
                     val = obs_item
                     # 이미지는 uint8 타입일 경우 0-1 사이로 정규화하기 위해 255.0로 나눔
-                    val = val.astype(np.float32) / 255.0
-
+                    if np.max(val) > 1:
+                        val = val.astype(np.float32) / 255.0
+                    else:
+                        val = val.astype(np.float32)
+                        
                     obs_list.append(val.cpu().numpy())
                 
                 batched_observations = torch.as_tensor(np.stack(obs_list), device=device).detach().float()
             
             else:
-                batched_observations = torch.squeeze(torch.stack(self.buffer.states, dim=0)).detach().to(device)
+                batched_observations = torch.squeeze(torch.stack(states, dim=0)).detach().to(device)
 
         return batched_observations
     
@@ -415,15 +423,16 @@ class PPO:
         old_state_values = torch.squeeze(torch.stack(self.buffer.state_values, dim=0)).detach().to(device) # 상태 가치 값
 
         rewards = torch.tensor(self.buffer.rewards, dtype=torch.float32).to(device) # 보상
-        
+
         # calculate advantages
         advantages = self.calculate_gae(old_state_values, rewards) # GAE 어드밴티지 계산 
 
         advantages = (advantages - advantages.mean()) / (advantages.std() + 1e-8) # 어드밴티지 정규화
 
         # Optimize policy for K epochs
-        inds = np.arange(len(old_states)) # 미니 배치 인덱스 
-        nbatch = len(old_states) # 배치 사이즈 설정
+        inds = np.arange(len(rewards)) # 미니 배치 인덱스 
+        
+        nbatch = len(rewards) # 배치 사이즈 설정
         
         for _ in range(self.K_epochs):
             np.random.shuffle(inds) # 인덱스 섞기
@@ -432,7 +441,13 @@ class PPO:
                 mbinds = inds[start:end] # 학습 배치 사이즈에 맞게 인덱스 슬라이싱
 
                 # 미니 배치 추출
-                old_states_mini = old_states[mbinds]
+                if isinstance(old_states, dict):
+                    old_states_mini = {}
+                    for key in old_states.keys():
+                        old_states_mini[key] = old_states[key][mbinds] 
+                else:
+                    old_states_mini = old_states[mbinds]
+
                 old_actions_mini = old_actions[mbinds]
                 old_logprobs_mini = old_logprobs[mbinds]
                 old_state_values_mini = old_state_values[mbinds]

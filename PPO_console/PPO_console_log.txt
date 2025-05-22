@@ -1,18 +1,18 @@
 training environment name : RichDog
 --------------------------------------------------------------------------------------------
-max training timesteps :  1000000
+max training timesteps :  10000000
 max timesteps per episode :  1000
 model saving frequency : 100000 timesteps
 log frequency : 2000 timesteps
 printing average reward over episodes in last : 10000 timesteps
 --------------------------------------------------------------------------------------------
-state space dimension :  Box(-inf, inf, (14,), float32)
+state space dimension :  Dict('img': Box(0.0, 1.0, (8, 60, 60), float32), 'num': Box(-inf, inf, (14,), float32))
 action space dimension :  Box(-1.0, 1.0, (1,), float32)
 --------------------------------------------------------------------------------------------
 Initializing a continuous action space policy
 --------------------------------------------------------------------------------------------
 starting std of action distribution :  0.6
-decay rate of std of action distribution :  0.16666666666666666
+decay rate of std of action distribution :  0.01282051282051282
 minimum std of action distribution :  0.1
 decay frequency of std of action distribution : 250000 timesteps
 --------------------------------------------------------------------------------------------
@@ -26,23 +26,3 @@ mini batch size :  32
 optimizer learning rate actor :  0.0003
 optimizer learning rate critic :  0.001
 ============================================================================================
-Started training at (GMT) : 2025-05-19 02:43:32
-============================================================================================
-Episode : 27 		 Timestep : 10000 		 Average Reward : 82.59
-Episode : 55 		 Timestep : 20000 		 Average Reward : 98.24
-Episode : 83 		 Timestep : 30000 		 Average Reward : 107.95
-Episode : 111 		 Timestep : 40000 		 Average Reward : 97.87
-Episode : 139 		 Timestep : 50000 		 Average Reward : 90.24
-Episode : 167 		 Timestep : 60000 		 Average Reward : 100.37
-Episode : 194 		 Timestep : 70000 		 Average Reward : 112.22
-Episode : 222 		 Timestep : 80000 		 Average Reward : 105.34
-Episode : 250 		 Timestep : 90000 		 Average Reward : 99.74
-Episode : 278 		 Timestep : 100000 		 Average Reward : 109.77
---------------------------------------------------------------------------------------------
-saving model at : PPO_preTrained/RichDog/PPO_RichDog_0_20250519-024331.pth
-model savedElapsed Time  : 0:03:30
---------------------------------------------------------------------------------------------
-std : 0.55
---------------------------------------------------------------------------------------------
-Start episode logging
-Episode : 306 		 Timestep : 110000 		 Average Reward : 104.41

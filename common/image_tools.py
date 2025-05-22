@@ -59,32 +59,32 @@ def get_time_series_image(image_format: str, target_column : str, df : pd.DataFr
     if "GASF":
         gaf_converter = GramianAngularFieldConverter(image_size=current_time_steps)
         gasf_image, gadf_image = gaf_converter.transform(np_ts_pyts)
-        print(f"GASF image shape: {gasf_image.shape}") # (1, image_size, image_size)
+        #print(f"GASF image shape: {gasf_image.shape}") # (1, image_size, image_size)
         return gadf_image
     elif "GADF":
         gaf_converter = GramianAngularFieldConverter(image_size=current_time_steps)
         gasf_image, gadf_image = gaf_converter.transform(np_ts_pyts)
-        print(f"GADF image shape: {gadf_image.shape}") # (1, image_size, image_size)
+        #print(f"GADF image shape: {gadf_image.shape}") # (1, image_size, image_size)
         return gadf_image
     elif "RP":
         rp_converter = RecurrencePlotConverter(threshold=0.15)
         rp_image = rp_converter.transform(np_ts_pyts)
-        print(f"Recurrence Plot image shape: {rp_image.shape}") # (1, time_steps, time_steps)
+        #print(f"Recurrence Plot image shape: {rp_image.shape}") # (1, time_steps, time_steps)
         return rp_image
     elif "MTF":
         mtf_converter = MarkovTransitionFieldConverter(n_bins=10)
         mtf_image = mtf_converter.transform(np_ts_pyts)
-        print(f"Markov Transition Field image shape: {mtf_image.shape}") # (1, n_bins, n_bins)
+        #print(f"Markov Transition Field image shape: {mtf_image.shape}") # (1, n_bins, n_bins)
         return mtf_image
     elif "STFT":
         spectrogram_converter = SpectrogramConverter(fs=1.0, nperseg_ratio=0.25)
         spec_frequencies, spec_times, spec_db_image = spectrogram_converter.transform(np_ts_1d)
-        print(f"Spectrogram (dB) image shape: {spec_db_image.shape}") # (num_frequencies, num_time_bins)
+        #print(f"Spectrogram (dB) image shape: {spec_db_image.shape}") # (num_frequencies, num_time_bins)
         return spec_db_image
     elif "CWT":
         scalogram_converter = ScalogramConverter(wavelet_name='morl', max_scale_ratio=0.5, fs=1.0)
         scalogram_mag_image, scal_scales_arr, scal_freq_arr, scal_w_name = scalogram_converter.transform(np_ts_1d)
-        print(f"Scalogram (magnitude) image shape: {scalogram_mag_image.shape}") # (num_scales, time_steps)
+        #print(f"Scalogram (magnitude) image shape: {scalogram_mag_image.shape}") # (num_scales, time_steps)
         return scalogram_mag_image
     else:
         raise ValueError(f"잘못된 포맷입니다. 사용가능한 포맷 : GASF, GADF, RP, MTF, STFT, CWT / 현재 포맷: {image_format}")
