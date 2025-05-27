@@ -1,0 +1,55 @@
+parameters:
+  count:
+    max: '360'
+    min: '360'
+    note: count of data to use per training
+    value: '360'
+  extra_datas:
+    max: '60'
+    min: '60'
+    note: count of extra data to use per visualization
+    value: '60'
+  stock_code_path:
+    max: None
+    min: None
+    note: the path of folder where the data is located
+    value: API/datas
+  visualization_format:
+    max: None
+    min: None
+    note: visualization image format for extra datas
+    value: GASF
+stock_codes:
+- 005930
+- '000660'
+- 083650
+- '010120'
+- '035720'
+- '012450'
+- 098460
+- '064350'
+- 056080
+- 068270
+- 039030
+- 124500
+stock_columns:
+- stck_clpr
+- stck_hgpr
+- stck_lwpr
+- acml_vol
+- prdy_vrss
+- '5'
+- '20'
+- '60'
+- rsi
+- bb_upper
+- bb_lower
+visualization_columns:
+- stck_clpr
+- acml_vol
+- '5'
+- '20'
+- '60'
+- rsi
+- bb_upper
+- bb_lower

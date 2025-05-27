@@ -143,7 +143,8 @@ class StockEnvironment(Environment): # 주식 환경
                                                          self.next_price, 
                                                          self.wallet.get_total_amt(self.price), 
                                                          self.wallet.get_current_amt(), 
-                                                         self.wallet.get_qty()
+                                                         self.wallet.get_qty(),
+                                                         0.0
                                                          )
 
         return (data, {**info, **{"order_qty" : 0}, **reward_info}) # 데이터 반환
