@@ -85,11 +85,11 @@ class GraphPage(QWidget):
         if item.flags() & Qt.ItemIsUserCheckable:  # 체크박스 항목인지 확인
             state = item.checkState(column)
             if state == Qt.Checked:
-                self.make_graph()
+                self.make_graph2()
                 self.load_graph_image()
                 print(f"'{item.text(0)}'가 선택되었습니다.")
             elif state == Qt.Unchecked:
-                self.make_graph()
+                self.make_graph2()
                 self.load_graph_image()
                 print(f"'{item.text(0)}'가 선택 해제되었습니다.")
     
@@ -99,6 +99,7 @@ class GraphPage(QWidget):
         new_tree_widget = QTreeWidget(self.widgets.graphDataFrame)
         new_tree_widget.setHeaderLabels(["데이터 항목"])
         self.tree_widgets.append(new_tree_widget)
+        self.set_current_tree_widget(new_tree_widget)
 
         self.widgets.verticalLayout_5.addWidget(new_tree_widget)
         # 새 트리 위젯 클릭 이벤트 연결
@@ -117,7 +118,7 @@ class GraphPage(QWidget):
                 index = self.current_tree_widget.indexOfTopLevelItem(item)
                 self.current_tree_widget.takeTopLevelItem(index)
         
-        self.make_graph()
+        self.make_graph2()
         self.load_graph_image()
 
     # 그래프 삭제
@@ -130,7 +131,7 @@ class GraphPage(QWidget):
         self.current_tree_widget = None
         
         if self.tree_widgets:
-            self.make_graph()
+            self.make_graph2()
             self.load_graph_image()
         else:
             self.widgets.graph_image.clear()
@@ -138,6 +139,66 @@ class GraphPage(QWidget):
             self.widgets.imageSizeUpPushButton.setEnabled(False)
             self.widgets.imageSizeDownPushButton.setEnabled(False)
 
+    def make_graph2(self):
+        rootItem = self.current_tree_widget.invisibleRootItem()
+        items = self.get_items_recursively(rootItem)
+        
+        data = pd.DataFrame() 
+
+        for item in items:
+            item_name = item.text(0)
+            if item_name.endswith('.csv'):
+                path = item_name
+                data = pd.read_csv(path)
+
+        # 그래프 그`리기
+        fig, ax1 = plt.subplots(figsize=(30, 10))
+
+        # Price 선 그래프 (왼쪽 Y축)
+        ax1.plot(data['timestep'], data['price'], label='Price', color='black')
+        
+        for index, row in data.iterrows():
+            if row['order_qty'] == 0:  # order_qty가 0인 경우 회색 점
+                ax1.scatter(row['timestep'], row['price'], color='gray', label='Order Qty = 0' if index == 0 else "")
+                ax1.annotate(f"{int(row['order_qty'])}", (row['timestep'], row['price']), textcoords="offset points", xytext=(-10, -10), color='gray')
+            elif row['action'] > 0:  # action이 음수인 경우 빨간 점
+                ax1.scatter(row['timestep'], row['price'], color='red', label='Action > 0' if index == 0 else "")
+                ax1.annotate(f"{int(row['order_qty'])}", (row['timestep'], row['price']), textcoords="offset points", xytext=(-10, -10), color='red')
+            elif row['action'] < 0:  # action이 양수인 경우 파란 점
+                ax1.scatter(row['timestep'], row['price'], color='blue', label='Action < 0' if index == 0 else "")
+                ax1.annotate(f"{int(row['order_qty'])}", (row['timestep'], row['price']), textcoords="offset points", xytext=(-10, 10), color='blue')
+        
+        ax1.set_xlabel('Timestep')
+        ax1.set_ylabel('Price')
+        ax1.set_xticks(data['timestep'])  # x축 간격을 timestep에 맞춤
+        ax1.legend(loc='upper left')
+        ax1.grid(True)
+        
+        # Current Amount 선 그래프 (오른쪽 Y축)
+        ax2 = ax1.twinx()  # 오른쪽 Y축 추가
+        ax2.plot(data['timestep'], data['total_amt'], label='Total Amount', color='Orange')
+        ax2.set_ylabel('Total Amount')
+        ax2.legend(loc='upper right')
+        ax2.axhline(y=data['total_amt'][0], color='Orange', linestyle='--', linewidth=1, label='init Amount Line')
+        
+        # Reward 막대 그래프 (아래쪽 Y축 공유)
+        ax3 = ax1.twinx()  # 새로운 Y축 추가
+        ax3.spines['right'].set_position(('outward', 60))  # 추가 Y축을 오른쪽으로 이동
+
+        reward_colors = ['red' if r < 0 else 'blue' for r in data['reward']]  # 음수는 빨간색, 양수는 파란색
+        ax3.bar(data['timestep'], data['reward'], width=0.4, alpha=0.8, label='Reward', color=reward_colors)
+
+        # y축 0에 선 추가
+        ax3.axhline(y=0, color='black', linestyle='--', linewidth=1, label='y = 0 Line')
+
+        ax3.set_ylabel('Reward and Daily Rate')
+        ax3.legend(loc='lower center')
+
+        # 그래프 제목
+        plt.title('Price, Current Amount, Reward, and Daily Rate vs Timestep')
+        
+        plt.savefig("./Data_graph/graph.png")
+        
     # 그래프 그리기
     def make_graph(self):
         color_list = ['red', 'olive', 'blue', 'hotpink','orange', 'green', 'brown', 'yellow', 'lime', 'cyan', 'navy', 'violet', 'purple', 'magenta', 'pink', 'gray']
@@ -228,7 +289,7 @@ class GraphPage(QWidget):
         return items
     
     def update_image(self):
-        # 이미지를 현재 크기로 조정하여 QLabel에 표시
+        # 이미지를 현재 크기로 조정하여
         resized_pixmap = self.pixmap.scaled(self.image_width, self.image_height)
         self.widgets.graph_image.setPixmap(resized_pixmap)
 

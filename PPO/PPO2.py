@@ -41,10 +41,12 @@ class ActorCritic(nn.Module):
         # actor
         if has_continuous_action_space :
             self.actor = nn.Sequential(
-                            nn.Linear(self.input_dim, 64),
-                            nn.Tanh(),
+                            nn.Linear(self.input_dim, 128),
+                            nn.ReLU(),
+                            nn.Linear(128, 64),
+                            nn.ReLU(),
                             nn.Linear(64, 64),
-                            nn.Tanh(),
+                            nn.ReLU(),
                             nn.Linear(64, self.action_dim),
                             nn.Tanh()
                         )
@@ -52,19 +54,21 @@ class ActorCritic(nn.Module):
             self.action_var = torch.full((self.action_dim,), action_std_init * action_std_init).to(device) # 행동 표준 편차 설정
         else:
             self.actor = nn.Sequential(
-                            nn.Linear(self.input_dim, 64),
-                            nn.Tanh(),
+                            nn.Linear(self.input_dim, 128),
+                            nn.ReLU(),
+                            nn.Linear(128, 64),
+                            nn.ReLU(),
                             nn.Linear(64, 64),
-                            nn.Tanh(),
+                            nn.ReLU(),
                             nn.Linear(64, self.action_dim),
                             nn.Softmax(dim=-1)
                         )
         # critic
         self.critic = nn.Sequential(
                         nn.Linear(self.input_dim, 64),
-                        nn.Tanh(),
+                        nn.ReLU(),
                         nn.Linear(64, 64),
-                        nn.Tanh(),
+                        nn.ReLU(),
                         nn.Linear(64, 1)
                     )
         

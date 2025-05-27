@@ -73,6 +73,9 @@ class RichDog:
         self.entropy_coef = self._get_random_or_fixed_value(self.config.entropy_coef, float)       # 엔트로피 계수
 
         self.random_seed = int(self.config.random_seed.value)         # set random seed if required (0 = no random seed) (랜덤 시드)
+        
+        self.cnn_features_dim = int(self.config.cnn_features_dim.value)
+        self.mlp_features_dim = int(self.config.mlp_features_dim.value)
         #####################################################
 
         if self.env_name == "RichDog":
@@ -232,7 +235,9 @@ class RichDogTrain(RichDog):
         # initialize a PPO agent
         ppo_agent = PPO(self.observation_space, self.action_space, self.lr_actor, self.lr_critic, 
                         self.gamma, self.K_epochs, self.eps_clip, self.has_continuous_action_space, 
-                        self.action_std, self.value_loss_coef, self.entropy_coef,self.lamda, self.minibatchsize)
+                        self.action_std, self.value_loss_coef, self.entropy_coef,self.lamda, self.minibatchsize,
+                        self.cnn_features_dim, self.mlp_features_dim
+                        )
 
 
         # 만약 모델 데이터 경로가 있으면
@@ -276,7 +281,7 @@ class RichDogTrain(RichDog):
             if is_action_log:
                 self.data_recorder.log_to_console("Start episode logging\n")
                 action_labels = ['timestep', "action", "reward"] + (list(info.keys()) if info else [])
-                state_labels = self.env.get_data_label() if hasattr(self.env, 'get_data_label') else [f"state_{i}" for i in range(ppo_agent.policy.input_dim)]
+                state_labels = [f"state_{i}" for i in range(ppo_agent.policy.input_dim)]
                 
                 self.data_recorder.setup_run_data_logs(
                     mode_dir_suffix="train_episode_data", # 훈련 중 에피소드 상세 데이터 저장용 하위폴더
@@ -457,7 +462,10 @@ class RichDogTest(RichDog):
         # initialize a PPO agent
         ppo_agent = PPO(self.observation_space, self.action_space, self.lr_actor, self.lr_critic, 
                     self.gamma, self.K_epochs, self.eps_clip, self.has_continuous_action_space, 
-                    self.action_std,self. value_loss_coef, self.entropy_coef,self.lamda, self.minibatchsize)
+                    self.action_std,self. value_loss_coef, self.entropy_coef,self.lamda, self.minibatchsize,
+                    self.cnn_features_dim, self.mlp_features_dim
+                    )
+        
         # preTrained weights directory
 
         if self.checkpoint_path == "":

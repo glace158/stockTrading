@@ -12,11 +12,12 @@ from typing import (
     Tuple
 )
 
-from PPO.reward import BuySellReward, ExpReward
+from PPO.reward import BuySellReward, ExpReward, ExpReward2
 from common.fileManager import Config
 from common.image_tools import get_time_series_image,get_multiple_time_series_images
 from stock.stock_adaptor import DailyStockAdaptor
 from stock.stock_wallet import TrainStockWallet
+from common.data_preprocessing import VectorL2Normalizer
 
 class Environment:
     __metaclass__ = abc.ABCMeta
@@ -94,18 +95,20 @@ class StockEnvironment(Environment): # 주식 환경
         
         self.stock_config = stock_config
 
-        self.min_dt = self.stock_config.min_dt.value
-        self.max_dt = self.stock_config.max_dt.value
-        self.stock_code_path = self.stock_config.stock_code_path.value
-        self.defult_count = int(self.stock_config.count.value)
-        self.extra_count = int(self.stock_config.extra_datas.value)
+        #self.min_dt = self.stock_config.min_dt.value
+        #self.max_dt = self.stock_config.max_dt.value
+        self.stock_code_path = self.stock_config.parameters.stock_code_path.value
+        self.defult_count = int(self.stock_config.parameters.count.value)
+        self.extra_count = int(self.stock_config.parameters.extra_datas.value)
         self.visualization_columns = self.stock_config.visualization_columns
-        self.visualization_format = self.stock_config.visualization_format.value
+        self.visualization_format = self.stock_config.parameters.visualization_format.value
 
         self.stock = DailyStockAdaptor(self.stock_config.stock_columns, self.stock_code_path)
 
         self.wallet = TrainStockWallet()
-        self.reward_cls = ExpReward()
+        self.reward_cls = ExpReward2()
+
+        self.preprocessing = VectorL2Normalizer()
 
         observation, _ = self.reset()
         
@@ -132,37 +135,43 @@ class StockEnvironment(Environment): # 주식 환경
         self.wallet.init_balance(start_amt)
         self.reward_cls.init_datas(self.price, start_amt)
 
-        reward, reward_info = self.reward_cls.get_reward(info["current_date"], 
+        reward, reward_info = self.reward_cls.get_reward(
+                                                         self.current_date, 
                                                          True,
                                                          0.0, 
                                                          self.price, 
-                                                         info["next_price"], 
+                                                         self.next_price, 
                                                          self.wallet.get_total_amt(self.price), 
                                                          self.wallet.get_current_amt(), 
                                                          self.wallet.get_qty()
                                                          )
 
-        return (data, {**info, **reward_info}) # 데이터 반환
+        return (data, {**info, **{"order_qty" : 0}, **reward_info}) # 데이터 반환
     
     def step(self, action) -> Tuple[Any, float, bool, bool, dict]: # (nextstate, reward, terminated, truncated, info) 
 
         total_amt, current_amt, order_qty, qty, is_order = self.wallet.order(self.stock_code, action, self.price)
-        nextstate, extra_datas, terminated, info = self._get_observation_datas() # 주식 정보 가져오기
-        self.price = info["price"]
-
-        reward, reward_info = self.reward_cls.get_reward(info["current_date"], 
+        
+        reward, reward_info = self.reward_cls.get_reward(
+                                                         self.current_date, 
                                                          is_order, 
                                                          action, 
                                                          self.price, 
-                                                         info["next_price"], 
+                                                         self.next_price, 
                                                          total_amt, 
                                                          current_amt, 
-                                                         qty
+                                                         qty,
+                                                         order_qty
                                                          ) # 보상
-
-        truncated = False
         
-        return (nextstate, reward, terminated, truncated, {**info, **reward_info})
+        nextstate, extra_datas, terminated, info = self._get_observation_datas() # 다음 주식 정보 가져오기
+        
+        truncated = False
+        if reward_info["next_total_evlu_rate"] < -5.0:
+            reward = -1.0
+            truncated = True
+
+        return (nextstate, reward, terminated, truncated, {**info, **{"order_qty" : order_qty}, **reward_info})
     
     def getObservation(self) -> spaces.Space: # box
         return self.observation_space
@@ -193,22 +202,28 @@ class StockEnvironment(Environment): # 주식 환경
         return random.randrange(300000, 100000001,100000)
     
     def _get_observation_datas(self):
-        datas, extra_datas, done, info = self.stock.get_info() # 주식 정보 가져오기
+        datas, extra_datas, done, info = self.stock.get_info() # 다음 주식 정보 가져오기
         datas = datas.values # 데이터프레임에서 값만 가져오기
         self.price = info["price"]
+        self.next_price = info["next_price"]
+        self.current_date = info["current_date"]
 
         qty = self.wallet.get_qty()
         current_amt = self.wallet.get_current_amt()
         total_amt = self.wallet.get_total_amt(self.price)
+
         datas = np.insert(datas, 0, qty)
         datas = np.insert(datas, 0, current_amt)
         datas = np.insert(datas, 0, total_amt)
 
         if not extra_datas.empty:
-            time_series_images = self._get_visualization_data(self.visualization_columns, extra_datas)
-            datas = dict({"img": time_series_images, "num": datas})
+            time_series_images = self._get_visualization_data(self.visualization_columns, extra_datas) # 시계열 데이터 생성
+            datas = self.preprocessing.get_preprocessing(datas) # 전처리 
+            datas = dict({"img": time_series_images, "num": datas}) # 데이터 합치기
         else:
+            datas = self.preprocessing.get_preprocessing(datas)
             datas = datas.astype(np.float32)
+
 
         return datas, extra_datas, done, {**info, **{"qty": qty, "current_amt": current_amt, "total_amt": total_amt}}
     
