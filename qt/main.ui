@@ -555,7 +555,7 @@ Button */
 
 </string>
    </property>
-   <layout class="QHBoxLayout" name="horizontalLayout_29">
+   <layout class="QVBoxLayout" name="verticalLayout_21">
     <property name="spacing">
      <number>0</number>
     </property>
@@ -1221,7 +1221,7 @@ Button */
                       <string notr="true">background: transparent;</string>
                      </property>
                      <property name="currentIndex">
-                      <number>1</number>
+                      <number>4</number>
                      </property>
                      <widget class="QWidget" name="home">
                       <property name="styleSheet">
@@ -3455,7 +3455,7 @@ border: 2px solid rgb(52, 59, 72);</string>
                                </property>
                                <property name="dateTime">
                                 <datetime>
-                                 <hour>18</hour>
+                                 <hour>9</hour>
                                  <minute>0</minute>
                                  <second>0</second>
                                  <year>2025</year>
@@ -4314,22 +4314,38 @@ QProgressBar::chunk{
                                 </property>
                                 <layout class="QHBoxLayout" name="horizontalLayout_15">
                                  <item>
-                                  <widget class="QLabel" name="graph_image">
-                                   <property name="sizePolicy">
-                                    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                                     <horstretch>0</horstretch>
-                                     <verstretch>0</verstretch>
-                                    </sizepolicy>
+                                  <widget class="QFrame" name="frame_16">
+                                   <property name="frameShape">
+                                    <enum>QFrame::Shape::StyledPanel</enum>
                                    </property>
-                                   <property name="styleSheet">
-                                    <string notr="true"/>
+                                   <property name="frameShadow">
+                                    <enum>QFrame::Shadow::Raised</enum>
                                    </property>
-                                   <property name="text">
-                                    <string>No Images</string>
-                                   </property>
-                                   <property name="alignment">
-                                    <set>Qt::AlignmentFlag::AlignCenter</set>
-                                   </property>
+                                   <layout class="QVBoxLayout" name="verticalLayout_41">
+                                    <item>
+                                     <layout class="QVBoxLayout" name="verticalLayout_42">
+                                      <item>
+                                       <widget class="QLabel" name="graph_image">
+                                        <property name="sizePolicy">
+                                         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                                          <horstretch>0</horstretch>
+                                          <verstretch>0</verstretch>
+                                         </sizepolicy>
+                                        </property>
+                                        <property name="styleSheet">
+                                         <string notr="true"/>
+                                        </property>
+                                        <property name="text">
+                                         <string>No Images</string>
+                                        </property>
+                                        <property name="alignment">
+                                         <set>Qt::AlignmentFlag::AlignCenter</set>
+                                        </property>
+                                       </widget>
+                                      </item>
+                                     </layout>
+                                    </item>
+                                   </layout>
                                   </widget>
                                  </item>
                                 </layout>
@@ -4418,7 +4434,7 @@ QScrollArea{
                                   <x>0</x>
                                   <y>0</y>
                                   <width>222</width>
-                                  <height>238</height>
+                                  <height>46</height>
                                  </rect>
                                 </property>
                                 <property name="sizePolicy">
@@ -4473,20 +4489,6 @@ QScrollArea{
                                     <property name="bottomMargin">
                                      <number>10</number>
                                     </property>
-                                    <item>
-                                     <widget class="QTreeWidget" name="treeWidget">
-                                      <property name="styleSheet">
-                                       <string notr="true">QTreeWidget{
-	border: 2px solid rgb(189, 147, 249);
-}</string>
-                                      </property>
-                                      <column>
-                                       <property name="text">
-                                        <string>데이터 항목</string>
-                                       </property>
-                                      </column>
-                                     </widget>
-                                    </item>
                                    </layout>
                                   </widget>
                                  </item>
@@ -4519,20 +4521,6 @@ QScrollArea{
                                  <number>0</number>
                                 </property>
                                 <item>
-                                 <widget class="QPushButton" name="addCSVPushButton">
-                                  <property name="styleSheet">
-                                   <string notr="true">background-color: rgb(52, 59, 72);</string>
-                                  </property>
-                                  <property name="text">
-                                   <string>Add CSV File</string>
-                                  </property>
-                                  <property name="icon">
-                                   <iconset resource="resources.qrc">
-                                    <normaloff>:/icons/images/icons/cil-folder-open.png</normaloff>:/icons/images/icons/cil-folder-open.png</iconset>
-                                  </property>
-                                 </widget>
-                                </item>
-                                <item>
                                  <widget class="QPushButton" name="addGraphPushButton">
                                   <property name="styleSheet">
                                    <string notr="true">background-color: rgb(52, 59, 72);</string>
@@ -4543,20 +4531,6 @@ QScrollArea{
                                   <property name="icon">
                                    <iconset resource="resources.qrc">
                                     <normaloff>:/icons/images/icons/cil-plus.png</normaloff>:/icons/images/icons/cil-plus.png</iconset>
-                                  </property>
-                                 </widget>
-                                </item>
-                                <item>
-                                 <widget class="QPushButton" name="removeCSVPushButton">
-                                  <property name="styleSheet">
-                                   <string notr="true">background-color: rgb(52, 59, 72);</string>
-                                  </property>
-                                  <property name="text">
-                                   <string>Remove CSV File</string>
-                                  </property>
-                                  <property name="icon">
-                                   <iconset resource="resources.qrc">
-                                    <normaloff>:/icons/images/icons/cil-minus.png</normaloff>:/icons/images/icons/cil-minus.png</iconset>
                                   </property>
                                  </widget>
                                 </item>
@@ -4880,7 +4854,7 @@ QScrollArea{
                                 <rect>
                                  <x>0</x>
                                  <y>0</y>
-                                 <width>322</width>
+                                 <width>320</width>
                                  <height>224</height>
                                 </rect>
                                </property>

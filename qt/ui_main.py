@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'maineqSADk.ui'
+## Form generated from reading UI file 'mainiiBToj.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.8.2
 ##
@@ -22,8 +22,7 @@ from PySide6.QtWidgets import (QAbstractItemView, QAbstractScrollArea, QApplicat
     QMainWindow, QPlainTextEdit, QProgressBar, QPushButton,
     QRadioButton, QScrollArea, QScrollBar, QSizePolicy,
     QSlider, QSpinBox, QStackedWidget, QTableWidget,
-    QTableWidgetItem, QTreeWidget, QTreeWidgetItem, QVBoxLayout,
-    QWidget)
+    QTableWidgetItem, QVBoxLayout, QWidget)
 import qt.resources_rc
 
 class Ui_MainWindow(object):
@@ -579,10 +578,10 @@ class Ui_MainWindow(object):
 "}\n"
 "\n"
 "")
-        self.horizontalLayout_29 = QHBoxLayout(self.styleSheet)
-        self.horizontalLayout_29.setSpacing(0)
-        self.horizontalLayout_29.setObjectName(u"horizontalLayout_29")
-        self.horizontalLayout_29.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout_21 = QVBoxLayout(self.styleSheet)
+        self.verticalLayout_21.setSpacing(0)
+        self.verticalLayout_21.setObjectName(u"verticalLayout_21")
+        self.verticalLayout_21.setContentsMargins(0, 0, 0, 0)
         self.bgApp = QFrame(self.styleSheet)
         self.bgApp.setObjectName(u"bgApp")
         self.bgApp.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
@@ -1681,7 +1680,7 @@ class Ui_MainWindow(object):
         self.LastDateEdit = QDateEdit(self.dateEditFrame)
         self.LastDateEdit.setObjectName(u"LastDateEdit")
         self.LastDateEdit.setStyleSheet(u"background-color: rgb(33, 37, 43);")
-        self.LastDateEdit.setDateTime(QDateTime(QDate(2025, 1, 28), QTime(18, 0, 0)))
+        self.LastDateEdit.setDateTime(QDateTime(QDate(2025, 1, 28), QTime(9, 0, 0)))
 
         self.horizontalLayout_27.addWidget(self.LastDateEdit)
 
@@ -2146,9 +2145,17 @@ class Ui_MainWindow(object):
         self.scrollAreaWidgetContents_3.setGeometry(QRect(0, 0, 862, 675))
         self.horizontalLayout_15 = QHBoxLayout(self.scrollAreaWidgetContents_3)
         self.horizontalLayout_15.setObjectName(u"horizontalLayout_15")
-        self.graph_image = QLabel(self.scrollAreaWidgetContents_3)
+        self.frame_16 = QFrame(self.scrollAreaWidgetContents_3)
+        self.frame_16.setObjectName(u"frame_16")
+        self.frame_16.setFrameShape(QFrame.Shape.StyledPanel)
+        self.frame_16.setFrameShadow(QFrame.Shadow.Raised)
+        self.verticalLayout_41 = QVBoxLayout(self.frame_16)
+        self.verticalLayout_41.setObjectName(u"verticalLayout_41")
+        self.verticalLayout_42 = QVBoxLayout()
+        self.verticalLayout_42.setObjectName(u"verticalLayout_42")
+        self.graph_image = QLabel(self.frame_16)
         self.graph_image.setObjectName(u"graph_image")
-        sizePolicy8 = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
+        sizePolicy8 = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
         sizePolicy8.setHorizontalStretch(0)
         sizePolicy8.setVerticalStretch(0)
         sizePolicy8.setHeightForWidth(self.graph_image.sizePolicy().hasHeightForWidth())
@@ -2156,7 +2163,13 @@ class Ui_MainWindow(object):
         self.graph_image.setStyleSheet(u"")
         self.graph_image.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        self.horizontalLayout_15.addWidget(self.graph_image)
+        self.verticalLayout_42.addWidget(self.graph_image)
+
+
+        self.verticalLayout_41.addLayout(self.verticalLayout_42)
+
+
+        self.horizontalLayout_15.addWidget(self.frame_16)
 
         self.scrollArea_3.setWidget(self.scrollAreaWidgetContents_3)
 
@@ -2200,7 +2213,7 @@ class Ui_MainWindow(object):
         self.scrollArea_2.setWidgetResizable(True)
         self.scrollAreaWidgetContents_2 = QWidget()
         self.scrollAreaWidgetContents_2.setObjectName(u"scrollAreaWidgetContents_2")
-        self.scrollAreaWidgetContents_2.setGeometry(QRect(0, 0, 222, 238))
+        self.scrollAreaWidgetContents_2.setGeometry(QRect(0, 0, 222, 46))
         sizePolicy5.setHeightForWidth(self.scrollAreaWidgetContents_2.sizePolicy().hasHeightForWidth())
         self.scrollAreaWidgetContents_2.setSizePolicy(sizePolicy5)
         self.scrollAreaWidgetContents_2.setStyleSheet(u" QScrollBar:vertical {\n"
@@ -2223,14 +2236,6 @@ class Ui_MainWindow(object):
         self.verticalLayout_5.setSpacing(10)
         self.verticalLayout_5.setObjectName(u"verticalLayout_5")
         self.verticalLayout_5.setContentsMargins(10, 10, 10, 10)
-        self.treeWidget = QTreeWidget(self.graphDataFrame)
-        self.treeWidget.setObjectName(u"treeWidget")
-        self.treeWidget.setStyleSheet(u"QTreeWidget{\n"
-"	border: 2px solid rgb(189, 147, 249);\n"
-"}")
-
-        self.verticalLayout_5.addWidget(self.treeWidget)
-
 
         self.horizontalLayout_13.addWidget(self.graphDataFrame)
 
@@ -2246,26 +2251,12 @@ class Ui_MainWindow(object):
         self.verticalLayout_10.setSpacing(10)
         self.verticalLayout_10.setObjectName(u"verticalLayout_10")
         self.verticalLayout_10.setContentsMargins(0, 0, 0, 0)
-        self.addCSVPushButton = QPushButton(self.data_buttons_frame)
-        self.addCSVPushButton.setObjectName(u"addCSVPushButton")
-        self.addCSVPushButton.setStyleSheet(u"background-color: rgb(52, 59, 72);")
-        self.addCSVPushButton.setIcon(icon)
-
-        self.verticalLayout_10.addWidget(self.addCSVPushButton)
-
         self.addGraphPushButton = QPushButton(self.data_buttons_frame)
         self.addGraphPushButton.setObjectName(u"addGraphPushButton")
         self.addGraphPushButton.setStyleSheet(u"background-color: rgb(52, 59, 72);")
         self.addGraphPushButton.setIcon(icon4)
 
         self.verticalLayout_10.addWidget(self.addGraphPushButton)
-
-        self.removeCSVPushButton = QPushButton(self.data_buttons_frame)
-        self.removeCSVPushButton.setObjectName(u"removeCSVPushButton")
-        self.removeCSVPushButton.setStyleSheet(u"background-color: rgb(52, 59, 72);")
-        self.removeCSVPushButton.setIcon(icon5)
-
-        self.verticalLayout_10.addWidget(self.removeCSVPushButton)
 
         self.removePushButton = QPushButton(self.data_buttons_frame)
         self.removePushButton.setObjectName(u"removePushButton")
@@ -2423,7 +2414,7 @@ class Ui_MainWindow(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 322, 224))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 320, 224))
         self.scrollAreaWidgetContents.setStyleSheet(u" QScrollBar:vertical {\n"
 "	border: none;\n"
 "    background: rgb(52, 59, 72);\n"
@@ -2665,13 +2656,13 @@ class Ui_MainWindow(object):
         self.appLayout.addWidget(self.contentBox)
 
 
-        self.horizontalLayout_29.addWidget(self.bgApp)
+        self.verticalLayout_21.addWidget(self.bgApp)
 
         MainWindow.setCentralWidget(self.styleSheet)
 
         self.retranslateUi(MainWindow)
 
-        self.stackedWidget.setCurrentIndex(1)
+        self.stackedWidget.setCurrentIndex(4)
 
 
         QMetaObject.connectSlotsByName(MainWindow)
@@ -2848,11 +2839,7 @@ class Ui_MainWindow(object):
         self.imageSizeUpPushButton.setText("")
         self.imageSizeDownPushButton.setText("")
         self.graph_image.setText(QCoreApplication.translate("MainWindow", u"No Images", None))
-        ___qtreewidgetitem = self.treeWidget.headerItem()
-        ___qtreewidgetitem.setText(0, QCoreApplication.translate("MainWindow", u"\ub370\uc774\ud130 \ud56d\ubaa9", None));
-        self.addCSVPushButton.setText(QCoreApplication.translate("MainWindow", u"Add CSV File", None))
         self.addGraphPushButton.setText(QCoreApplication.translate("MainWindow", u"Add Graph", None))
-        self.removeCSVPushButton.setText(QCoreApplication.translate("MainWindow", u"Remove CSV File", None))
         self.removePushButton.setText(QCoreApplication.translate("MainWindow", u"Remove Graph", None))
         self.labelBoxBlenderInstalation.setText(QCoreApplication.translate("MainWindow", u"FILE BOX", None))
         self.lineEdit.setText("")

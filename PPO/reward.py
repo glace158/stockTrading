@@ -178,7 +178,7 @@ class Reward:
             i -= 1 # 해당 날짜의 데이터가 -1이면 이전 데이터 확인
         return bond_yield
     
-class ExpReward2(Reward):
+class ExpReward(Reward):
     def __init__(self, init_price=0, start_amt=0):
         super().__init__(init_price, start_amt)
 
@@ -250,71 +250,6 @@ class ExpReward2(Reward):
                 rate_reward = wait_see_rate
 
         return self._np_to_float(rate_reward)
-    
-class ExpReward(Reward):
-    def __init__(self, init_price=0, start_amt=0):
-        super().__init__(init_price, start_amt)
-
-    def get_reward(self, current_date, is_order, order_percent, price, next_price, current_total_amt, current_money, qty, order_qty):
-        init_price_rate = self.get_init_price_rate(next_price) # 초기 대비 가격 증감률
-        next_day_total_amt = current_money + (next_price * qty)
-        
-        evlu_rate = self.get_total_evlu_rate(current_total_amt) # 현재 총자산 증감률
-        daily_evlu_rate = self.get_daily_evlu_rate(current_total_amt) # 거래당 자산 증감 비율 (현재 기준)
-        wait_see_rate = self.get_wait_see_next_day_evlu_rate(next_price) # 만약 관망 했을 때 수익률
-        
-        next_total_evlu_rate = self.get_total_evlu_rate(next_day_total_amt) # 다음날 총자산 증감률
-        net_income_rate = self.get_net_income_rate(init_price_rate, next_total_evlu_rate) # 다음날 순이익 비율
-        next_day_evlu_rate = self.get_next_day_evlu_rate(next_day_total_amt, current_total_amt) # 다음날 자산 증감률
-        unrealized_gain_loss = self.get_unrealized_gain_loss(price, next_price, qty) #  미실현 수익 기회 손실 계산
-        rate_reward = self.get_rate_reward(order_percent, wait_see_rate, next_day_evlu_rate) # 수익 증감 보상
-
-        next_total_evlu_rate_exp = self.get_exp_reward(0.01, next_total_evlu_rate) # 다음날 총자산 증감률
-        net_income_rate_exp = self.get_exp_reward(0.01, net_income_rate) # 다음날 순이익 비율
-        next_day_evlu_rate_exp = self.get_exp_reward(0.01, next_day_evlu_rate) # 다음날 자산 증감률
-        unrealized_gain_loss_exp = self.get_exp_reward(0.01, unrealized_gain_loss) #  미실현 수익 기회 손실 계산
-        rate_reward_exp = self.get_exp_reward2(alpha = 5.0 , reward=rate_reward) # 수익 증감 보상
-        
-        # 현재 데이터 저장
-        self.total_amt_list.append(current_total_amt)
-        self.rate_list.append(daily_evlu_rate)
-        self.current_money_list.append(current_money)
-        self.qty_list.append(qty)
-
-        sharp_data = self.sharpe_ratio(current_date, evlu_rate) # 샤프 지수
-        sortino_data = self.sortino_ratio(current_date, evlu_rate) # 소르티노 지수
-
-        if is_order: # 보상 계산
-            reward = 0.8 * rate_reward_exp + 0.2 * next_total_evlu_rate_exp ; 
-        else:
-            reward = -1
-
-        sortino_data_exp = 0
-        if self.step_count % 10 == 0:
-            sortino_data_exp = self.get_exp_reward(2.0, sortino_data) 
-
-        reward_log = self.get_reward_log(order_percent, is_order) # 보상 로그
-        
-        self.step_count += 1
-        return self._np_to_float(reward), {
-                                            "wait_see_rate" : wait_see_rate,
-                                            "evlu_rate" : evlu_rate,
-                                            "daily_evlu_rate" : daily_evlu_rate,
-                                            "rate_reward" : rate_reward,
-                                            "rate_reward_exp" : rate_reward_exp, 
-                                            "next_total_evlu_rate" : next_total_evlu_rate,
-                                            "next_total_evlu_rate_exp" : next_total_evlu_rate_exp,
-                                            "net_income_rate" : net_income_rate,
-                                            "net_income_rate_exp" : net_income_rate_exp,
-                                            "next_day_evlu_rate" : next_day_evlu_rate,
-                                            "next_day_evlu_rate_exp" : next_day_evlu_rate_exp,
-                                            "unrealized_gain_loss" : unrealized_gain_loss,
-                                            "unrealized_gain_loss_exp" : unrealized_gain_loss_exp,
-                                            "sharp_data" : sharp_data,
-                                            "sortino_data" : sortino_data,
-                                            "sortino_data_exp" : sortino_data_exp,
-                                            "reward_log" : reward_log
-                                            }
 
 class BuySellReward(Reward):
 

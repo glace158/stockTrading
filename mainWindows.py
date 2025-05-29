@@ -7,7 +7,6 @@ from PySide6.QtCore import *
 from PySide6.QtGui import *
 from qt.ui_main import Ui_MainWindow
 
-
 from qt.pages.parameters_page import ParameterPage
 from qt.pages.graph_page import GraphPage
 from qt.pages.setting_page import SettingPage

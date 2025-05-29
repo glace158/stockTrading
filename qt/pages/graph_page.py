@@ -8,21 +8,19 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as dates
 import pandas as pd
 import numpy as np
+import os
 
 class GraphPage(QWidget):
     def __init__(self, widgets : Ui_MainWindow):
         super().__init__()
         self.widgets = widgets 
 
-        self.tree_widgets = [self.widgets.treeWidget]  # 생성된 트리 위젯 목록
-        self.current_tree_widget = self.widgets.treeWidget # 현재 선택된 트리 위젯
-        self.widgets.treeWidget.mouseDoubleClickEvent = lambda event: self.set_current_tree_widget(self.widgets.treeWidget)
-        
+        self.tree_widgets = []  # 생성된 트리 위젯 목록
+        self.current_tree_widget = None # 현재 선택된 트리 위젯
+
         # 그래픽 관련 버튼
-        self.widgets.addCSVPushButton.clicked.connect(self.add_csv_files_to_current_tree)
         self.widgets.addGraphPushButton.clicked.connect(self.add_new_tree_widget)
         self.widgets.removePushButton.clicked.connect(self.remove_graph)
-        self.widgets.removeCSVPushButton.clicked.connect(self.remove_csv)
 
         self.widgets.imageSizeUpPushButton.clicked.connect(self.increase_size)
         self.widgets.imageSizeDownPushButton.clicked.connect(self.decrease_size)
@@ -30,7 +28,12 @@ class GraphPage(QWidget):
         self.widgets.imageSizeUpPushButton.setEnabled(False)
         self.widgets.imageSizeDownPushButton.setEnabled(False)
 
-        # 현재 클릭한 트리 위젯
+        self.pixmap_list = []
+        self.graph_image_list = []
+        self.image_width_list = []
+        self.image_height_list = []
+
+    # 현재 클릭한 트리 위젯
     def set_current_tree_widget(self, tree_widget):
         self.current_tree_widget = tree_widget
 
@@ -45,15 +48,6 @@ class GraphPage(QWidget):
 
         print("트리 위젯이 선택되었습니다.")
 
-    # csv 파일 읽기
-    def add_csv_files_to_current_tree(self):
-        if self.current_tree_widget:
-            csv_file_paths, _ = QFileDialog.getOpenFileNames(self, "CSV 파일 선택", "", "CSV Files (*.csv)")
-            for csv_file_path in csv_file_paths:
-                if csv_file_path:
-                    self.load_csv_to_tree(self.current_tree_widget, csv_file_path)
-        else:
-            print("먼저 트리를 선택하세요.")
 
     # csv 트리 구성
     def load_csv_to_tree(self, tree_widget, file_path):
@@ -85,26 +79,39 @@ class GraphPage(QWidget):
         if item.flags() & Qt.ItemIsUserCheckable:  # 체크박스 항목인지 확인
             state = item.checkState(column)
             if state == Qt.Checked:
-                self.make_graph2()
+                self.make_action_graph()
                 self.load_graph_image()
                 print(f"'{item.text(0)}'가 선택되었습니다.")
             elif state == Qt.Unchecked:
-                self.make_graph2()
+                self.make_action_graph()
                 self.load_graph_image()
                 print(f"'{item.text(0)}'가 선택 해제되었습니다.")
     
     # 새로운 그래프 (트리) 추가하기
     def add_new_tree_widget(self):
-        # 새로운 QTreeWidget 추가
-        new_tree_widget = QTreeWidget(self.widgets.graphDataFrame)
-        new_tree_widget.setHeaderLabels(["데이터 항목"])
-        self.tree_widgets.append(new_tree_widget)
-        self.set_current_tree_widget(new_tree_widget)
+        # csv 파일 읽기
+        csv_file_paths, _ = QFileDialog.getOpenFileNames(self, "CSV 파일 선택", "", "CSV Files (*.csv)")
 
-        self.widgets.verticalLayout_5.addWidget(new_tree_widget)
-        # 새 트리 위젯 클릭 이벤트 연결
-        new_tree_widget.mouseDoubleClickEvent = lambda event: self.set_current_tree_widget(new_tree_widget)
-        print("새로운 트리가 추가되었습니다.")
+        if csv_file_paths:
+            # 새로운 QTreeWidget 추가
+            new_tree_widget = QTreeWidget(self.widgets.graphDataFrame)
+            new_tree_widget.setHeaderLabels(["데이터 항목"])
+            self.tree_widgets.append(new_tree_widget)
+            self.set_current_tree_widget(new_tree_widget)
+
+            self.widgets.verticalLayout_5.addWidget(new_tree_widget)
+            # 새 트리 위젯 클릭 이벤트 연결
+            new_tree_widget.mouseDoubleClickEvent = lambda event: self.set_current_tree_widget(new_tree_widget)
+            print("새로운 트리가 추가되었습니다.")
+            self.current_tree_widget = self.tree_widgets[-1]
+
+            for csv_file_path in csv_file_paths:
+                if csv_file_path:
+                    self.load_csv_to_tree(self.current_tree_widget, csv_file_path)
+
+                if "action" in csv_file_path:
+                    self.make_action_graph()
+                    self.load_graph_image()
     
     # csv 삭제
     def remove_csv(self):
@@ -118,7 +125,7 @@ class GraphPage(QWidget):
                 index = self.current_tree_widget.indexOfTopLevelItem(item)
                 self.current_tree_widget.takeTopLevelItem(index)
         
-        self.make_graph2()
+        self.make_action_graph()
         self.load_graph_image()
 
     # 그래프 삭제
@@ -131,15 +138,24 @@ class GraphPage(QWidget):
         self.current_tree_widget = None
         
         if self.tree_widgets:
-            self.make_graph2()
+            self.make_action_graph()
             self.load_graph_image()
         else:
-            self.widgets.graph_image.clear()
-            self.widgets.graph_image.setText("No Images")
+            self.pixmap_list = []
+            self.graph_image_list = []
+            self.image_width_list = []
+            self.image_height_list = []
+
+            self._layout_clear(self.widgets.verticalLayout_42)
+
+            no_image = QLabel()
+            no_image.setText("No Images")
+            self.widgets.verticalLayout_42.addWidget(no_image)
+
             self.widgets.imageSizeUpPushButton.setEnabled(False)
             self.widgets.imageSizeDownPushButton.setEnabled(False)
 
-    def make_graph2(self):
+    def make_action_graph(self):
         rootItem = self.current_tree_widget.invisibleRootItem()
         items = self.get_items_recursively(rootItem)
         
@@ -151,28 +167,21 @@ class GraphPage(QWidget):
                 path = item_name
                 data = pd.read_csv(path)
 
+
         # 그래프 그`리기
         fig, ax1 = plt.subplots(figsize=(30, 10))
 
-        # Price 선 그래프 (왼쪽 Y축)
-        ax1.plot(data['timestep'], data['price'], label='Price', color='black')
-        
-        for index, row in data.iterrows():
-            if row['order_qty'] == 0:  # order_qty가 0인 경우 회색 점
-                ax1.scatter(row['timestep'], row['price'], color='gray', label='Order Qty = 0' if index == 0 else "")
-                ax1.annotate(f"{int(row['order_qty'])}", (row['timestep'], row['price']), textcoords="offset points", xytext=(-10, -10), color='gray')
-            elif row['action'] > 0:  # action이 음수인 경우 빨간 점
-                ax1.scatter(row['timestep'], row['price'], color='red', label='Action > 0' if index == 0 else "")
-                ax1.annotate(f"{int(row['order_qty'])}", (row['timestep'], row['price']), textcoords="offset points", xytext=(-10, -10), color='red')
-            elif row['action'] < 0:  # action이 양수인 경우 파란 점
-                ax1.scatter(row['timestep'], row['price'], color='blue', label='Action < 0' if index == 0 else "")
-                ax1.annotate(f"{int(row['order_qty'])}", (row['timestep'], row['price']), textcoords="offset points", xytext=(-10, 10), color='blue')
-        
-        ax1.set_xlabel('Timestep')
-        ax1.set_ylabel('Price')
-        ax1.set_xticks(data['timestep'])  # x축 간격을 timestep에 맞춤
-        ax1.legend(loc='upper left')
-        ax1.grid(True)
+        # Reward 막대 그래프 (아래쪽 Y축 공유)
+        ax1.spines['right'].set_position(('outward', 60))  # 추가 Y축을 오른쪽으로 이동
+
+        reward_colors = ['red' if r < 0 else 'blue' for r in data['reward']]  # 음수는 빨간색, 양수는 파란색
+        ax1.bar(data['timestep'], data['reward'], width=0.4, alpha=0.8, label='Reward', color=reward_colors)
+
+        # y축 0에 선 추가
+        ax1.axhline(y=0, color='black', linestyle='--', linewidth=1, label='y = 0 Line')
+
+        ax1.set_ylabel('Reward and Daily Rate')
+        ax1.legend(loc='lower center')
         
         # Current Amount 선 그래프 (오른쪽 Y축)
         ax2 = ax1.twinx()  # 오른쪽 Y축 추가
@@ -181,18 +190,26 @@ class GraphPage(QWidget):
         ax2.legend(loc='upper right')
         ax2.axhline(y=data['total_amt'][0], color='Orange', linestyle='--', linewidth=1, label='init Amount Line')
         
-        # Reward 막대 그래프 (아래쪽 Y축 공유)
+        # Price 선 그래프 (왼쪽 Y축)
         ax3 = ax1.twinx()  # 새로운 Y축 추가
-        ax3.spines['right'].set_position(('outward', 60))  # 추가 Y축을 오른쪽으로 이동
-
-        reward_colors = ['red' if r < 0 else 'blue' for r in data['reward']]  # 음수는 빨간색, 양수는 파란색
-        ax3.bar(data['timestep'], data['reward'], width=0.4, alpha=0.8, label='Reward', color=reward_colors)
-
-        # y축 0에 선 추가
-        ax3.axhline(y=0, color='black', linestyle='--', linewidth=1, label='y = 0 Line')
-
-        ax3.set_ylabel('Reward and Daily Rate')
-        ax3.legend(loc='lower center')
+        ax3.plot(data['timestep'], data['price'], label='Price', color='black')
+        
+        for index, row in data.iterrows():
+            if row['order_qty'] == 0:  # order_qty가 0인 경우 회색 점
+                ax3.scatter(row['timestep'], row['price'], color='gray', label='Order Qty = 0' if index == 0 else "")
+                ax3.annotate(f"{int(row['order_qty'])}", (row['timestep'], row['price']), textcoords="offset points", xytext=(-10, -10), color='gray')
+            elif row['action'] > 0:  # action이 음수인 경우 빨간 점
+                ax3.scatter(row['timestep'], row['price'], color='red', label='Action > 0' if index == 0 else "")
+                ax3.annotate(f"{int(row['order_qty'])}", (row['timestep'], row['price']), textcoords="offset points", xytext=(-10, -10), color='red')
+            elif row['action'] < 0:  # action이 양수인 경우 파란 점
+                ax3.scatter(row['timestep'], row['price'], color='blue', label='Action < 0' if index == 0 else "")
+                ax3.annotate(f"{int(row['order_qty'])}", (row['timestep'], row['price']), textcoords="offset points", xytext=(-10, 10), color='blue')
+        
+        ax3.set_xlabel('Timestep')
+        ax3.set_ylabel('Price')
+        ax3.set_xticks(data['timestep'])  # x축 간격을 timestep에 맞춤
+        ax3.legend(loc='upper left')
+        ax3.grid(True)
 
         # 그래프 제목
         plt.title('Price, Current Amount, Reward, and Daily Rate vs Timestep')
@@ -270,14 +287,31 @@ class GraphPage(QWidget):
 
     # 저장한 그래프 이미지 불러오기
     def load_graph_image(self):
+        path = "./Data_graph/"
+        file_list = os.listdir(path)
+        file_list = [file for file in file_list if file.endswith(".png")]
+        
+        self.pixmap_list = []
+        self.graph_image_list = []
+        self.image_width_list = []
+        self.image_height_list = []
+        
+        self._layout_clear(self.widgets.verticalLayout_42)
 
-        self.pixmap = QPixmap("./Data_graph/graph.png")
-        self.widgets.graph_image.adjustSize()
-        self.widgets.graph_image.setPixmap(self.pixmap)
+        for file in file_list:
+            pixmap = QPixmap(path + file)
+            graph_image = QLabel()
+            graph_image.adjustSize()
+            graph_image.setPixmap(pixmap)
         
-        self.image_width = self.pixmap.width()
-        self.image_height = self.pixmap.height()
-        
+            self.image_width_list.append(pixmap.width())
+            self.image_height_list.append(pixmap.height())
+
+            self.pixmap_list.append(pixmap)
+            self.graph_image_list.append(graph_image)
+
+            self.widgets.verticalLayout_42.addWidget(graph_image)
+
         self.widgets.imageSizeUpPushButton.setEnabled(True)
         self.widgets.imageSizeDownPushButton.setEnabled(True)
 
@@ -290,18 +324,35 @@ class GraphPage(QWidget):
     
     def update_image(self):
         # 이미지를 현재 크기로 조정하여
-        resized_pixmap = self.pixmap.scaled(self.image_width, self.image_height)
-        self.widgets.graph_image.setPixmap(resized_pixmap)
+        for i, pixmap in enumerate(self.pixmap_list):
+            resized_pixmap = pixmap.scaled(self.image_width_list[i], self.image_height_list[i])
+            self.graph_image_list[i].setPixmap(resized_pixmap)
 
     def increase_size(self):
-        # 이미지 크기를 증가
-        self.image_width += 20
-        self.image_height += 20
+
+        for i in range(len(self.pixmap_list)):
+            # 이미지 크기를 증가
+            self.image_width_list[i] += 20
+            self.image_height_list[i] += 20
+
         self.update_image()
 
     def decrease_size(self):
         # 이미지 크기를 감소
-        if self.image_width > 20 and self.image_height > 20:  # 최소 크기 제한
-            self.image_width -= 20
-            self.image_height -= 20
-            self.update_image()
+        for i in range(len(self.pixmap_list)):
+            if self.image_width_list[i] > 20 and self.image_height_list[i] > 20:  # 최소 크기 제한
+                self.image_width_list[i] -= 20
+                self.image_height_list[i] -= 20
+
+        self.update_image()
+
+    def _layout_clear(self, layout):
+        if layout is not None:
+            while layout.count():
+                item = layout.takeAt(0)
+                if item is None:
+                    continue
+
+                widget = item.widget()
+                if widget is not None:
+                    widget.deleteLater()

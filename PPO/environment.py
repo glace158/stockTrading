@@ -12,7 +12,7 @@ from typing import (
     Tuple
 )
 
-from PPO.reward import BuySellReward, ExpReward, ExpReward2
+from PPO.reward import BuySellReward, ExpReward
 from common.fileManager import Config
 from common.image_tools import get_time_series_image,get_multiple_time_series_images
 from stock.stock_adaptor import DailyStockAdaptor
@@ -106,7 +106,7 @@ class StockEnvironment(Environment): # 주식 환경
         self.stock = DailyStockAdaptor(self.stock_config.stock_columns, self.stock_code_path)
 
         self.wallet = TrainStockWallet()
-        self.reward_cls = ExpReward2()
+        self.reward_cls = ExpReward()
 
         self.preprocessing = VectorL2Normalizer()
 
@@ -127,7 +127,6 @@ class StockEnvironment(Environment): # 주식 환경
         self.count = self._get_random_count() # 에피소드 크기 설정
 
         self.result = self.stock.load_datas(self.stock_code, count=self.count, extra_count=self.extra_count) # 주식 파일 로드
-        #print(result)
         
         data, extra_datas, done, info = self._get_observation_datas() # 주식 정보 가져오기
 
