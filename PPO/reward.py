@@ -185,7 +185,7 @@ class ExpReward(Reward):
     def get_reward(self, current_date, is_order, order_percent, price, next_price, current_total_amt, current_money, qty, order_qty):
         init_price_rate = self.get_init_price_rate(next_price) # 초기 대비 가격 증감률
         price_rate = self.get_price_rate(price, next_price) # 다음날 주식 증감률 계산
-        print(price_rate)
+
         next_day_total_amt = current_money + (next_price * qty) # 다음날 예측 총자산
 
         init_total_evlu_rate = self.get_total_evlu_rate(current_total_amt) # 초기 자산 대비 현재 총자산 증감률
@@ -195,6 +195,8 @@ class ExpReward(Reward):
         next_total_evlu_rate = self.get_total_evlu_rate(next_day_total_amt) # 다음날 총자산 증감률
         next_day_evlu_rate = self.get_next_day_evlu_rate(next_day_total_amt, current_total_amt) # 다음날 자산 증감률
         rate_reward = self.get_rate_reward(order_percent, order_qty, wait_see_rate, price_rate, next_day_evlu_rate) # 수익 증감 보상
+        
+        net_income_rate = self.get_net_income_rate(init_price_rate, next_total_evlu_rate) # 순이익 비률
 
         rate_reward_exp = self.get_exp_reward2(alpha = 5.0 , reward=rate_reward) # 수익 증감 보상
         next_day_evlu_rate_exp = self.get_exp_reward2(0.01, next_day_evlu_rate) # 다음날 자산 증감률
@@ -209,7 +211,7 @@ class ExpReward(Reward):
         sortino_data = self.sortino_ratio(current_date, init_total_evlu_rate) # 소르티노 지수
 
         if is_order: # 보상 계산
-            reward = 0.3 * rate_reward_exp + 0.7 * next_day_evlu_rate_exp; 
+            reward = 0.8 * rate_reward_exp + 0.2 * next_day_evlu_rate_exp; 
         else:
             reward = -1.0
 
@@ -223,6 +225,7 @@ class ExpReward(Reward):
                                             "daily_evlu_rate" : daily_evlu_rate,
                                             "rate_reward" : rate_reward,
                                             "rate_reward_exp" : rate_reward_exp,
+                                            "net_income_rate" : net_income_rate,
                                             "next_total_evlu_rate" : next_total_evlu_rate,
                                             "next_day_evlu_rate" : next_day_evlu_rate,
                                             "next_day_evlu_rate_exp": next_day_evlu_rate_exp,

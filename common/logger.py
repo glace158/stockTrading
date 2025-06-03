@@ -22,7 +22,7 @@ class Logger:
         self.file_dict[key].write_flush(data)
 
     def print_wirte_file(self, key, data:str):
-        print(data)
+        #print(data)
         self.file_dict[key].write_append(data)
 
     def close_all(self):
@@ -132,7 +132,7 @@ class DataRecorder:
         if print_to_stdout:
             print(message.strip()) # 메시지에 이미 개행 문자가 있을 수 있으므로 strip() 사용
         # 메시지가 필요에 따라 개행 문자를 포함한다고 가정
-        self._console_logger.write_file("console", message)  
+        self._console_logger.print_wirte_file("console", message)  
 
     def log_to_action_file(self, data_list: list):
         """행동 로그 파일에 데이터를 기록합니다."""

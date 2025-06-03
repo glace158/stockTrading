@@ -291,7 +291,6 @@ class RichDogTrain(RichDog):
                 )
 
             for t in range(1, self.max_ep_len+1):
-
                 # select action with policy
                 action, action_logprob, state_val = ppo_agent.select_action(state)
                 
@@ -308,7 +307,6 @@ class RichDogTrain(RichDog):
                 # update PPO agent
                 if time_step % self.update_timestep == 0:
                     loss,policy_loss,value_loss,dist_entropy = ppo_agent.update()
-                    
                     # 서서히 액션 분포의 표준편차 감소
                     if self.action_std_method == "schedule":
                         ppo_agent.schedule_action_std(self.min_action_std, self.action_std, time_step, self.max_training_timesteps)

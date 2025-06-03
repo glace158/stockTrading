@@ -2,6 +2,7 @@ from PySide6.QtWidgets import *
 from PySide6.QtCore import *
 from PySide6.QtGui import *
 
+from plot_graph import save_graph
 from qt.ui_main import Ui_MainWindow
 import csv
 import matplotlib.pyplot as plt
@@ -112,6 +113,8 @@ class GraphPage(QWidget):
                 if "action" in csv_file_path:
                     self.make_action_graph()
                     self.load_graph_image()
+                elif "log" in csv_file_path:
+                    self.make_log_graph(csv_file_path)
     
     # csv 삭제
     def remove_csv(self):
@@ -154,6 +157,15 @@ class GraphPage(QWidget):
 
             self.widgets.imageSizeUpPushButton.setEnabled(False)
             self.widgets.imageSizeDownPushButton.setEnabled(False)
+
+    def make_log_graph(self, log_path):
+        fig_directory = "PPO_figs" + '/' + "Richdog" + '/'
+
+        for file in os.scandir(fig_directory): # 기존에 있던 이미지 지우기
+            print("Remove File: ",file)
+            os.remove(file)
+
+        save_graph(log_path)
 
     def make_action_graph(self):
         rootItem = self.current_tree_widget.invisibleRootItem()

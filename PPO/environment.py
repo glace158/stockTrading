@@ -218,10 +218,10 @@ class StockEnvironment(Environment): # 주식 환경
 
         if not extra_datas.empty:
             time_series_images = self._get_visualization_data(self.visualization_columns, extra_datas) # 시계열 데이터 생성
-            datas = self.preprocessing.get_preprocessing(datas) # 전처리 
+            datas = self.preprocessing.get_preprocessing(datas) # 데이터 전처리 
             datas = dict({"img": time_series_images, "num": datas}) # 데이터 합치기
         else:
-            datas = self.preprocessing.get_preprocessing(datas)
+            datas = self.preprocessing.get_preprocessing(datas) # 데이터 전처리
             datas = datas.astype(np.float32)
 
 
@@ -245,5 +245,3 @@ if __name__ == '__main__':
 
     for i, val in enumerate(stock_env.step(0)[0]):
         print(f"[{i:2}] {val:,.4f}")
-    
-    print(stock_env.get_data_label())

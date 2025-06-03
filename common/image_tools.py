@@ -24,6 +24,7 @@ def get_multiple_time_series_images(image_format: str, target_column_list : List
     """
     time_series_image_list = []
     for target_column in target_column_list:
+        
         time_series_image = get_time_series_image(image_format, target_column, df)
         time_series_image = add_batch_channel_dim(time_series_image) # 
         time_series_image_list.append(time_series_image)

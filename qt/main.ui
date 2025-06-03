@@ -1221,7 +1221,7 @@ Button */
                       <string notr="true">background: transparent;</string>
                      </property>
                      <property name="currentIndex">
-                      <number>4</number>
+                      <number>2</number>
                      </property>
                      <widget class="QWidget" name="home">
                       <property name="styleSheet">
@@ -3234,6 +3234,12 @@ border: 2px solid rgb(52, 59, 72);</string>
                              </item>
                              <item>
                               <widget class="QListWidget" name="dataListWidget">
+                               <property name="sizePolicy">
+                                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                                 <horstretch>0</horstretch>
+                                 <verstretch>0</verstretch>
+                                </sizepolicy>
+                               </property>
                                <property name="minimumSize">
                                 <size>
                                  <width>0</width>
@@ -3266,6 +3272,12 @@ border: 2px solid rgb(52, 59, 72);</string>
                              </item>
                              <item>
                               <widget class="QListWidget" name="dataListWidget_2">
+                               <property name="sizePolicy">
+                                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                                 <horstretch>0</horstretch>
+                                 <verstretch>0</verstretch>
+                                </sizepolicy>
+                               </property>
                                <property name="minimumSize">
                                 <size>
                                  <width>0</width>
@@ -3337,81 +3349,220 @@ border: 2px solid rgb(52, 59, 72);</string>
                      <widget class="QWidget" name="download_page">
                       <layout class="QVBoxLayout" name="verticalLayout_12">
                        <item>
-                        <widget class="QFrame" name="stocklistFrame">
+                        <widget class="QFrame" name="frame_21">
                          <property name="frameShape">
                           <enum>QFrame::Shape::StyledPanel</enum>
                          </property>
                          <property name="frameShadow">
                           <enum>QFrame::Shadow::Raised</enum>
                          </property>
-                         <layout class="QVBoxLayout" name="verticalLayout_39">
+                         <layout class="QHBoxLayout" name="horizontalLayout_32">
+                          <property name="spacing">
+                           <number>0</number>
+                          </property>
+                          <property name="leftMargin">
+                           <number>0</number>
+                          </property>
+                          <property name="topMargin">
+                           <number>0</number>
+                          </property>
+                          <property name="rightMargin">
+                           <number>0</number>
+                          </property>
+                          <property name="bottomMargin">
+                           <number>0</number>
+                          </property>
                           <item>
-                           <widget class="QLabel" name="label_18">
-                            <property name="text">
-                             <string>Stock Code List</string>
-                            </property>
-                           </widget>
-                          </item>
-                          <item>
-                           <widget class="QListWidget" name="stockCodeListWidget">
-                            <property name="styleSheet">
-                             <string notr="true">background-color: rgb(33, 37, 43);</string>
-                            </property>
-                           </widget>
-                          </item>
-                          <item>
-                           <widget class="QFrame" name="frame_15">
+                           <widget class="QFrame" name="stocklistFrame">
                             <property name="frameShape">
                              <enum>QFrame::Shape::StyledPanel</enum>
                             </property>
                             <property name="frameShadow">
                              <enum>QFrame::Shadow::Raised</enum>
                             </property>
-                            <layout class="QHBoxLayout" name="horizontalLayout_26">
+                            <layout class="QVBoxLayout" name="verticalLayout_43">
                              <item>
-                              <widget class="QLabel" name="label_14">
+                              <widget class="QLabel" name="label_18">
                                <property name="text">
-                                <string>Stock Code</string>
+                                <string>Train Stock Code List</string>
                                </property>
                               </widget>
                              </item>
                              <item>
-                              <widget class="QLineEdit" name="lineEdit_2">
+                              <widget class="QListWidget" name="stockCodeListWidget_3">
                                <property name="styleSheet">
                                 <string notr="true">background-color: rgb(33, 37, 43);</string>
                                </property>
                               </widget>
                              </item>
                              <item>
-                              <widget class="QPushButton" name="addStockCodePushButton">
-                               <property name="minimumSize">
-                                <size>
-                                 <width>100</width>
-                                 <height>0</height>
-                                </size>
-                               </property>
-                               <property name="styleSheet">
-                                <string notr="true">background-color: rgb(52, 59, 72);</string>
-                               </property>
+                              <widget class="QLabel" name="label_22">
                                <property name="text">
-                                <string>Add</string>
+                                <string>Downloded Train Stock Code List</string>
                                </property>
                               </widget>
                              </item>
                              <item>
-                              <widget class="QPushButton" name="removeStockCodePushButton">
-                               <property name="minimumSize">
-                                <size>
-                                 <width>100</width>
-                                 <height>0</height>
-                                </size>
-                               </property>
+                              <widget class="QListWidget" name="stockCodeListWidget">
                                <property name="styleSheet">
-                                <string notr="true">background-color: rgb(52, 59, 72);</string>
+                                <string notr="true">background-color: rgb(33, 37, 43);</string>
                                </property>
+                              </widget>
+                             </item>
+                             <item>
+                              <widget class="QFrame" name="frame_15">
+                               <property name="frameShape">
+                                <enum>QFrame::Shape::StyledPanel</enum>
+                               </property>
+                               <property name="frameShadow">
+                                <enum>QFrame::Shadow::Raised</enum>
+                               </property>
+                               <layout class="QHBoxLayout" name="horizontalLayout_26">
+                                <item>
+                                 <widget class="QLabel" name="label_14">
+                                  <property name="text">
+                                   <string>Stock Code</string>
+                                  </property>
+                                 </widget>
+                                </item>
+                                <item>
+                                 <widget class="QLineEdit" name="lineEdit_2">
+                                  <property name="styleSheet">
+                                   <string notr="true">background-color: rgb(33, 37, 43);</string>
+                                  </property>
+                                 </widget>
+                                </item>
+                                <item>
+                                 <widget class="QPushButton" name="addStockCodePushButton">
+                                  <property name="minimumSize">
+                                   <size>
+                                    <width>100</width>
+                                    <height>0</height>
+                                   </size>
+                                  </property>
+                                  <property name="styleSheet">
+                                   <string notr="true">background-color: rgb(52, 59, 72);</string>
+                                  </property>
+                                  <property name="text">
+                                   <string>Add</string>
+                                  </property>
+                                 </widget>
+                                </item>
+                                <item>
+                                 <widget class="QPushButton" name="removeStockCodePushButton">
+                                  <property name="minimumSize">
+                                   <size>
+                                    <width>100</width>
+                                    <height>0</height>
+                                   </size>
+                                  </property>
+                                  <property name="styleSheet">
+                                   <string notr="true">background-color: rgb(52, 59, 72);</string>
+                                  </property>
+                                  <property name="text">
+                                   <string>Remove</string>
+                                  </property>
+                                 </widget>
+                                </item>
+                               </layout>
+                              </widget>
+                             </item>
+                            </layout>
+                           </widget>
+                          </item>
+                          <item>
+                           <widget class="QFrame" name="stocklistFrame_2">
+                            <property name="frameShape">
+                             <enum>QFrame::Shape::StyledPanel</enum>
+                            </property>
+                            <property name="frameShadow">
+                             <enum>QFrame::Shadow::Raised</enum>
+                            </property>
+                            <layout class="QVBoxLayout" name="verticalLayout_39">
+                             <item>
+                              <widget class="QLabel" name="label_20">
                                <property name="text">
-                                <string>Remove</string>
+                                <string>Test Stock Code List</string>
                                </property>
+                              </widget>
+                             </item>
+                             <item>
+                              <widget class="QListWidget" name="stockCodeListWidget_4">
+                               <property name="styleSheet">
+                                <string notr="true">background-color: rgb(33, 37, 43);</string>
+                               </property>
+                              </widget>
+                             </item>
+                             <item>
+                              <widget class="QLabel" name="label_23">
+                               <property name="text">
+                                <string>Downloded Test Stock Code List</string>
+                               </property>
+                              </widget>
+                             </item>
+                             <item>
+                              <widget class="QListWidget" name="stockCodeListWidget_2">
+                               <property name="styleSheet">
+                                <string notr="true">background-color: rgb(33, 37, 43);</string>
+                               </property>
+                              </widget>
+                             </item>
+                             <item>
+                              <widget class="QFrame" name="frame_22">
+                               <property name="frameShape">
+                                <enum>QFrame::Shape::StyledPanel</enum>
+                               </property>
+                               <property name="frameShadow">
+                                <enum>QFrame::Shadow::Raised</enum>
+                               </property>
+                               <layout class="QHBoxLayout" name="horizontalLayout_29">
+                                <item>
+                                 <widget class="QLabel" name="label_21">
+                                  <property name="text">
+                                   <string>Stock Code</string>
+                                  </property>
+                                 </widget>
+                                </item>
+                                <item>
+                                 <widget class="QLineEdit" name="lineEdit_3">
+                                  <property name="styleSheet">
+                                   <string notr="true">background-color: rgb(33, 37, 43);</string>
+                                  </property>
+                                 </widget>
+                                </item>
+                                <item>
+                                 <widget class="QPushButton" name="addStockCodePushButton_2">
+                                  <property name="minimumSize">
+                                   <size>
+                                    <width>100</width>
+                                    <height>0</height>
+                                   </size>
+                                  </property>
+                                  <property name="styleSheet">
+                                   <string notr="true">background-color: rgb(52, 59, 72);</string>
+                                  </property>
+                                  <property name="text">
+                                   <string>Add</string>
+                                  </property>
+                                 </widget>
+                                </item>
+                                <item>
+                                 <widget class="QPushButton" name="removeStockCodePushButton_2">
+                                  <property name="minimumSize">
+                                   <size>
+                                    <width>100</width>
+                                    <height>0</height>
+                                   </size>
+                                  </property>
+                                  <property name="styleSheet">
+                                   <string notr="true">background-color: rgb(52, 59, 72);</string>
+                                  </property>
+                                  <property name="text">
+                                   <string>Remove</string>
+                                  </property>
+                                 </widget>
+                                </item>
+                               </layout>
                               </widget>
                              </item>
                             </layout>
@@ -3429,74 +3580,148 @@ border: 2px solid rgb(52, 59, 72);</string>
                           <enum>QFrame::Shadow::Raised</enum>
                          </property>
                          <layout class="QHBoxLayout" name="horizontalLayout_31">
+                          <property name="spacing">
+                           <number>0</number>
+                          </property>
+                          <property name="leftMargin">
+                           <number>0</number>
+                          </property>
+                          <property name="topMargin">
+                           <number>0</number>
+                          </property>
+                          <property name="rightMargin">
+                           <number>0</number>
+                          </property>
+                          <property name="bottomMargin">
+                           <number>0</number>
+                          </property>
                           <item>
-                           <widget class="QFrame" name="dateEditFrame">
+                           <widget class="QFrame" name="frame_24">
                             <property name="frameShape">
                              <enum>QFrame::Shape::StyledPanel</enum>
                             </property>
                             <property name="frameShadow">
                              <enum>QFrame::Shadow::Raised</enum>
                             </property>
-                            <layout class="QHBoxLayout" name="horizontalLayout_27">
+                            <layout class="QVBoxLayout" name="verticalLayout_45">
+                             <property name="spacing">
+                              <number>0</number>
+                             </property>
+                             <property name="leftMargin">
+                              <number>0</number>
+                             </property>
+                             <property name="topMargin">
+                              <number>0</number>
+                             </property>
+                             <property name="rightMargin">
+                              <number>0</number>
+                             </property>
+                             <property name="bottomMargin">
+                              <number>0</number>
+                             </property>
                              <item>
-                              <widget class="QLabel" name="label_16">
-                               <property name="text">
-                                <string>Last Date</string>
+                              <widget class="QFrame" name="dateEditFrame">
+                               <property name="frameShape">
+                                <enum>QFrame::Shape::StyledPanel</enum>
                                </property>
-                               <property name="alignment">
-                                <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+                               <property name="frameShadow">
+                                <enum>QFrame::Shadow::Raised</enum>
                                </property>
+                               <layout class="QHBoxLayout" name="horizontalLayout_27">
+                                <item>
+                                 <widget class="QLabel" name="label_16">
+                                  <property name="text">
+                                   <string>Last Date</string>
+                                  </property>
+                                  <property name="alignment">
+                                   <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+                                  </property>
+                                 </widget>
+                                </item>
+                                <item>
+                                 <widget class="QDateEdit" name="LastDateEdit">
+                                  <property name="styleSheet">
+                                   <string notr="true">background-color: rgb(33, 37, 43);</string>
+                                  </property>
+                                  <property name="dateTime">
+                                   <datetime>
+                                    <hour>15</hour>
+                                    <minute>0</minute>
+                                    <second>0</second>
+                                    <year>2025</year>
+                                    <month>1</month>
+                                    <day>27</day>
+                                   </datetime>
+                                  </property>
+                                 </widget>
+                                </item>
+                               </layout>
                               </widget>
                              </item>
                              <item>
-                              <widget class="QDateEdit" name="LastDateEdit">
-                               <property name="styleSheet">
-                                <string notr="true">background-color: rgb(33, 37, 43);</string>
+                              <widget class="QFrame" name="countFrame">
+                               <property name="frameShape">
+                                <enum>QFrame::Shape::StyledPanel</enum>
                                </property>
-                               <property name="dateTime">
-                                <datetime>
-                                 <hour>9</hour>
-                                 <minute>0</minute>
-                                 <second>0</second>
-                                 <year>2025</year>
-                                 <month>1</month>
-                                 <day>28</day>
-                                </datetime>
+                               <property name="frameShadow">
+                                <enum>QFrame::Shadow::Raised</enum>
                                </property>
+                               <layout class="QHBoxLayout" name="horizontalLayout_28">
+                                <item>
+                                 <widget class="QLabel" name="label_15">
+                                  <property name="text">
+                                   <string>count</string>
+                                  </property>
+                                  <property name="alignment">
+                                   <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+                                  </property>
+                                 </widget>
+                                </item>
+                                <item>
+                                 <widget class="QSpinBox" name="countSpinBox">
+                                  <property name="styleSheet">
+                                   <string notr="true">background-color: rgb(33, 37, 43);</string>
+                                  </property>
+                                  <property name="maximum">
+                                   <number>9999</number>
+                                  </property>
+                                  <property name="value">
+                                   <number>1500</number>
+                                  </property>
+                                 </widget>
+                                </item>
+                               </layout>
                               </widget>
                              </item>
                             </layout>
                            </widget>
                           </item>
                           <item>
-                           <widget class="QFrame" name="countFrame">
+                           <widget class="QFrame" name="frame_23">
                             <property name="frameShape">
                              <enum>QFrame::Shape::StyledPanel</enum>
                             </property>
                             <property name="frameShadow">
                              <enum>QFrame::Shadow::Raised</enum>
                             </property>
-                            <layout class="QHBoxLayout" name="horizontalLayout_28">
+                            <layout class="QVBoxLayout" name="verticalLayout_44">
                              <item>
-                              <widget class="QLabel" name="label_15">
+                              <widget class="QLabel" name="label_24">
                                <property name="text">
-                                <string>count</string>
-                               </property>
-                               <property name="alignment">
-                                <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+                                <string>Extra Info</string>
                                </property>
                               </widget>
                              </item>
                              <item>
-                              <widget class="QSpinBox" name="countSpinBox">
+                              <widget class="QListWidget" name="stockCodeListWidget_5">
+                               <property name="sizePolicy">
+                                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                                 <horstretch>0</horstretch>
+                                 <verstretch>0</verstretch>
+                                </sizepolicy>
+                               </property>
                                <property name="styleSheet">
                                 <string notr="true">background-color: rgb(33, 37, 43);</string>
-                               </property>
-                               <property name="maximum">
-                                <number>9999</number>
-                               </property>
-                               <property name="value">
-                                <number>1500</number>
                                </property>
                               </widget>
                              </item>
@@ -3536,6 +3761,12 @@ border: 2px solid rgb(52, 59, 72);</string>
                           </item>
                           <item>
                            <widget class="QPushButton" name="DownloadPushButton">
+                            <property name="sizePolicy">
+                             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                              <horstretch>0</horstretch>
+                              <verstretch>0</verstretch>
+                             </sizepolicy>
+                            </property>
                             <property name="styleSheet">
                              <string notr="true">background-color: rgb(52, 59, 72);</string>
                             </property>
@@ -4434,7 +4665,7 @@ QScrollArea{
                                   <x>0</x>
                                   <y>0</y>
                                   <width>222</width>
-                                  <height>46</height>
+                                  <height>40</height>
                                  </rect>
                                 </property>
                                 <property name="sizePolicy">
@@ -4854,8 +5085,8 @@ QScrollArea{
                                 <rect>
                                  <x>0</x>
                                  <y>0</y>
-                                 <width>320</width>
-                                 <height>224</height>
+                                 <width>323</width>
+                                 <height>218</height>
                                 </rect>
                                </property>
                                <property name="styleSheet">

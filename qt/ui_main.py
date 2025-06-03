@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'mainiiBToj.ui'
+## Form generated from reading UI file 'mainDHzePg.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.8.2
 ##
@@ -1545,6 +1545,8 @@ class Ui_MainWindow(object):
 
         self.dataListWidget = QListWidget(self.frame_19)
         self.dataListWidget.setObjectName(u"dataListWidget")
+        sizePolicy3.setHeightForWidth(self.dataListWidget.sizePolicy().hasHeightForWidth())
+        self.dataListWidget.setSizePolicy(sizePolicy3)
         self.dataListWidget.setMinimumSize(QSize(0, 250))
         self.dataListWidget.setStyleSheet(u"background-color: rgb(33, 37, 43);")
 
@@ -1566,6 +1568,8 @@ class Ui_MainWindow(object):
 
         self.dataListWidget_2 = QListWidget(self.frame_20)
         self.dataListWidget_2.setObjectName(u"dataListWidget_2")
+        sizePolicy3.setHeightForWidth(self.dataListWidget_2.sizePolicy().hasHeightForWidth())
+        self.dataListWidget_2.setSizePolicy(sizePolicy3)
         self.dataListWidget_2.setMinimumSize(QSize(0, 250))
         self.dataListWidget_2.setStyleSheet(u"background-color: rgb(33, 37, 43);")
 
@@ -1605,22 +1609,41 @@ class Ui_MainWindow(object):
         self.download_page.setObjectName(u"download_page")
         self.verticalLayout_12 = QVBoxLayout(self.download_page)
         self.verticalLayout_12.setObjectName(u"verticalLayout_12")
-        self.stocklistFrame = QFrame(self.download_page)
+        self.frame_21 = QFrame(self.download_page)
+        self.frame_21.setObjectName(u"frame_21")
+        self.frame_21.setFrameShape(QFrame.Shape.StyledPanel)
+        self.frame_21.setFrameShadow(QFrame.Shadow.Raised)
+        self.horizontalLayout_32 = QHBoxLayout(self.frame_21)
+        self.horizontalLayout_32.setSpacing(0)
+        self.horizontalLayout_32.setObjectName(u"horizontalLayout_32")
+        self.horizontalLayout_32.setContentsMargins(0, 0, 0, 0)
+        self.stocklistFrame = QFrame(self.frame_21)
         self.stocklistFrame.setObjectName(u"stocklistFrame")
         self.stocklistFrame.setFrameShape(QFrame.Shape.StyledPanel)
         self.stocklistFrame.setFrameShadow(QFrame.Shadow.Raised)
-        self.verticalLayout_39 = QVBoxLayout(self.stocklistFrame)
-        self.verticalLayout_39.setObjectName(u"verticalLayout_39")
+        self.verticalLayout_43 = QVBoxLayout(self.stocklistFrame)
+        self.verticalLayout_43.setObjectName(u"verticalLayout_43")
         self.label_18 = QLabel(self.stocklistFrame)
         self.label_18.setObjectName(u"label_18")
 
-        self.verticalLayout_39.addWidget(self.label_18)
+        self.verticalLayout_43.addWidget(self.label_18)
+
+        self.stockCodeListWidget_3 = QListWidget(self.stocklistFrame)
+        self.stockCodeListWidget_3.setObjectName(u"stockCodeListWidget_3")
+        self.stockCodeListWidget_3.setStyleSheet(u"background-color: rgb(33, 37, 43);")
+
+        self.verticalLayout_43.addWidget(self.stockCodeListWidget_3)
+
+        self.label_22 = QLabel(self.stocklistFrame)
+        self.label_22.setObjectName(u"label_22")
+
+        self.verticalLayout_43.addWidget(self.label_22)
 
         self.stockCodeListWidget = QListWidget(self.stocklistFrame)
         self.stockCodeListWidget.setObjectName(u"stockCodeListWidget")
         self.stockCodeListWidget.setStyleSheet(u"background-color: rgb(33, 37, 43);")
 
-        self.verticalLayout_39.addWidget(self.stockCodeListWidget)
+        self.verticalLayout_43.addWidget(self.stockCodeListWidget)
 
         self.frame_15 = QFrame(self.stocklistFrame)
         self.frame_15.setObjectName(u"frame_15")
@@ -1654,18 +1677,96 @@ class Ui_MainWindow(object):
         self.horizontalLayout_26.addWidget(self.removeStockCodePushButton)
 
 
-        self.verticalLayout_39.addWidget(self.frame_15)
+        self.verticalLayout_43.addWidget(self.frame_15)
 
 
-        self.verticalLayout_12.addWidget(self.stocklistFrame)
+        self.horizontalLayout_32.addWidget(self.stocklistFrame)
+
+        self.stocklistFrame_2 = QFrame(self.frame_21)
+        self.stocklistFrame_2.setObjectName(u"stocklistFrame_2")
+        self.stocklistFrame_2.setFrameShape(QFrame.Shape.StyledPanel)
+        self.stocklistFrame_2.setFrameShadow(QFrame.Shadow.Raised)
+        self.verticalLayout_39 = QVBoxLayout(self.stocklistFrame_2)
+        self.verticalLayout_39.setObjectName(u"verticalLayout_39")
+        self.label_20 = QLabel(self.stocklistFrame_2)
+        self.label_20.setObjectName(u"label_20")
+
+        self.verticalLayout_39.addWidget(self.label_20)
+
+        self.stockCodeListWidget_4 = QListWidget(self.stocklistFrame_2)
+        self.stockCodeListWidget_4.setObjectName(u"stockCodeListWidget_4")
+        self.stockCodeListWidget_4.setStyleSheet(u"background-color: rgb(33, 37, 43);")
+
+        self.verticalLayout_39.addWidget(self.stockCodeListWidget_4)
+
+        self.label_23 = QLabel(self.stocklistFrame_2)
+        self.label_23.setObjectName(u"label_23")
+
+        self.verticalLayout_39.addWidget(self.label_23)
+
+        self.stockCodeListWidget_2 = QListWidget(self.stocklistFrame_2)
+        self.stockCodeListWidget_2.setObjectName(u"stockCodeListWidget_2")
+        self.stockCodeListWidget_2.setStyleSheet(u"background-color: rgb(33, 37, 43);")
+
+        self.verticalLayout_39.addWidget(self.stockCodeListWidget_2)
+
+        self.frame_22 = QFrame(self.stocklistFrame_2)
+        self.frame_22.setObjectName(u"frame_22")
+        self.frame_22.setFrameShape(QFrame.Shape.StyledPanel)
+        self.frame_22.setFrameShadow(QFrame.Shadow.Raised)
+        self.horizontalLayout_29 = QHBoxLayout(self.frame_22)
+        self.horizontalLayout_29.setObjectName(u"horizontalLayout_29")
+        self.label_21 = QLabel(self.frame_22)
+        self.label_21.setObjectName(u"label_21")
+
+        self.horizontalLayout_29.addWidget(self.label_21)
+
+        self.lineEdit_3 = QLineEdit(self.frame_22)
+        self.lineEdit_3.setObjectName(u"lineEdit_3")
+        self.lineEdit_3.setStyleSheet(u"background-color: rgb(33, 37, 43);")
+
+        self.horizontalLayout_29.addWidget(self.lineEdit_3)
+
+        self.addStockCodePushButton_2 = QPushButton(self.frame_22)
+        self.addStockCodePushButton_2.setObjectName(u"addStockCodePushButton_2")
+        self.addStockCodePushButton_2.setMinimumSize(QSize(100, 0))
+        self.addStockCodePushButton_2.setStyleSheet(u"background-color: rgb(52, 59, 72);")
+
+        self.horizontalLayout_29.addWidget(self.addStockCodePushButton_2)
+
+        self.removeStockCodePushButton_2 = QPushButton(self.frame_22)
+        self.removeStockCodePushButton_2.setObjectName(u"removeStockCodePushButton_2")
+        self.removeStockCodePushButton_2.setMinimumSize(QSize(100, 0))
+        self.removeStockCodePushButton_2.setStyleSheet(u"background-color: rgb(52, 59, 72);")
+
+        self.horizontalLayout_29.addWidget(self.removeStockCodePushButton_2)
+
+
+        self.verticalLayout_39.addWidget(self.frame_22)
+
+
+        self.horizontalLayout_32.addWidget(self.stocklistFrame_2)
+
+
+        self.verticalLayout_12.addWidget(self.frame_21)
 
         self.frame_17 = QFrame(self.download_page)
         self.frame_17.setObjectName(u"frame_17")
         self.frame_17.setFrameShape(QFrame.Shape.StyledPanel)
         self.frame_17.setFrameShadow(QFrame.Shadow.Raised)
         self.horizontalLayout_31 = QHBoxLayout(self.frame_17)
+        self.horizontalLayout_31.setSpacing(0)
         self.horizontalLayout_31.setObjectName(u"horizontalLayout_31")
-        self.dateEditFrame = QFrame(self.frame_17)
+        self.horizontalLayout_31.setContentsMargins(0, 0, 0, 0)
+        self.frame_24 = QFrame(self.frame_17)
+        self.frame_24.setObjectName(u"frame_24")
+        self.frame_24.setFrameShape(QFrame.Shape.StyledPanel)
+        self.frame_24.setFrameShadow(QFrame.Shadow.Raised)
+        self.verticalLayout_45 = QVBoxLayout(self.frame_24)
+        self.verticalLayout_45.setSpacing(0)
+        self.verticalLayout_45.setObjectName(u"verticalLayout_45")
+        self.verticalLayout_45.setContentsMargins(0, 0, 0, 0)
+        self.dateEditFrame = QFrame(self.frame_24)
         self.dateEditFrame.setObjectName(u"dateEditFrame")
         self.dateEditFrame.setFrameShape(QFrame.Shape.StyledPanel)
         self.dateEditFrame.setFrameShadow(QFrame.Shadow.Raised)
@@ -1680,14 +1781,14 @@ class Ui_MainWindow(object):
         self.LastDateEdit = QDateEdit(self.dateEditFrame)
         self.LastDateEdit.setObjectName(u"LastDateEdit")
         self.LastDateEdit.setStyleSheet(u"background-color: rgb(33, 37, 43);")
-        self.LastDateEdit.setDateTime(QDateTime(QDate(2025, 1, 28), QTime(9, 0, 0)))
+        self.LastDateEdit.setDateTime(QDateTime(QDate(2025, 1, 27), QTime(15, 0, 0)))
 
         self.horizontalLayout_27.addWidget(self.LastDateEdit)
 
 
-        self.horizontalLayout_31.addWidget(self.dateEditFrame)
+        self.verticalLayout_45.addWidget(self.dateEditFrame)
 
-        self.countFrame = QFrame(self.frame_17)
+        self.countFrame = QFrame(self.frame_24)
         self.countFrame.setObjectName(u"countFrame")
         self.countFrame.setFrameShape(QFrame.Shape.StyledPanel)
         self.countFrame.setFrameShadow(QFrame.Shadow.Raised)
@@ -1708,7 +1809,32 @@ class Ui_MainWindow(object):
         self.horizontalLayout_28.addWidget(self.countSpinBox)
 
 
-        self.horizontalLayout_31.addWidget(self.countFrame)
+        self.verticalLayout_45.addWidget(self.countFrame)
+
+
+        self.horizontalLayout_31.addWidget(self.frame_24)
+
+        self.frame_23 = QFrame(self.frame_17)
+        self.frame_23.setObjectName(u"frame_23")
+        self.frame_23.setFrameShape(QFrame.Shape.StyledPanel)
+        self.frame_23.setFrameShadow(QFrame.Shadow.Raised)
+        self.verticalLayout_44 = QVBoxLayout(self.frame_23)
+        self.verticalLayout_44.setObjectName(u"verticalLayout_44")
+        self.label_24 = QLabel(self.frame_23)
+        self.label_24.setObjectName(u"label_24")
+
+        self.verticalLayout_44.addWidget(self.label_24)
+
+        self.stockCodeListWidget_5 = QListWidget(self.frame_23)
+        self.stockCodeListWidget_5.setObjectName(u"stockCodeListWidget_5")
+        sizePolicy3.setHeightForWidth(self.stockCodeListWidget_5.sizePolicy().hasHeightForWidth())
+        self.stockCodeListWidget_5.setSizePolicy(sizePolicy3)
+        self.stockCodeListWidget_5.setStyleSheet(u"background-color: rgb(33, 37, 43);")
+
+        self.verticalLayout_44.addWidget(self.stockCodeListWidget_5)
+
+
+        self.horizontalLayout_31.addWidget(self.frame_23)
 
         self.frame_14 = QFrame(self.frame_17)
         self.frame_14.setObjectName(u"frame_14")
@@ -1730,6 +1856,8 @@ class Ui_MainWindow(object):
 
         self.DownloadPushButton = QPushButton(self.frame_17)
         self.DownloadPushButton.setObjectName(u"DownloadPushButton")
+        sizePolicy5.setHeightForWidth(self.DownloadPushButton.sizePolicy().hasHeightForWidth())
+        self.DownloadPushButton.setSizePolicy(sizePolicy5)
         self.DownloadPushButton.setStyleSheet(u"background-color: rgb(52, 59, 72);")
 
         self.horizontalLayout_31.addWidget(self.DownloadPushButton)
@@ -2213,7 +2341,7 @@ class Ui_MainWindow(object):
         self.scrollArea_2.setWidgetResizable(True)
         self.scrollAreaWidgetContents_2 = QWidget()
         self.scrollAreaWidgetContents_2.setObjectName(u"scrollAreaWidgetContents_2")
-        self.scrollAreaWidgetContents_2.setGeometry(QRect(0, 0, 222, 46))
+        self.scrollAreaWidgetContents_2.setGeometry(QRect(0, 0, 222, 40))
         sizePolicy5.setHeightForWidth(self.scrollAreaWidgetContents_2.sizePolicy().hasHeightForWidth())
         self.scrollAreaWidgetContents_2.setSizePolicy(sizePolicy5)
         self.scrollAreaWidgetContents_2.setStyleSheet(u" QScrollBar:vertical {\n"
@@ -2414,7 +2542,7 @@ class Ui_MainWindow(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 320, 224))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 323, 218))
         self.scrollAreaWidgetContents.setStyleSheet(u" QScrollBar:vertical {\n"
 "	border: none;\n"
 "    background: rgb(52, 59, 72);\n"
@@ -2662,7 +2790,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.stackedWidget.setCurrentIndex(4)
+        self.stackedWidget.setCurrentIndex(2)
 
 
         QMetaObject.connectSlotsByName(MainWindow)
@@ -2809,12 +2937,19 @@ class Ui_MainWindow(object):
         self.label_17.setText(QCoreApplication.translate("MainWindow", u"Stock Columns", None))
         self.label_19.setText(QCoreApplication.translate("MainWindow", u"Visualization Columns", None))
         self.SavePerarametersButton.setText(QCoreApplication.translate("MainWindow", u"Save Hyperparameters", None))
-        self.label_18.setText(QCoreApplication.translate("MainWindow", u"Stock Code List", None))
+        self.label_18.setText(QCoreApplication.translate("MainWindow", u"Train Stock Code List", None))
+        self.label_22.setText(QCoreApplication.translate("MainWindow", u"Downloded Train Stock Code List", None))
         self.label_14.setText(QCoreApplication.translate("MainWindow", u"Stock Code", None))
         self.addStockCodePushButton.setText(QCoreApplication.translate("MainWindow", u"Add", None))
         self.removeStockCodePushButton.setText(QCoreApplication.translate("MainWindow", u"Remove", None))
+        self.label_20.setText(QCoreApplication.translate("MainWindow", u"Test Stock Code List", None))
+        self.label_23.setText(QCoreApplication.translate("MainWindow", u"Downloded Test Stock Code List", None))
+        self.label_21.setText(QCoreApplication.translate("MainWindow", u"Stock Code", None))
+        self.addStockCodePushButton_2.setText(QCoreApplication.translate("MainWindow", u"Add", None))
+        self.removeStockCodePushButton_2.setText(QCoreApplication.translate("MainWindow", u"Remove", None))
         self.label_16.setText(QCoreApplication.translate("MainWindow", u"Last Date", None))
         self.label_15.setText(QCoreApplication.translate("MainWindow", u"count", None))
+        self.label_24.setText(QCoreApplication.translate("MainWindow", u"Extra Info", None))
         self.isDataFileRemoveCheckBox.setText(QCoreApplication.translate("MainWindow", u"Is data File Remove", None))
         self.DownloadPushButton.setText(QCoreApplication.translate("MainWindow", u"Download", None))
         self.labelBoxBlenderInstalation_4.setText(QCoreApplication.translate("MainWindow", u"kis_devlp file", None))

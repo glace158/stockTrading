@@ -4,11 +4,11 @@ import matplotlib.pyplot as plt
 from common.fileManager import Config, File
 
 
-def save_graph():
+def save_graph(log_path, env_name = 'Richdog', fig_num = 0):
     print("============================================================================================")
-    env_name = 'Richdog'
+    
 
-    fig_num = 0     #### change this to prevent overwriting figures in same env_name folder
+    #fig_num = 0     #### change this to prevent overwriting figures in same env_name folder
     plot_avg = True    # plot average of all runs; else plot all runs separately
     fig_width = 10
     fig_height = 6
@@ -30,17 +30,18 @@ def save_graph():
 
     # get number of log files in directory
     #log_directory = "C:/Users/11/Desktop/save/20250422-131323/" 
-    log_directory = "PPO_logs/Richdog/20250501-010212/" 
+    #log_directory = "PPO_logs/Richdog/20250501-010212/" 
     #log_directory = path + "PPO_logs" + '/' + env_name + '/'
     #log_file_list = next(os.walk(log_directory))[2]
-    log_path = log_directory + "PPO_Richdog_log_20250501-010212" + ".csv"
+    #log_path = log_directory + "PPO_Richdog_log_20250501-010212" + ".csv"
 
     #fig_num = log_file_list[-1].split('_')[-1]
 
     fig_directory = path + "PPO_figs" + '/' + env_name + '/'
 
-    fig_save_path =  '/PPO_' + env_name + '_fig_' + str(0) + '.png'
-    fig_file = File(fig_directory ,fig_save_path)
+    fig_save_path =  '/PPO_' + env_name + '_fig_' + str(fig_num) + '.png'
+
+    fig_file = File(fig_directory , fig_save_path)
 
     all_runs = []
     print("loading data from : " + log_path)

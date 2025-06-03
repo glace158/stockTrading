@@ -52,8 +52,11 @@ class Stock:
 
                 extra_data = fetch_function(**kwargs, inqr_strt_dt=temp_end_dt).loc[::-1]
                 
+                if extra_data.empty:
+                    print("data empty")
+                    break
+
                 rt_data = pd.concat([extra_data, rt_data], ignore_index=True)
-                
                 inqr_end_dt = rt_data.iat[0, 0]
             except AttributeError:
                 print("wait..")
@@ -129,32 +132,35 @@ class Stock:
             inqr_end_dt=inqr_end_dt
         )[["stck_bsop_date", "ovrs_nmix_prpr", "ovrs_nmix_hgpr", "ovrs_nmix_lwpr"]]# 필요한 정보 필터링, "acml_vol"
 
-    def get_moving_average_line(self, stock_data : pd.DataFrame = None, count=0, moving_days = [5,20,60]):
+    def get_moving_average_line(self, stock_data : pd.DataFrame = None, moving_days = [5,20,60]):
         '''
         이동 평균선 데이터 구하기
         '''
         rt_data = stock_data[["stck_clpr"]]
 
         moving_average_data = pd.DataFrame(columns=moving_days) # 이동평균선 저장할 데이터프레임 생성
-        
-        strt_index = stock_data.shape[0] - count # 시작 인덱스
 
-        for i in range(count): # 이동평균선 구하기 작업
-            index = strt_index + i # 현재 인덱스
-            
+        for i in reversed(range(rt_data.shape[0])): # 이동평균선 구하기 작업
             temp_list = []
             for days in moving_days: # 각 일별로 평균구하기 5일, 20일 60일
-                datas = rt_data.loc[index - days + 1 : index].astype(float) # 일별로 데이터 슬라이싱
+                datas = rt_data.loc[i - days + 1: i].astype(float) # 일별로 데이터 슬라이싱
+                
+                if datas.shape[0] != days:
+                    temp_list.append(None)    
+                    continue
+
                 temp_list.append(datas.mean()[0]) # 평균 구하기
             
             moving_average_data.loc[i] = temp_list # 데이터 넣기
         
+        moving_average_data = moving_average_data.sort_index() # 인덱스 정렬
+
         # 데이터프레임 앞에 날짜 넣어주기
-        moving_average_data.insert(loc=0, column='stck_bsop_date', value=stock_data["stck_bsop_date"].values[stock_data.shape[0] - count:])
+        moving_average_data.insert(loc=0, column='stck_bsop_date', value=stock_data["stck_bsop_date"].values)
 
         return moving_average_data
         
-    def get_rsi(self, stock_data : pd.DataFrame = None, count=0, days=14):
+    def get_rsi(self, stock_data : pd.DataFrame = None, days=14):
         '''
         RSI 구하기
         '''
@@ -162,22 +168,25 @@ class Stock:
 
         rsi_data = pd.DataFrame(columns=["rsi"]) # RSI 저장할 데이터프레임 생성
 
-        strt_index = stock_data.shape[0] - count # 시작 인덱스
+        #strt_index = stock_data.shape[0] - count # 시작 인덱스
 
-        for i in range(count): # RSI 구하기 작업
-            index = strt_index + i # 현재 인덱스
-            
+        for i in reversed(range(rt_data.shape[0])): # RSI 구하기 작업
+            if days > i:
+                rsi_data.loc[i] = None        
+                continue
+
             u = []
             d = []
 
             for j in range(days):
-                today_clpr = rt_data.loc[index - j].astype(float)[0] # 당일 종가
-                pre_clpr = rt_data.loc[(index - 1) - j].astype(float)[0] # 전일 종가
+                
+                today_clpr = rt_data.loc[i - j].astype(float)[0] # 당일 종가
+                pre_clpr = rt_data.loc[(i - 1) - j].astype(float)[0] # 전일 종가
 
                 difference = today_clpr - pre_clpr # 당일과 전일의 차이 계산
                 u.append(difference if difference > 0 else 0) # 전일대비 상승했으면 
                 d.append(-difference if difference < 0 else 0) # 전일대비 하강했으면
-            
+
             # 평균구하기
             a_u = np.mean(u)
             a_d = np.mean(d)
@@ -190,39 +199,52 @@ class Stock:
             rsi = rs / (1 + rs) * 100 # RSI 구하기
             rsi_data.loc[i] = rsi # 구한 RSI 넣기
 
+        rsi_data = rsi_data.sort_index() # 인덱스 정렬
+
         # 데이터프레임 앞에 날짜 넣어주기
-        rsi_data.insert(loc=0, column='stck_bsop_date', value=stock_data["stck_bsop_date"].values[stock_data.shape[0] - count:])
+        rsi_data.insert(loc=0, column='stck_bsop_date', value=stock_data["stck_bsop_date"].values)
         
         return rsi_data
     
-    def get_bollinger_band(self, stock_data : pd.DataFrame = None, moving_average_line : pd.DataFrame = None ,count=0, days=20, k=2 ):
+    def get_bollinger_band(self, stock_data : pd.DataFrame = None, moving_average_line : pd.DataFrame = None, days=20, k=2 ):
         '''
         볼린저 밴드 구하기
         '''
-        
-        bb_middle = moving_average_line[[days]].astype(float)
+        if days in moving_average_line.columns:
+            bb_middle = moving_average_line[[days]].astype(float)
+        else:
+            moving_average_line = self.get_moving_average_line(stock_data=stock_data, moving_days=[days])
+            bb_middle = moving_average_line[[days]].astype(float)
+
         rt_data = stock_data[["stck_clpr"]]
         bb_data = pd.DataFrame(columns=["bb_upper", "bb_middle", "bb_lower"]) # bollinger_band 저장할 데이터프레임 생성
         
-        strt_index = stock_data.shape[0] - count # 시작 인덱스
 
-        for i in range(count):
-            index = strt_index + i # 현재 인덱스
+        for i in reversed(range(rt_data.shape[0])):
+            #index = strt_index + i # 현재 인덱스
                 
-            datas = rt_data.loc[index - days + 1 : index].astype(float) # 일별로 데이터 슬라이싱
+            datas = rt_data.loc[i - days + 1: i].astype(float) # 일별로 데이터 슬라이싱
+
+            if datas.shape[0] != days:
+                bb_data.loc[i] = [None, None, None]    
+                continue
+            
             std_data = np.std(datas)[0] # 표준편차 구하기
             
             middle = bb_middle.loc[i].values[0] # 중단 밴드
             bb_upper = middle + std_data * k # 상단 밴드
             bb_lower = middle - std_data * k # 하단 밴드
-
-            bb_data.loc[i] = [bb_upper, middle, bb_lower] # 밴드 추가
         
+            bb_data.loc[i] = [bb_upper, middle, bb_lower] # 밴드 추가
+
+        
+        bb_data = bb_data.sort_index() # 인덱스 정렬
+
         # 데이터프레임 앞에 날짜 넣어주기
-        bb_data.insert(loc=0, column='stck_bsop_date', value=stock_data["stck_bsop_date"].values[stock_data.shape[0] - count:])
+        bb_data.insert(loc=0, column='stck_bsop_date', value=stock_data["stck_bsop_date"].values)
         return bb_data
     
-    def get_all_datas(self, itm_no=None, inqr_strt_dt=None , count=30, is_remove_date=True):
+    def get_all_datas(self, itm_no=None, inqr_strt_dt=None , count=30, is_remove_date=True, info_list=[]):
         self.index = 0
         self.result = pd.DataFrame()
         self.moving_days = [5,20,60]
@@ -233,57 +255,63 @@ class Stock:
         # 주식정보
         stock_data = self.get_daily_stock_info(itm_no=itm_no, count=count+ max(self.moving_days), inqr_strt_dt=inqr_strt_dt)
         print(stock_data.loc[stock_data.shape[0] - count :].reset_index(drop=True))
-        sliced_stock_data = stock_data.loc[stock_data.shape[0] - count :].reset_index(drop=True)
 
-        #datas.append(sliced_stock_data)
+        if "moving_average_line" in info_list:
+            # 이동평균선
+            move_line_data = self.get_moving_average_line(stock_data=stock_data, moving_days=self.moving_days)
+            print(move_line_data)
+            datas.append(move_line_data)
 
-        # 이동평균선
-        move_line_data = self.get_moving_average_line(stock_data=stock_data, count=count, moving_days=self.moving_days)
-        print(move_line_data)
-        datas.append(move_line_data)
+        if "rst" in info_list:        
+            # RSI
+            rsi_data = self.get_rsi(stock_data=stock_data,days=self.rsi_days)
+            print(rsi_data)
+            datas.append(rsi_data)
         
-        # RSI
-        rsi_data = self.get_rsi(stock_data=stock_data, count=count,days=self.rsi_days)
-        print(rsi_data)
-        datas.append(rsi_data)
-        
-        # BollingerBand
-        bb_data = self.get_bollinger_band(stock_data=stock_data, moving_average_line=move_line_data, count=count, days=self.bb_days, k=2)
-        print(bb_data)
-        datas.append(bb_data)
-        
-        # 코스피
-        kospi_data = self.get_daily_index_price(itm_no="0001", count=count, inqr_strt_dt=inqr_strt_dt)
-        print(kospi_data)
-        datas.append(kospi_data)
-        
-        # 코스닥
-        kosdaq_data = self.get_daily_index_price(itm_no="1001", count=count, inqr_strt_dt=inqr_strt_dt)
-        print(kosdaq_data)
-        datas.append(kosdaq_data)
-        
-        # 나스닥
-        nasdaq_data = self.get_daily_chartprice(itm_no="COMP", count=count+60, inqr_strt_dt=inqr_strt_dt)
-        nasdaq_data = self._compare_datetime(sliced_stock_data,nasdaq_data)
-        print(nasdaq_data)
-        datas.append(nasdaq_data)
-        
-        # S&P500
-        spx_data = self.get_daily_chartprice(itm_no="SPX", count=count+60, inqr_strt_dt=inqr_strt_dt)
-        spx_data = self._compare_datetime(sliced_stock_data,spx_data)
-        #del spx_data["acml_vol"]
-        print(spx_data)
-        datas.append(spx_data)
+        if "bollinger_band" in info_list:
+            # BollingerBand
+            bb_data = self.get_bollinger_band(stock_data=stock_data, moving_average_line=move_line_data, days=self.bb_days, k=2)
+            print(bb_data)
+            datas.append(bb_data)
 
-        if is_remove_date:
-            del sliced_stock_data["stck_bsop_date"]
+        if "kospi" in info_list:
+            # 코스피
+            kospi_data = self.get_daily_index_price(itm_no="0001", count=stock_data.shape[0], inqr_strt_dt=inqr_strt_dt)
+            print(kospi_data)
+            datas.append(kospi_data)
+
+        if "kosdaq" in info_list:    
+            # 코스닥
+            kosdaq_data = self.get_daily_index_price(itm_no="1001", count=stock_data.shape[0], inqr_strt_dt=inqr_strt_dt)
+            print(kosdaq_data)
+            datas.append(kosdaq_data)
+        
+        if "nasdaq" in info_list:    
+            # 나스닥
+            nasdaq_data = self.get_daily_chartprice(itm_no="COMP", count=stock_data.shape[0]+60, inqr_strt_dt=inqr_strt_dt)
+            nasdaq_data = self._compare_datetime(stock_data, nasdaq_data)
+            print(nasdaq_data)
+            datas.append(nasdaq_data)
+        
+        if "spx" in info_list:  
+            # S&P500
+            spx_data = self.get_daily_chartprice(itm_no="SPX", count=stock_data.shape[0]+60, inqr_strt_dt=inqr_strt_dt)
+            spx_data = self._compare_datetime(stock_data, spx_data)
+            #del spx_data["acml_vol"]
+            print(spx_data)
+            datas.append(spx_data)
+
+        if is_remove_date: # 데이터에 날짜 제외
+            del stock_data["stck_bsop_date"]
             
-        self.result = sliced_stock_data
+        self.result = stock_data
 
         for data in datas:
             del data["stck_bsop_date"]
-            self.result = pd.concat([self.result, data], axis=1)
+            self.result = pd.concat([self.result, data], axis=1) 
 
+        self.result = self.result.dropna() # None 있는 행 삭제
+        self.result.reset_index(drop=True, inplace=True) # 인덱스 재정렬
         print("================================================")
         return self.result
 
@@ -299,6 +327,7 @@ class Stock:
                     break
         
         return rt_data
+                
 
 if __name__ == '__main__':
     s = Stock()
