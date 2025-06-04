@@ -26,6 +26,2097 @@ mini batch size :  128
 optimizer learning rate actor :  0.0003
 optimizer learning rate critic :  0.001
 ============================================================================================
-Started training at (GMT) : 2025-06-02 16:54:04
+Started training at (GMT) : 2025-06-03 18:35:16
 ============================================================================================
-Episode : 33 		 Timestep : 3600 		 Average Reward : -22.2
+Episode : 27 		 Timestep : 3600 		 Average Reward : -21.76
+Episode : 68 		 Timestep : 7200 		 Average Reward : -14.37
+Episode : 91 		 Timestep : 10800 		 Average Reward : -23.84
+Episode : 120 		 Timestep : 14400 		 Average Reward : -21.9
+Episode : 153 		 Timestep : 18000 		 Average Reward : -17.9
+Episode : 178 		 Timestep : 21600 		 Average Reward : -34.28
+Episode : 209 		 Timestep : 25200 		 Average Reward : -20.97
+Episode : 236 		 Timestep : 28800 		 Average Reward : -22.17
+Episode : 267 		 Timestep : 32400 		 Average Reward : -18.37
+Episode : 297 		 Timestep : 36000 		 Average Reward : -20.4
+Episode : 316 		 Timestep : 39600 		 Average Reward : -31.09
+Episode : 340 		 Timestep : 43200 		 Average Reward : -26.1
+Episode : 371 		 Timestep : 46800 		 Average Reward : -20.72
+Episode : 401 		 Timestep : 50400 		 Average Reward : -18.87
+Episode : 430 		 Timestep : 54000 		 Average Reward : -22.91
+Episode : 473 		 Timestep : 57600 		 Average Reward : -14.76
+Episode : 499 		 Timestep : 61200 		 Average Reward : -22.94
+Episode : 538 		 Timestep : 64800 		 Average Reward : -16.51
+Episode : 564 		 Timestep : 68400 		 Average Reward : -24.8
+Episode : 605 		 Timestep : 72000 		 Average Reward : -15.01
+Episode : 640 		 Timestep : 75600 		 Average Reward : -17.51
+Episode : 674 		 Timestep : 79200 		 Average Reward : -18.09
+Episode : 695 		 Timestep : 82800 		 Average Reward : -26.47
+Episode : 729 		 Timestep : 86400 		 Average Reward : -18.87
+Episode : 766 		 Timestep : 90000 		 Average Reward : -16.75
+Episode : 800 		 Timestep : 93600 		 Average Reward : -19.55
+Episode : 831 		 Timestep : 97200 		 Average Reward : -20.98
+--------------------------------------------------------------------------------------------
+saving model at : PPO_preTrained\RichDog\PPO_RichDog_0_20250603-183515.pth
+model savedElapsed Time  : 0:17:09
+--------------------------------------------------------------------------------------------
+std : 0.595
+--------------------------------------------------------------------------------------------
+Start episode logging
+Episode : 877 		 Timestep : 100800 		 Average Reward : -14.05
+Episode : 914 		 Timestep : 104400 		 Average Reward : -17.01
+Episode : 938 		 Timestep : 108000 		 Average Reward : -26.56
+Episode : 968 		 Timestep : 111600 		 Average Reward : -19.95
+Episode : 1001 		 Timestep : 115200 		 Average Reward : -19.13
+Episode : 1035 		 Timestep : 118800 		 Average Reward : -19.97
+Episode : 1067 		 Timestep : 122400 		 Average Reward : -18.8
+Episode : 1094 		 Timestep : 126000 		 Average Reward : -20.88
+Episode : 1127 		 Timestep : 129600 		 Average Reward : -20.21
+Episode : 1160 		 Timestep : 133200 		 Average Reward : -18.13
+Episode : 1190 		 Timestep : 136800 		 Average Reward : -19.36
+Episode : 1219 		 Timestep : 140400 		 Average Reward : -20.84
+Episode : 1256 		 Timestep : 144000 		 Average Reward : -18.39
+Episode : 1287 		 Timestep : 147600 		 Average Reward : -19.11
+Episode : 1313 		 Timestep : 151200 		 Average Reward : -22.43
+Episode : 1339 		 Timestep : 154800 		 Average Reward : -20.14
+Episode : 1373 		 Timestep : 158400 		 Average Reward : -20.16
+Episode : 1405 		 Timestep : 162000 		 Average Reward : -16.56
+Episode : 1439 		 Timestep : 165600 		 Average Reward : -17.27
+Episode : 1475 		 Timestep : 169200 		 Average Reward : -16.54
+Episode : 1501 		 Timestep : 172800 		 Average Reward : -20.76
+Episode : 1544 		 Timestep : 176400 		 Average Reward : -16.06
+Episode : 1568 		 Timestep : 180000 		 Average Reward : -24.86
+Episode : 1608 		 Timestep : 183600 		 Average Reward : -16.68
+Episode : 1650 		 Timestep : 187200 		 Average Reward : -14.78
+Episode : 1692 		 Timestep : 190800 		 Average Reward : -15.71
+Episode : 1724 		 Timestep : 194400 		 Average Reward : -19.64
+Episode : 1760 		 Timestep : 198000 		 Average Reward : -16.47
+--------------------------------------------------------------------------------------------
+saving model at : PPO_preTrained\RichDog\PPO_RichDog_0_20250603-183515.pth
+model savedElapsed Time  : 0:33:53
+--------------------------------------------------------------------------------------------
+std : 0.5901
+--------------------------------------------------------------------------------------------
+Start episode logging
+Episode : 1789 		 Timestep : 201600 		 Average Reward : -20.77
+Episode : 1822 		 Timestep : 205200 		 Average Reward : -18.63
+Episode : 1855 		 Timestep : 208800 		 Average Reward : -21.41
+Episode : 1896 		 Timestep : 212400 		 Average Reward : -13.8
+Episode : 1931 		 Timestep : 216000 		 Average Reward : -18.2
+Episode : 1967 		 Timestep : 219600 		 Average Reward : -15.3
+Episode : 2008 		 Timestep : 223200 		 Average Reward : -15.69
+Episode : 2041 		 Timestep : 226800 		 Average Reward : -18.02
+Episode : 2072 		 Timestep : 230400 		 Average Reward : -20.25
+Episode : 2105 		 Timestep : 234000 		 Average Reward : -19.69
+Episode : 2147 		 Timestep : 237600 		 Average Reward : -17.09
+Episode : 2172 		 Timestep : 241200 		 Average Reward : -25.03
+Episode : 2202 		 Timestep : 244800 		 Average Reward : -18.22
+Episode : 2238 		 Timestep : 248400 		 Average Reward : -15.83
+Episode : 2283 		 Timestep : 252000 		 Average Reward : -13.99
+Episode : 2315 		 Timestep : 255600 		 Average Reward : -19.23
+Episode : 2345 		 Timestep : 259200 		 Average Reward : -18.0
+Episode : 2377 		 Timestep : 262800 		 Average Reward : -18.13
+Episode : 2405 		 Timestep : 266400 		 Average Reward : -21.37
+Episode : 2435 		 Timestep : 270000 		 Average Reward : -19.66
+Episode : 2473 		 Timestep : 273600 		 Average Reward : -17.72
+Episode : 2511 		 Timestep : 277200 		 Average Reward : -17.12
+Episode : 2554 		 Timestep : 280800 		 Average Reward : -15.4
+Episode : 2589 		 Timestep : 284400 		 Average Reward : -17.4
+Episode : 2629 		 Timestep : 288000 		 Average Reward : -17.06
+Episode : 2660 		 Timestep : 291600 		 Average Reward : -19.37
+Episode : 2692 		 Timestep : 295200 		 Average Reward : -19.84
+Episode : 2728 		 Timestep : 298800 		 Average Reward : -17.43
+--------------------------------------------------------------------------------------------
+saving model at : PPO_preTrained\RichDog\PPO_RichDog_0_20250603-183515.pth
+model savedElapsed Time  : 0:50:33
+--------------------------------------------------------------------------------------------
+std : 0.585
+--------------------------------------------------------------------------------------------
+Start episode logging
+Episode : 2753 		 Timestep : 302400 		 Average Reward : -24.21
+Episode : 2782 		 Timestep : 306000 		 Average Reward : -19.57
+Episode : 2799 		 Timestep : 309600 		 Average Reward : -31.11
+Episode : 2831 		 Timestep : 313200 		 Average Reward : -18.91
+Episode : 2860 		 Timestep : 316800 		 Average Reward : -20.79
+Episode : 2893 		 Timestep : 320400 		 Average Reward : -17.03
+Episode : 2917 		 Timestep : 324000 		 Average Reward : -20.56
+Episode : 2947 		 Timestep : 327600 		 Average Reward : -27.63
+Episode : 2978 		 Timestep : 331200 		 Average Reward : -19.34
+Episode : 3024 		 Timestep : 334800 		 Average Reward : -15.15
+Episode : 3066 		 Timestep : 338400 		 Average Reward : -15.69
+Episode : 3095 		 Timestep : 342000 		 Average Reward : -20.13
+Episode : 3128 		 Timestep : 345600 		 Average Reward : -21.44
+Episode : 3165 		 Timestep : 349200 		 Average Reward : -19.02
+Episode : 3199 		 Timestep : 352800 		 Average Reward : -17.01
+Episode : 3235 		 Timestep : 356400 		 Average Reward : -16.71
+Episode : 3271 		 Timestep : 360000 		 Average Reward : -17.71
+Episode : 3301 		 Timestep : 363600 		 Average Reward : -20.2
+Episode : 3324 		 Timestep : 367200 		 Average Reward : -28.19
+Episode : 3354 		 Timestep : 370800 		 Average Reward : -20.9
+Episode : 3394 		 Timestep : 374400 		 Average Reward : -16.65
+Episode : 3430 		 Timestep : 378000 		 Average Reward : -16.72
+Episode : 3463 		 Timestep : 381600 		 Average Reward : -18.61
+Episode : 3491 		 Timestep : 385200 		 Average Reward : -19.55
+Episode : 3524 		 Timestep : 388800 		 Average Reward : -28.1
+Episode : 3554 		 Timestep : 392400 		 Average Reward : -18.59
+Episode : 3581 		 Timestep : 396000 		 Average Reward : -23.47
+Episode : 3623 		 Timestep : 399600 		 Average Reward : -14.51
+--------------------------------------------------------------------------------------------
+saving model at : PPO_preTrained\RichDog\PPO_RichDog_0_20250603-183515.pth
+model savedElapsed Time  : 1:08:25
+--------------------------------------------------------------------------------------------
+std : 0.5801
+--------------------------------------------------------------------------------------------
+Start episode logging
+Episode : 3654 		 Timestep : 403200 		 Average Reward : -19.12
+Episode : 3691 		 Timestep : 406800 		 Average Reward : -15.08
+Episode : 3725 		 Timestep : 410400 		 Average Reward : -19.0
+Episode : 3750 		 Timestep : 414000 		 Average Reward : -22.03
+Episode : 3796 		 Timestep : 417600 		 Average Reward : -13.09
+Episode : 3825 		 Timestep : 421200 		 Average Reward : -22.9
+Episode : 3865 		 Timestep : 424800 		 Average Reward : -16.17
+Episode : 3893 		 Timestep : 428400 		 Average Reward : -22.01
+Episode : 3929 		 Timestep : 432000 		 Average Reward : -16.71
+Episode : 3958 		 Timestep : 435600 		 Average Reward : -19.31
+Episode : 3996 		 Timestep : 439200 		 Average Reward : -17.38
+Episode : 4032 		 Timestep : 442800 		 Average Reward : -18.54
+Episode : 4070 		 Timestep : 446400 		 Average Reward : -17.22
+Episode : 4113 		 Timestep : 450000 		 Average Reward : -15.58
+Episode : 4151 		 Timestep : 453600 		 Average Reward : -16.06
+Episode : 4183 		 Timestep : 457200 		 Average Reward : -19.59
+Episode : 4213 		 Timestep : 460800 		 Average Reward : -19.69
+Episode : 4239 		 Timestep : 464400 		 Average Reward : -24.98
+Episode : 4267 		 Timestep : 468000 		 Average Reward : -23.33
+Episode : 4301 		 Timestep : 471600 		 Average Reward : -18.96
+Episode : 4327 		 Timestep : 475200 		 Average Reward : -24.44
+Episode : 4350 		 Timestep : 478800 		 Average Reward : -25.32
+Episode : 4394 		 Timestep : 482400 		 Average Reward : -15.94
+Episode : 4422 		 Timestep : 486000 		 Average Reward : -23.64
+Episode : 4465 		 Timestep : 489600 		 Average Reward : -14.83
+Episode : 4497 		 Timestep : 493200 		 Average Reward : -19.77
+Episode : 4533 		 Timestep : 496800 		 Average Reward : -16.67
+--------------------------------------------------------------------------------------------
+saving model at : PPO_preTrained\RichDog\PPO_RichDog_0_20250603-183515.pth
+model savedElapsed Time  : 1:24:34
+--------------------------------------------------------------------------------------------
+std : 0.575
+--------------------------------------------------------------------------------------------
+Start episode logging
+Episode : 4582 		 Timestep : 500400 		 Average Reward : -14.15
+Episode : 4621 		 Timestep : 504000 		 Average Reward : -17.56
+Episode : 4660 		 Timestep : 507600 		 Average Reward : -16.98
+Episode : 4689 		 Timestep : 511200 		 Average Reward : -19.41
+Episode : 4724 		 Timestep : 514800 		 Average Reward : -17.17
+Episode : 4755 		 Timestep : 518400 		 Average Reward : -20.51
+Episode : 4786 		 Timestep : 522000 		 Average Reward : -19.69
+Episode : 4816 		 Timestep : 525600 		 Average Reward : -23.12
+Episode : 4843 		 Timestep : 529200 		 Average Reward : -24.41
+Episode : 4869 		 Timestep : 532800 		 Average Reward : -25.2
+Episode : 4903 		 Timestep : 536400 		 Average Reward : -17.92
+Episode : 4929 		 Timestep : 540000 		 Average Reward : -21.82
+Episode : 4966 		 Timestep : 543600 		 Average Reward : -18.05
+Episode : 4997 		 Timestep : 547200 		 Average Reward : -18.57
+Episode : 5035 		 Timestep : 550800 		 Average Reward : -15.3
+Episode : 5062 		 Timestep : 554400 		 Average Reward : -24.36
+Episode : 5113 		 Timestep : 558000 		 Average Reward : -13.14
+Episode : 5147 		 Timestep : 561600 		 Average Reward : -17.7
+Episode : 5181 		 Timestep : 565200 		 Average Reward : -19.76
+Episode : 5209 		 Timestep : 568800 		 Average Reward : -20.4
+Episode : 5236 		 Timestep : 572400 		 Average Reward : -23.04
+Episode : 5276 		 Timestep : 576000 		 Average Reward : -14.66
+Episode : 5312 		 Timestep : 579600 		 Average Reward : -16.76
+Episode : 5335 		 Timestep : 583200 		 Average Reward : -25.43
+Episode : 5365 		 Timestep : 586800 		 Average Reward : -19.36
+Episode : 5403 		 Timestep : 590400 		 Average Reward : -17.22
+Episode : 5430 		 Timestep : 594000 		 Average Reward : -20.8
+Episode : 5459 		 Timestep : 597600 		 Average Reward : -20.22
+--------------------------------------------------------------------------------------------
+saving model at : PPO_preTrained\RichDog\PPO_RichDog_0_20250603-183515.pth
+model savedElapsed Time  : 1:40:21
+--------------------------------------------------------------------------------------------
+std : 0.57
+--------------------------------------------------------------------------------------------
+Start episode logging
+Episode : 5487 		 Timestep : 601200 		 Average Reward : -22.41
+Episode : 5513 		 Timestep : 604800 		 Average Reward : -24.53
+Episode : 5544 		 Timestep : 608400 		 Average Reward : -19.2
+Episode : 5583 		 Timestep : 612000 		 Average Reward : -16.83
+Episode : 5608 		 Timestep : 615600 		 Average Reward : -21.46
+Episode : 5635 		 Timestep : 619200 		 Average Reward : -23.08
+Episode : 5664 		 Timestep : 622800 		 Average Reward : -21.18
+Episode : 5689 		 Timestep : 626400 		 Average Reward : -23.98
+Episode : 5716 		 Timestep : 630000 		 Average Reward : -22.87
+Episode : 5749 		 Timestep : 633600 		 Average Reward : -19.36
+Episode : 5791 		 Timestep : 637200 		 Average Reward : -15.65
+Episode : 5819 		 Timestep : 640800 		 Average Reward : -21.86
+Episode : 5846 		 Timestep : 644400 		 Average Reward : -21.23
+Episode : 5876 		 Timestep : 648000 		 Average Reward : -20.75
+Episode : 5903 		 Timestep : 651600 		 Average Reward : -23.88
+Episode : 5946 		 Timestep : 655200 		 Average Reward : -15.23
+Episode : 5977 		 Timestep : 658800 		 Average Reward : -21.36
+Episode : 6005 		 Timestep : 662400 		 Average Reward : -19.44
+Episode : 6048 		 Timestep : 666000 		 Average Reward : -15.76
+Episode : 6079 		 Timestep : 669600 		 Average Reward : -19.52
+Episode : 6103 		 Timestep : 673200 		 Average Reward : -25.14
+Episode : 6136 		 Timestep : 676800 		 Average Reward : -18.69
+Episode : 6177 		 Timestep : 680400 		 Average Reward : -15.63
+Episode : 6210 		 Timestep : 684000 		 Average Reward : -16.75
+Episode : 6249 		 Timestep : 687600 		 Average Reward : -14.34
+Episode : 6280 		 Timestep : 691200 		 Average Reward : -16.69
+Episode : 6309 		 Timestep : 694800 		 Average Reward : -21.97
+Episode : 6331 		 Timestep : 698400 		 Average Reward : -28.08
+--------------------------------------------------------------------------------------------
+saving model at : PPO_preTrained\RichDog\PPO_RichDog_0_20250603-183515.pth
+model savedElapsed Time  : 1:56:08
+--------------------------------------------------------------------------------------------
+std : 0.565
+--------------------------------------------------------------------------------------------
+Start episode logging
+Episode : 6375 		 Timestep : 702000 		 Average Reward : -13.29
+Episode : 6400 		 Timestep : 705600 		 Average Reward : -23.26
+Episode : 6420 		 Timestep : 709200 		 Average Reward : -31.33
+Episode : 6457 		 Timestep : 712800 		 Average Reward : -17.15
+Episode : 6489 		 Timestep : 716400 		 Average Reward : -19.15
+Episode : 6525 		 Timestep : 720000 		 Average Reward : -15.08
+Episode : 6545 		 Timestep : 723600 		 Average Reward : -30.26
+Episode : 6575 		 Timestep : 727200 		 Average Reward : -20.52
+Episode : 6606 		 Timestep : 730800 		 Average Reward : -22.93
+Episode : 6628 		 Timestep : 734400 		 Average Reward : -26.23
+Episode : 6667 		 Timestep : 738000 		 Average Reward : -20.45
+Episode : 6703 		 Timestep : 741600 		 Average Reward : -20.66
+Episode : 6743 		 Timestep : 745200 		 Average Reward : -17.74
+Episode : 6782 		 Timestep : 748800 		 Average Reward : -15.29
+Episode : 6812 		 Timestep : 752400 		 Average Reward : -21.97
+Episode : 6834 		 Timestep : 756000 		 Average Reward : -28.5
+Episode : 6869 		 Timestep : 759600 		 Average Reward : -17.48
+Episode : 6891 		 Timestep : 763200 		 Average Reward : -24.95
+Episode : 6921 		 Timestep : 766800 		 Average Reward : -21.74
+Episode : 6960 		 Timestep : 770400 		 Average Reward : -17.03
+Episode : 6987 		 Timestep : 774000 		 Average Reward : -22.1
+Episode : 7014 		 Timestep : 777600 		 Average Reward : -22.06
+Episode : 7057 		 Timestep : 781200 		 Average Reward : -16.35
+Episode : 7081 		 Timestep : 784800 		 Average Reward : -24.79
+Episode : 7106 		 Timestep : 788400 		 Average Reward : -22.69
+Episode : 7135 		 Timestep : 792000 		 Average Reward : -20.17
+Episode : 7166 		 Timestep : 795600 		 Average Reward : -19.9
+Episode : 7190 		 Timestep : 799200 		 Average Reward : -22.74
+--------------------------------------------------------------------------------------------
+saving model at : PPO_preTrained\RichDog\PPO_RichDog_0_20250603-183515.pth
+model savedElapsed Time  : 2:11:59
+--------------------------------------------------------------------------------------------
+std : 0.56
+--------------------------------------------------------------------------------------------
+Start episode logging
+Episode : 7220 		 Timestep : 802800 		 Average Reward : -19.71
+Episode : 7246 		 Timestep : 806400 		 Average Reward : -22.05
+Episode : 7274 		 Timestep : 810000 		 Average Reward : -21.12
+Episode : 7298 		 Timestep : 813600 		 Average Reward : -23.55
+Episode : 7325 		 Timestep : 817200 		 Average Reward : -21.63
+Episode : 7349 		 Timestep : 820800 		 Average Reward : -24.34
+Episode : 7383 		 Timestep : 824400 		 Average Reward : -17.22
+Episode : 7412 		 Timestep : 828000 		 Average Reward : -18.8
+Episode : 7436 		 Timestep : 831600 		 Average Reward : -23.53
+Episode : 7461 		 Timestep : 835200 		 Average Reward : -24.83
+Episode : 7486 		 Timestep : 838800 		 Average Reward : -25.68
+Episode : 7509 		 Timestep : 842400 		 Average Reward : -27.89
+Episode : 7540 		 Timestep : 846000 		 Average Reward : -19.29
+Episode : 7574 		 Timestep : 849600 		 Average Reward : -17.75
+Episode : 7601 		 Timestep : 853200 		 Average Reward : -20.7
+Episode : 7637 		 Timestep : 856800 		 Average Reward : -17.66
+Episode : 7659 		 Timestep : 860400 		 Average Reward : -24.11
+Episode : 7683 		 Timestep : 864000 		 Average Reward : -26.92
+Episode : 7706 		 Timestep : 867600 		 Average Reward : -22.36
+Episode : 7733 		 Timestep : 871200 		 Average Reward : -23.26
+Episode : 7762 		 Timestep : 874800 		 Average Reward : -22.24
+Episode : 7788 		 Timestep : 878400 		 Average Reward : -21.61
+Episode : 7815 		 Timestep : 882000 		 Average Reward : -21.27
+Episode : 7839 		 Timestep : 885600 		 Average Reward : -24.93
+Episode : 7864 		 Timestep : 889200 		 Average Reward : -23.48
+Episode : 7896 		 Timestep : 892800 		 Average Reward : -18.16
+Episode : 7925 		 Timestep : 896400 		 Average Reward : -20.9
+Episode : 7962 		 Timestep : 900000 		 Average Reward : -16.81
+--------------------------------------------------------------------------------------------
+saving model at : PPO_preTrained\RichDog\PPO_RichDog_0_20250603-183515.pth
+model savedElapsed Time  : 2:28:36
+--------------------------------------------------------------------------------------------
+std : 0.555
+--------------------------------------------------------------------------------------------
+Start episode logging
+Episode : 8003 		 Timestep : 903600 		 Average Reward : -15.12
+Episode : 8034 		 Timestep : 907200 		 Average Reward : -18.54
+Episode : 8064 		 Timestep : 910800 		 Average Reward : -17.98
+Episode : 8101 		 Timestep : 914400 		 Average Reward : -17.46
+Episode : 8139 		 Timestep : 918000 		 Average Reward : -15.75
+Episode : 8174 		 Timestep : 921600 		 Average Reward : -17.6
+Episode : 8204 		 Timestep : 925200 		 Average Reward : -20.08
+Episode : 8236 		 Timestep : 928800 		 Average Reward : -14.82
+Episode : 8263 		 Timestep : 932400 		 Average Reward : -21.21
+Episode : 8296 		 Timestep : 936000 		 Average Reward : -18.2
+Episode : 8319 		 Timestep : 939600 		 Average Reward : -21.09
+Episode : 8355 		 Timestep : 943200 		 Average Reward : -17.79
+Episode : 8389 		 Timestep : 946800 		 Average Reward : -17.12
+Episode : 8423 		 Timestep : 950400 		 Average Reward : -16.91
+Episode : 8454 		 Timestep : 954000 		 Average Reward : -16.13
+Episode : 8483 		 Timestep : 957600 		 Average Reward : -19.72
+Episode : 8528 		 Timestep : 961200 		 Average Reward : -12.91
+Episode : 8552 		 Timestep : 964800 		 Average Reward : -24.03
+Episode : 8575 		 Timestep : 968400 		 Average Reward : -22.39
+Episode : 8604 		 Timestep : 972000 		 Average Reward : -18.78
+Episode : 8647 		 Timestep : 975600 		 Average Reward : -13.91
+Episode : 8673 		 Timestep : 979200 		 Average Reward : -24.06
+Episode : 8712 		 Timestep : 982800 		 Average Reward : -14.42
+Episode : 8743 		 Timestep : 986400 		 Average Reward : -19.15
+Episode : 8783 		 Timestep : 990000 		 Average Reward : -15.29
+Episode : 8811 		 Timestep : 993600 		 Average Reward : -21.02
+Episode : 8841 		 Timestep : 997200 		 Average Reward : -18.62
+--------------------------------------------------------------------------------------------
+saving model at : PPO_preTrained\RichDog\PPO_RichDog_0_20250603-183515.pth
+model savedElapsed Time  : 2:44:44
+--------------------------------------------------------------------------------------------
+std : 0.55
+--------------------------------------------------------------------------------------------
+Start episode logging
+Episode : 8872 		 Timestep : 1000800 		 Average Reward : -20.61
+Episode : 8907 		 Timestep : 1004400 		 Average Reward : -17.12
+Episode : 8940 		 Timestep : 1008000 		 Average Reward : -17.92
+Episode : 8975 		 Timestep : 1011600 		 Average Reward : -18.38
+Episode : 9015 		 Timestep : 1015200 		 Average Reward : -15.83
+Episode : 9043 		 Timestep : 1018800 		 Average Reward : -19.66
+Episode : 9068 		 Timestep : 1022400 		 Average Reward : -25.57
+Episode : 9102 		 Timestep : 1026000 		 Average Reward : -15.95
+Episode : 9133 		 Timestep : 1029600 		 Average Reward : -20.49
+Episode : 9169 		 Timestep : 1033200 		 Average Reward : -17.02
+Episode : 9208 		 Timestep : 1036800 		 Average Reward : -15.95
+Episode : 9229 		 Timestep : 1040400 		 Average Reward : -34.04
+Episode : 9255 		 Timestep : 1044000 		 Average Reward : -22.76
+Episode : 9289 		 Timestep : 1047600 		 Average Reward : -17.75
+Episode : 9312 		 Timestep : 1051200 		 Average Reward : -25.96
+Episode : 9352 		 Timestep : 1054800 		 Average Reward : -15.25
+Episode : 9385 		 Timestep : 1058400 		 Average Reward : -19.39
+Episode : 9413 		 Timestep : 1062000 		 Average Reward : -22.67
+Episode : 9442 		 Timestep : 1065600 		 Average Reward : -20.0
+Episode : 9473 		 Timestep : 1069200 		 Average Reward : -16.08
+Episode : 9495 		 Timestep : 1072800 		 Average Reward : -25.25
+Episode : 9526 		 Timestep : 1076400 		 Average Reward : -20.64
+Episode : 9563 		 Timestep : 1080000 		 Average Reward : -16.64
+Episode : 9586 		 Timestep : 1083600 		 Average Reward : -23.09
+Episode : 9613 		 Timestep : 1087200 		 Average Reward : -23.51
+Episode : 9647 		 Timestep : 1090800 		 Average Reward : -18.24
+Episode : 9685 		 Timestep : 1094400 		 Average Reward : -16.51
+Episode : 9711 		 Timestep : 1098000 		 Average Reward : -22.2
+--------------------------------------------------------------------------------------------
+saving model at : PPO_preTrained\RichDog\PPO_RichDog_0_20250603-183515.pth
+model savedElapsed Time  : 3:01:23
+--------------------------------------------------------------------------------------------
+std : 0.5451
+--------------------------------------------------------------------------------------------
+Start episode logging
+Episode : 9741 		 Timestep : 1101600 		 Average Reward : -19.42
+Episode : 9770 		 Timestep : 1105200 		 Average Reward : -20.07
+Episode : 9805 		 Timestep : 1108800 		 Average Reward : -15.58
+Episode : 9836 		 Timestep : 1112400 		 Average Reward : -21.06
+Episode : 9863 		 Timestep : 1116000 		 Average Reward : -19.21
+Episode : 9887 		 Timestep : 1119600 		 Average Reward : -24.14
+Episode : 9922 		 Timestep : 1123200 		 Average Reward : -15.5
+Episode : 9957 		 Timestep : 1126800 		 Average Reward : -17.83
+Episode : 9981 		 Timestep : 1130400 		 Average Reward : -22.99
+Episode : 10012 		 Timestep : 1134000 		 Average Reward : -17.71
+Episode : 10045 		 Timestep : 1137600 		 Average Reward : -16.95
+Episode : 10062 		 Timestep : 1141200 		 Average Reward : -32.07
+Episode : 10098 		 Timestep : 1144800 		 Average Reward : -16.4
+Episode : 10140 		 Timestep : 1148400 		 Average Reward : -13.64
+Episode : 10161 		 Timestep : 1152000 		 Average Reward : -25.51
+Episode : 10188 		 Timestep : 1155600 		 Average Reward : -20.3
+Episode : 10215 		 Timestep : 1159200 		 Average Reward : -21.97
+Episode : 10244 		 Timestep : 1162800 		 Average Reward : -20.06
+Episode : 10272 		 Timestep : 1166400 		 Average Reward : -19.69
+Episode : 10298 		 Timestep : 1170000 		 Average Reward : -20.71
+Episode : 10334 		 Timestep : 1173600 		 Average Reward : -17.06
+Episode : 10369 		 Timestep : 1177200 		 Average Reward : -15.55
+Episode : 10398 		 Timestep : 1180800 		 Average Reward : -29.05
+Episode : 10420 		 Timestep : 1184400 		 Average Reward : -27.88
+Episode : 10442 		 Timestep : 1188000 		 Average Reward : -24.0
+Episode : 10470 		 Timestep : 1191600 		 Average Reward : -20.97
+Episode : 10499 		 Timestep : 1195200 		 Average Reward : -19.13
+Episode : 10536 		 Timestep : 1198800 		 Average Reward : -18.36
+--------------------------------------------------------------------------------------------
+saving model at : PPO_preTrained\RichDog\PPO_RichDog_0_20250603-183515.pth
+model savedElapsed Time  : 3:18:36
+--------------------------------------------------------------------------------------------
+std : 0.54
+--------------------------------------------------------------------------------------------
+Start episode logging
+Episode : 10565 		 Timestep : 1202400 		 Average Reward : -21.09
+Episode : 10604 		 Timestep : 1206000 		 Average Reward : -17.13
+Episode : 10633 		 Timestep : 1209600 		 Average Reward : -20.37
+Episode : 10662 		 Timestep : 1213200 		 Average Reward : -20.85
+Episode : 10698 		 Timestep : 1216800 		 Average Reward : -16.77
+Episode : 10734 		 Timestep : 1220400 		 Average Reward : -16.85
+Episode : 10770 		 Timestep : 1224000 		 Average Reward : -14.43
+Episode : 10805 		 Timestep : 1227600 		 Average Reward : -15.86
+Episode : 10833 		 Timestep : 1231200 		 Average Reward : -20.72
+Episode : 10867 		 Timestep : 1234800 		 Average Reward : -20.24
+Episode : 10899 		 Timestep : 1238400 		 Average Reward : -17.81
+Episode : 10923 		 Timestep : 1242000 		 Average Reward : -26.96
+Episode : 10951 		 Timestep : 1245600 		 Average Reward : -20.29
+Episode : 10981 		 Timestep : 1249200 		 Average Reward : -18.44
+Episode : 11009 		 Timestep : 1252800 		 Average Reward : -18.54
+Episode : 11042 		 Timestep : 1256400 		 Average Reward : -17.93
+Episode : 11067 		 Timestep : 1260000 		 Average Reward : -22.05
+Episode : 11090 		 Timestep : 1263600 		 Average Reward : -22.35
+Episode : 11124 		 Timestep : 1267200 		 Average Reward : -17.24
+Episode : 11156 		 Timestep : 1270800 		 Average Reward : -17.05
+Episode : 11181 		 Timestep : 1274400 		 Average Reward : -22.34
+Episode : 11210 		 Timestep : 1278000 		 Average Reward : -20.48
+Episode : 11243 		 Timestep : 1281600 		 Average Reward : -16.4
+Episode : 11270 		 Timestep : 1285200 		 Average Reward : -19.29
+Episode : 11289 		 Timestep : 1288800 		 Average Reward : -27.24
+Episode : 11329 		 Timestep : 1292400 		 Average Reward : -14.46
+Episode : 11362 		 Timestep : 1296000 		 Average Reward : -17.53
+Episode : 11393 		 Timestep : 1299600 		 Average Reward : -18.3
+--------------------------------------------------------------------------------------------
+saving model at : PPO_preTrained\RichDog\PPO_RichDog_0_20250603-183515.pth
+model savedElapsed Time  : 3:35:29
+--------------------------------------------------------------------------------------------
+std : 0.5351
+--------------------------------------------------------------------------------------------
+Start episode logging
+Episode : 11421 		 Timestep : 1303200 		 Average Reward : -19.42
+Episode : 11459 		 Timestep : 1306800 		 Average Reward : -16.24
+Episode : 11496 		 Timestep : 1310400 		 Average Reward : -16.11
+Episode : 11523 		 Timestep : 1314000 		 Average Reward : -17.92
+Episode : 11548 		 Timestep : 1317600 		 Average Reward : -21.17
+Episode : 11580 		 Timestep : 1321200 		 Average Reward : -17.59
+Episode : 11603 		 Timestep : 1324800 		 Average Reward : -20.95
+Episode : 11632 		 Timestep : 1328400 		 Average Reward : -17.52
+Episode : 11665 		 Timestep : 1332000 		 Average Reward : -18.68
+Episode : 11690 		 Timestep : 1335600 		 Average Reward : -20.35
+Episode : 11725 		 Timestep : 1339200 		 Average Reward : -16.95
+Episode : 11753 		 Timestep : 1342800 		 Average Reward : -19.3
+Episode : 11771 		 Timestep : 1346400 		 Average Reward : -29.53
+Episode : 11799 		 Timestep : 1350000 		 Average Reward : -21.75
+Episode : 11832 		 Timestep : 1353600 		 Average Reward : -17.04
+Episode : 11856 		 Timestep : 1357200 		 Average Reward : -22.6
+Episode : 11886 		 Timestep : 1360800 		 Average Reward : -18.95
+Episode : 11922 		 Timestep : 1364400 		 Average Reward : -16.84
+Episode : 11947 		 Timestep : 1368000 		 Average Reward : -20.95
+Episode : 11976 		 Timestep : 1371600 		 Average Reward : -18.02
+Episode : 12003 		 Timestep : 1375200 		 Average Reward : -22.08
+Episode : 12043 		 Timestep : 1378800 		 Average Reward : -14.83
+Episode : 12071 		 Timestep : 1382400 		 Average Reward : -19.71
+Episode : 12102 		 Timestep : 1386000 		 Average Reward : -17.34
+Episode : 12131 		 Timestep : 1389600 		 Average Reward : -18.62
+Episode : 12157 		 Timestep : 1393200 		 Average Reward : -20.25
+Episode : 12188 		 Timestep : 1396800 		 Average Reward : -17.14
+--------------------------------------------------------------------------------------------
+saving model at : PPO_preTrained\RichDog\PPO_RichDog_0_20250603-183515.pth
+model savedElapsed Time  : 3:52:24
+--------------------------------------------------------------------------------------------
+std : 0.53
+--------------------------------------------------------------------------------------------
+Start episode logging
+Episode : 12216 		 Timestep : 1400400 		 Average Reward : -20.58
+Episode : 12245 		 Timestep : 1404000 		 Average Reward : -18.29
+Episode : 12272 		 Timestep : 1407600 		 Average Reward : -20.3
+Episode : 12299 		 Timestep : 1411200 		 Average Reward : -22.11
+Episode : 12328 		 Timestep : 1414800 		 Average Reward : -18.33
+Episode : 12356 		 Timestep : 1418400 		 Average Reward : -20.39
+Episode : 12395 		 Timestep : 1422000 		 Average Reward : -16.56
+Episode : 12429 		 Timestep : 1425600 		 Average Reward : -17.04
+Episode : 12457 		 Timestep : 1429200 		 Average Reward : -20.85
+Episode : 12493 		 Timestep : 1432800 		 Average Reward : -15.77
+Episode : 12528 		 Timestep : 1436400 		 Average Reward : -15.75
+Episode : 12560 		 Timestep : 1440000 		 Average Reward : -15.91
+Episode : 12590 		 Timestep : 1443600 		 Average Reward : -19.68
+Episode : 12618 		 Timestep : 1447200 		 Average Reward : -19.4
+Episode : 12653 		 Timestep : 1450800 		 Average Reward : -16.04
+Episode : 12679 		 Timestep : 1454400 		 Average Reward : -20.26
+Episode : 12713 		 Timestep : 1458000 		 Average Reward : -15.97
+Episode : 12741 		 Timestep : 1461600 		 Average Reward : -21.54
+Episode : 12773 		 Timestep : 1465200 		 Average Reward : -15.14
+Episode : 12798 		 Timestep : 1468800 		 Average Reward : -18.87
+Episode : 12828 		 Timestep : 1472400 		 Average Reward : -17.88
+Episode : 12861 		 Timestep : 1476000 		 Average Reward : -15.3
+Episode : 12881 		 Timestep : 1479600 		 Average Reward : -26.11
+Episode : 12917 		 Timestep : 1483200 		 Average Reward : -15.17
+Episode : 12947 		 Timestep : 1486800 		 Average Reward : -18.0
+Episode : 12976 		 Timestep : 1490400 		 Average Reward : -18.29
+Episode : 13016 		 Timestep : 1494000 		 Average Reward : -13.34
+Episode : 13052 		 Timestep : 1497600 		 Average Reward : -16.4
+--------------------------------------------------------------------------------------------
+saving model at : PPO_preTrained\RichDog\PPO_RichDog_0_20250603-183515.pth
+model savedElapsed Time  : 4:09:22
+--------------------------------------------------------------------------------------------
+std : 0.525
+--------------------------------------------------------------------------------------------
+Start episode logging
+Episode : 13078 		 Timestep : 1501200 		 Average Reward : -18.94
+Episode : 13102 		 Timestep : 1504800 		 Average Reward : -21.12
+Episode : 13135 		 Timestep : 1508400 		 Average Reward : -16.27
+Episode : 13162 		 Timestep : 1512000 		 Average Reward : -21.3
+Episode : 13190 		 Timestep : 1515600 		 Average Reward : -28.78
+Episode : 13220 		 Timestep : 1519200 		 Average Reward : -17.48
+Episode : 13259 		 Timestep : 1522800 		 Average Reward : -14.15
+Episode : 13286 		 Timestep : 1526400 		 Average Reward : -17.14
+Episode : 13324 		 Timestep : 1530000 		 Average Reward : -13.57
+Episode : 13359 		 Timestep : 1533600 		 Average Reward : -14.41
+Episode : 13382 		 Timestep : 1537200 		 Average Reward : -22.99
+Episode : 13418 		 Timestep : 1540800 		 Average Reward : -13.26
+Episode : 13440 		 Timestep : 1544400 		 Average Reward : -24.83
+Episode : 13472 		 Timestep : 1548000 		 Average Reward : -14.63
+Episode : 13506 		 Timestep : 1551600 		 Average Reward : -14.03
+Episode : 13532 		 Timestep : 1555200 		 Average Reward : -20.36
+Episode : 13566 		 Timestep : 1558800 		 Average Reward : -14.64
+Episode : 13599 		 Timestep : 1562400 		 Average Reward : -15.2
+Episode : 13632 		 Timestep : 1566000 		 Average Reward : -15.96
+Episode : 13657 		 Timestep : 1569600 		 Average Reward : -19.82
+Episode : 13679 		 Timestep : 1573200 		 Average Reward : -19.17
+Episode : 13703 		 Timestep : 1576800 		 Average Reward : -19.13
+Episode : 13732 		 Timestep : 1580400 		 Average Reward : -16.84
+Episode : 13767 		 Timestep : 1584000 		 Average Reward : -16.96
+Episode : 13799 		 Timestep : 1587600 		 Average Reward : -15.15
+Episode : 13835 		 Timestep : 1591200 		 Average Reward : -15.47
+Episode : 13861 		 Timestep : 1594800 		 Average Reward : -16.74
+Episode : 13894 		 Timestep : 1598400 		 Average Reward : -14.62
+--------------------------------------------------------------------------------------------
+saving model at : PPO_preTrained\RichDog\PPO_RichDog_0_20250603-183515.pth
+model savedElapsed Time  : 4:26:50
+--------------------------------------------------------------------------------------------
+std : 0.52
+--------------------------------------------------------------------------------------------
+Start episode logging
+Episode : 13922 		 Timestep : 1602000 		 Average Reward : -18.61
+Episode : 13954 		 Timestep : 1605600 		 Average Reward : -13.31
+Episode : 13979 		 Timestep : 1609200 		 Average Reward : -18.05
+Episode : 14002 		 Timestep : 1612800 		 Average Reward : -18.87
+Episode : 14029 		 Timestep : 1616400 		 Average Reward : -18.84
+Episode : 14063 		 Timestep : 1620000 		 Average Reward : -14.43
+Episode : 14098 		 Timestep : 1623600 		 Average Reward : -15.47
+Episode : 14128 		 Timestep : 1627200 		 Average Reward : -16.68
+Episode : 14158 		 Timestep : 1630800 		 Average Reward : -16.05
+Episode : 14194 		 Timestep : 1634400 		 Average Reward : -14.97
+Episode : 14231 		 Timestep : 1638000 		 Average Reward : -15.59
+Episode : 14251 		 Timestep : 1641600 		 Average Reward : -20.87
+Episode : 14282 		 Timestep : 1645200 		 Average Reward : -16.79
+Episode : 14310 		 Timestep : 1648800 		 Average Reward : -18.67
+Episode : 14341 		 Timestep : 1652400 		 Average Reward : -15.34
+Episode : 14371 		 Timestep : 1656000 		 Average Reward : -16.46
+Episode : 14393 		 Timestep : 1659600 		 Average Reward : -19.86
+Episode : 14422 		 Timestep : 1663200 		 Average Reward : -18.53
+Episode : 14447 		 Timestep : 1666800 		 Average Reward : -17.44
+Episode : 14476 		 Timestep : 1670400 		 Average Reward : -13.04
+Episode : 14503 		 Timestep : 1674000 		 Average Reward : -15.78
+Episode : 14530 		 Timestep : 1677600 		 Average Reward : -15.95
+Episode : 14567 		 Timestep : 1681200 		 Average Reward : -15.52
+Episode : 14604 		 Timestep : 1684800 		 Average Reward : -12.44
+Episode : 14645 		 Timestep : 1688400 		 Average Reward : -11.97
+Episode : 14664 		 Timestep : 1692000 		 Average Reward : -22.73
+Episode : 14699 		 Timestep : 1695600 		 Average Reward : -13.57
+Episode : 14735 		 Timestep : 1699200 		 Average Reward : -13.6
+--------------------------------------------------------------------------------------------
+saving model at : PPO_preTrained\RichDog\PPO_RichDog_0_20250603-183515.pth
+model savedElapsed Time  : 4:44:12
+--------------------------------------------------------------------------------------------
+std : 0.515
+--------------------------------------------------------------------------------------------
+Start episode logging
+Episode : 14769 		 Timestep : 1702800 		 Average Reward : -12.43
+Episode : 14800 		 Timestep : 1706400 		 Average Reward : -16.26
+Episode : 14829 		 Timestep : 1710000 		 Average Reward : -13.43
+Episode : 14864 		 Timestep : 1713600 		 Average Reward : -13.12
+Episode : 14902 		 Timestep : 1717200 		 Average Reward : -12.32
+Episode : 14931 		 Timestep : 1720800 		 Average Reward : -17.23
+Episode : 14962 		 Timestep : 1724400 		 Average Reward : -14.34
+Episode : 14981 		 Timestep : 1728000 		 Average Reward : -25.59
+Episode : 15009 		 Timestep : 1731600 		 Average Reward : -18.43
+Episode : 15041 		 Timestep : 1735200 		 Average Reward : -14.63
+Episode : 15080 		 Timestep : 1738800 		 Average Reward : -12.48
+Episode : 15106 		 Timestep : 1742400 		 Average Reward : -18.13
+Episode : 15135 		 Timestep : 1746000 		 Average Reward : -15.72
+Episode : 15162 		 Timestep : 1749600 		 Average Reward : -16.03
+Episode : 15190 		 Timestep : 1753200 		 Average Reward : -16.72
+Episode : 15218 		 Timestep : 1756800 		 Average Reward : -20.3
+Episode : 15245 		 Timestep : 1760400 		 Average Reward : -16.96
+Episode : 15280 		 Timestep : 1764000 		 Average Reward : -13.32
+Episode : 15301 		 Timestep : 1767600 		 Average Reward : -20.72
+Episode : 15319 		 Timestep : 1771200 		 Average Reward : -21.16
+Episode : 15350 		 Timestep : 1774800 		 Average Reward : -16.32
+Episode : 15378 		 Timestep : 1778400 		 Average Reward : -15.17
+Episode : 15414 		 Timestep : 1782000 		 Average Reward : -17.79
+Episode : 15435 		 Timestep : 1785600 		 Average Reward : -19.64
+Episode : 15470 		 Timestep : 1789200 		 Average Reward : -13.32
+Episode : 15494 		 Timestep : 1792800 		 Average Reward : -19.04
+Episode : 15524 		 Timestep : 1796400 		 Average Reward : -15.25
+Episode : 15561 		 Timestep : 1800000 		 Average Reward : -12.61
+--------------------------------------------------------------------------------------------
+saving model at : PPO_preTrained\RichDog\PPO_RichDog_0_20250603-183515.pth
+model savedElapsed Time  : 5:01:15
+--------------------------------------------------------------------------------------------
+std : 0.51
+--------------------------------------------------------------------------------------------
+Start episode logging
+Episode : 15589 		 Timestep : 1803600 		 Average Reward : -17.03
+Episode : 15614 		 Timestep : 1807200 		 Average Reward : -19.17
+Episode : 15651 		 Timestep : 1810800 		 Average Reward : -15.11
+Episode : 15674 		 Timestep : 1814400 		 Average Reward : -15.9
+Episode : 15714 		 Timestep : 1818000 		 Average Reward : -12.29
+Episode : 15755 		 Timestep : 1821600 		 Average Reward : -11.61
+Episode : 15783 		 Timestep : 1825200 		 Average Reward : -16.99
+Episode : 15813 		 Timestep : 1828800 		 Average Reward : -17.08
+Episode : 15838 		 Timestep : 1832400 		 Average Reward : -19.94
+Episode : 15879 		 Timestep : 1836000 		 Average Reward : -11.47
+Episode : 15905 		 Timestep : 1839600 		 Average Reward : -17.89
+Episode : 15934 		 Timestep : 1843200 		 Average Reward : -15.59
+Episode : 15962 		 Timestep : 1846800 		 Average Reward : -18.41
+Episode : 15996 		 Timestep : 1850400 		 Average Reward : -13.49
+Episode : 16028 		 Timestep : 1854000 		 Average Reward : -15.45
+Episode : 16058 		 Timestep : 1857600 		 Average Reward : -16.75
+Episode : 16093 		 Timestep : 1861200 		 Average Reward : -11.39
+Episode : 16122 		 Timestep : 1864800 		 Average Reward : -16.78
+Episode : 16169 		 Timestep : 1868400 		 Average Reward : -11.94
+Episode : 16195 		 Timestep : 1872000 		 Average Reward : -19.33
+Episode : 16215 		 Timestep : 1875600 		 Average Reward : -22.46
+Episode : 16248 		 Timestep : 1879200 		 Average Reward : -14.71
+Episode : 16290 		 Timestep : 1882800 		 Average Reward : -11.12
+Episode : 16316 		 Timestep : 1886400 		 Average Reward : -16.48
+Episode : 16337 		 Timestep : 1890000 		 Average Reward : -24.24
+Episode : 16365 		 Timestep : 1893600 		 Average Reward : -17.05
+Episode : 16395 		 Timestep : 1897200 		 Average Reward : -17.15
+--------------------------------------------------------------------------------------------
+saving model at : PPO_preTrained\RichDog\PPO_RichDog_0_20250603-183515.pth
+model savedElapsed Time  : 5:18:34
+--------------------------------------------------------------------------------------------
+std : 0.505
+--------------------------------------------------------------------------------------------
+Start episode logging
+Episode : 16423 		 Timestep : 1900800 		 Average Reward : -18.25
+Episode : 16450 		 Timestep : 1904400 		 Average Reward : -17.93
+Episode : 16470 		 Timestep : 1908000 		 Average Reward : -24.34
+Episode : 16508 		 Timestep : 1911600 		 Average Reward : -12.81
+Episode : 16534 		 Timestep : 1915200 		 Average Reward : -17.88
+Episode : 16558 		 Timestep : 1918800 		 Average Reward : -20.53
+Episode : 16585 		 Timestep : 1922400 		 Average Reward : -16.04
+Episode : 16611 		 Timestep : 1926000 		 Average Reward : -16.93
+Episode : 16640 		 Timestep : 1929600 		 Average Reward : -14.85
+Episode : 16669 		 Timestep : 1933200 		 Average Reward : -14.71
+Episode : 16702 		 Timestep : 1936800 		 Average Reward : -14.19
+Episode : 16734 		 Timestep : 1940400 		 Average Reward : -15.0
+Episode : 16762 		 Timestep : 1944000 		 Average Reward : -15.48
+Episode : 16796 		 Timestep : 1947600 		 Average Reward : -14.55
+Episode : 16832 		 Timestep : 1951200 		 Average Reward : -13.34
+Episode : 16864 		 Timestep : 1954800 		 Average Reward : -12.89
+Episode : 16895 		 Timestep : 1958400 		 Average Reward : -17.0
+Episode : 16924 		 Timestep : 1962000 		 Average Reward : -13.35
+Episode : 16966 		 Timestep : 1965600 		 Average Reward : -11.69
+Episode : 17004 		 Timestep : 1969200 		 Average Reward : -13.32
+Episode : 17030 		 Timestep : 1972800 		 Average Reward : -14.61
+Episode : 17058 		 Timestep : 1976400 		 Average Reward : -16.69
+Episode : 17080 		 Timestep : 1980000 		 Average Reward : -19.35
+Episode : 17115 		 Timestep : 1983600 		 Average Reward : -14.14
+Episode : 17149 		 Timestep : 1987200 		 Average Reward : -20.6
+Episode : 17173 		 Timestep : 1990800 		 Average Reward : -17.52
+Episode : 17200 		 Timestep : 1994400 		 Average Reward : -14.46
+Episode : 17227 		 Timestep : 1998000 		 Average Reward : -16.49
+--------------------------------------------------------------------------------------------
+saving model at : PPO_preTrained\RichDog\PPO_RichDog_0_20250603-183515.pth
+model savedElapsed Time  : 5:35:43
+--------------------------------------------------------------------------------------------
+std : 0.5001
+--------------------------------------------------------------------------------------------
+Start episode logging
+Episode : 17257 		 Timestep : 2001600 		 Average Reward : -13.99
+Episode : 17291 		 Timestep : 2005200 		 Average Reward : -12.35
+Episode : 17317 		 Timestep : 2008800 		 Average Reward : -17.38
+Episode : 17336 		 Timestep : 2012400 		 Average Reward : -20.94
+Episode : 17352 		 Timestep : 2016000 		 Average Reward : -27.92
+Episode : 17392 		 Timestep : 2019600 		 Average Reward : -10.92
+Episode : 17417 		 Timestep : 2023200 		 Average Reward : -18.32
+Episode : 17443 		 Timestep : 2026800 		 Average Reward : -16.21
+Episode : 17472 		 Timestep : 2030400 		 Average Reward : -16.24
+Episode : 17508 		 Timestep : 2034000 		 Average Reward : -11.81
+Episode : 17541 		 Timestep : 2037600 		 Average Reward : -13.93
+Episode : 17568 		 Timestep : 2041200 		 Average Reward : -15.95
+Episode : 17590 		 Timestep : 2044800 		 Average Reward : -16.81
+Episode : 17608 		 Timestep : 2048400 		 Average Reward : -21.11
+Episode : 17638 		 Timestep : 2052000 		 Average Reward : -14.52
+Episode : 17667 		 Timestep : 2055600 		 Average Reward : -14.12
+Episode : 17698 		 Timestep : 2059200 		 Average Reward : -14.48
+Episode : 17738 		 Timestep : 2062800 		 Average Reward : -12.2
+Episode : 17774 		 Timestep : 2066400 		 Average Reward : -16.27
+Episode : 17801 		 Timestep : 2070000 		 Average Reward : -13.4
+Episode : 17828 		 Timestep : 2073600 		 Average Reward : -15.96
+Episode : 17858 		 Timestep : 2077200 		 Average Reward : -13.65
+Episode : 17887 		 Timestep : 2080800 		 Average Reward : -15.04
+Episode : 17912 		 Timestep : 2084400 		 Average Reward : -15.01
+Episode : 17946 		 Timestep : 2088000 		 Average Reward : -12.12
+Episode : 17973 		 Timestep : 2091600 		 Average Reward : -15.93
+Episode : 17998 		 Timestep : 2095200 		 Average Reward : -15.14
+Episode : 18026 		 Timestep : 2098800 		 Average Reward : -14.04
+--------------------------------------------------------------------------------------------
+saving model at : PPO_preTrained\RichDog\PPO_RichDog_0_20250603-183515.pth
+model savedElapsed Time  : 5:52:37
+--------------------------------------------------------------------------------------------
+std : 0.495
+--------------------------------------------------------------------------------------------
+Start episode logging
+Episode : 18049 		 Timestep : 2102400 		 Average Reward : -15.89
+Episode : 18083 		 Timestep : 2106000 		 Average Reward : -13.32
+Episode : 18106 		 Timestep : 2109600 		 Average Reward : -19.72
+Episode : 18134 		 Timestep : 2113200 		 Average Reward : -14.56
+Episode : 18160 		 Timestep : 2116800 		 Average Reward : -16.68
+Episode : 18200 		 Timestep : 2120400 		 Average Reward : -11.19
+Episode : 18226 		 Timestep : 2124000 		 Average Reward : -14.76
+Episode : 18254 		 Timestep : 2127600 		 Average Reward : -15.06
+Episode : 18284 		 Timestep : 2131200 		 Average Reward : -12.55
+Episode : 18317 		 Timestep : 2134800 		 Average Reward : -13.89
+Episode : 18341 		 Timestep : 2138400 		 Average Reward : -17.85
+Episode : 18365 		 Timestep : 2142000 		 Average Reward : -17.1
+Episode : 18407 		 Timestep : 2145600 		 Average Reward : -16.46
+Episode : 18436 		 Timestep : 2149200 		 Average Reward : -15.76
+Episode : 18464 		 Timestep : 2152800 		 Average Reward : -13.95
+Episode : 18499 		 Timestep : 2156400 		 Average Reward : -11.99
+Episode : 18536 		 Timestep : 2160000 		 Average Reward : -12.69
+Episode : 18564 		 Timestep : 2163600 		 Average Reward : -14.8
+Episode : 18594 		 Timestep : 2167200 		 Average Reward : -12.98
+Episode : 18638 		 Timestep : 2170800 		 Average Reward : -9.74
+Episode : 18676 		 Timestep : 2174400 		 Average Reward : -12.91
+Episode : 18702 		 Timestep : 2178000 		 Average Reward : -14.01
+Episode : 18736 		 Timestep : 2181600 		 Average Reward : -11.35
+Episode : 18761 		 Timestep : 2185200 		 Average Reward : -15.93
+Episode : 18786 		 Timestep : 2188800 		 Average Reward : -16.42
+Episode : 18819 		 Timestep : 2192400 		 Average Reward : -12.47
+Episode : 18846 		 Timestep : 2196000 		 Average Reward : -16.25
+Episode : 18866 		 Timestep : 2199600 		 Average Reward : -16.69
+--------------------------------------------------------------------------------------------
+saving model at : PPO_preTrained\RichDog\PPO_RichDog_0_20250603-183515.pth
+model savedElapsed Time  : 6:09:15
+--------------------------------------------------------------------------------------------
+std : 0.4901
+--------------------------------------------------------------------------------------------
+Start episode logging
+Episode : 18895 		 Timestep : 2203200 		 Average Reward : -15.07
+Episode : 18918 		 Timestep : 2206800 		 Average Reward : -18.33
+Episode : 18939 		 Timestep : 2210400 		 Average Reward : -18.67
+Episode : 18961 		 Timestep : 2214000 		 Average Reward : -15.54
+Episode : 18988 		 Timestep : 2217600 		 Average Reward : -15.38
+Episode : 19027 		 Timestep : 2221200 		 Average Reward : -13.04
+Episode : 19057 		 Timestep : 2224800 		 Average Reward : -13.39
+Episode : 19095 		 Timestep : 2228400 		 Average Reward : -12.3
+Episode : 19121 		 Timestep : 2232000 		 Average Reward : -15.2
+Episode : 19150 		 Timestep : 2235600 		 Average Reward : -13.47
+Episode : 19174 		 Timestep : 2239200 		 Average Reward : -13.7
+Episode : 19209 		 Timestep : 2242800 		 Average Reward : -11.93
+Episode : 19242 		 Timestep : 2246400 		 Average Reward : -13.19
+Episode : 19278 		 Timestep : 2250000 		 Average Reward : -12.51
+Episode : 19314 		 Timestep : 2253600 		 Average Reward : -11.12
+Episode : 19344 		 Timestep : 2257200 		 Average Reward : -13.96
+Episode : 19368 		 Timestep : 2260800 		 Average Reward : -15.2
+Episode : 19396 		 Timestep : 2264400 		 Average Reward : -19.61
+Episode : 19425 		 Timestep : 2268000 		 Average Reward : -13.47
+Episode : 19461 		 Timestep : 2271600 		 Average Reward : -11.63
+Episode : 19487 		 Timestep : 2275200 		 Average Reward : -17.0
+Episode : 19517 		 Timestep : 2278800 		 Average Reward : -13.36
+Episode : 19543 		 Timestep : 2282400 		 Average Reward : -15.0
+Episode : 19564 		 Timestep : 2286000 		 Average Reward : -16.22
+Episode : 19589 		 Timestep : 2289600 		 Average Reward : -14.46
+Episode : 19614 		 Timestep : 2293200 		 Average Reward : -17.41
+Episode : 19638 		 Timestep : 2296800 		 Average Reward : -15.68
+--------------------------------------------------------------------------------------------
+saving model at : PPO_preTrained\RichDog\PPO_RichDog_0_20250603-183515.pth
+model savedElapsed Time  : 6:25:48
+--------------------------------------------------------------------------------------------
+std : 0.485
+--------------------------------------------------------------------------------------------
+Start episode logging
+Episode : 19663 		 Timestep : 2300400 		 Average Reward : -17.18
+Episode : 19701 		 Timestep : 2304000 		 Average Reward : -10.93
+Episode : 19734 		 Timestep : 2307600 		 Average Reward : -10.62
+Episode : 19771 		 Timestep : 2311200 		 Average Reward : -10.84
+Episode : 19799 		 Timestep : 2314800 		 Average Reward : -14.55
+Episode : 19830 		 Timestep : 2318400 		 Average Reward : -15.31
+Episode : 19855 		 Timestep : 2322000 		 Average Reward : -17.41
+Episode : 19883 		 Timestep : 2325600 		 Average Reward : -14.6
+Episode : 19911 		 Timestep : 2329200 		 Average Reward : -13.86
+Episode : 19942 		 Timestep : 2332800 		 Average Reward : -12.86
+Episode : 19973 		 Timestep : 2336400 		 Average Reward : -11.9
+Episode : 20000 		 Timestep : 2340000 		 Average Reward : -14.57
+Episode : 20035 		 Timestep : 2343600 		 Average Reward : -11.08
+Episode : 20071 		 Timestep : 2347200 		 Average Reward : -12.69
+Episode : 20111 		 Timestep : 2350800 		 Average Reward : -10.43
+Episode : 20148 		 Timestep : 2354400 		 Average Reward : -11.63
+Episode : 20175 		 Timestep : 2358000 		 Average Reward : -12.63
+Episode : 20200 		 Timestep : 2361600 		 Average Reward : -17.02
+Episode : 20235 		 Timestep : 2365200 		 Average Reward : -12.71
+Episode : 20263 		 Timestep : 2368800 		 Average Reward : -13.54
+Episode : 20297 		 Timestep : 2372400 		 Average Reward : -12.21
+Episode : 20329 		 Timestep : 2376000 		 Average Reward : -12.26
+Episode : 20352 		 Timestep : 2379600 		 Average Reward : -15.62
+Episode : 20379 		 Timestep : 2383200 		 Average Reward : -14.97
+Episode : 20404 		 Timestep : 2386800 		 Average Reward : -14.78
+Episode : 20442 		 Timestep : 2390400 		 Average Reward : -10.85
+Episode : 20478 		 Timestep : 2394000 		 Average Reward : -11.63
+Episode : 20501 		 Timestep : 2397600 		 Average Reward : -17.68
+--------------------------------------------------------------------------------------------
+saving model at : PPO_preTrained\RichDog\PPO_RichDog_0_20250603-183515.pth
+model savedElapsed Time  : 6:42:20
+--------------------------------------------------------------------------------------------
+std : 0.48
+--------------------------------------------------------------------------------------------
+Start episode logging
+Episode : 20524 		 Timestep : 2401200 		 Average Reward : -17.09
+Episode : 20551 		 Timestep : 2404800 		 Average Reward : -14.05
+Episode : 20579 		 Timestep : 2408400 		 Average Reward : -12.65
+Episode : 20605 		 Timestep : 2412000 		 Average Reward : -15.85
+Episode : 20630 		 Timestep : 2415600 		 Average Reward : -13.75
+Episode : 20665 		 Timestep : 2419200 		 Average Reward : -12.54
+Episode : 20687 		 Timestep : 2422800 		 Average Reward : -26.04
+Episode : 20713 		 Timestep : 2426400 		 Average Reward : -13.72
+Episode : 20750 		 Timestep : 2430000 		 Average Reward : -10.59
+Episode : 20777 		 Timestep : 2433600 		 Average Reward : -13.84
+Episode : 20811 		 Timestep : 2437200 		 Average Reward : -11.62
+Episode : 20850 		 Timestep : 2440800 		 Average Reward : -11.13
+Episode : 20883 		 Timestep : 2444400 		 Average Reward : -11.98
+Episode : 20919 		 Timestep : 2448000 		 Average Reward : -10.91
+Episode : 20937 		 Timestep : 2451600 		 Average Reward : -19.9
+Episode : 20961 		 Timestep : 2455200 		 Average Reward : -28.79
+Episode : 20997 		 Timestep : 2458800 		 Average Reward : -12.45
+Episode : 21033 		 Timestep : 2462400 		 Average Reward : -10.92
+Episode : 21062 		 Timestep : 2466000 		 Average Reward : -12.65
+Episode : 21085 		 Timestep : 2469600 		 Average Reward : -16.1
+Episode : 21119 		 Timestep : 2473200 		 Average Reward : -13.08
+Episode : 21148 		 Timestep : 2476800 		 Average Reward : -14.82
+Episode : 21177 		 Timestep : 2480400 		 Average Reward : -13.98
+Episode : 21199 		 Timestep : 2484000 		 Average Reward : -16.21
+Episode : 21227 		 Timestep : 2487600 		 Average Reward : -16.38
+Episode : 21249 		 Timestep : 2491200 		 Average Reward : -14.0
+Episode : 21277 		 Timestep : 2494800 		 Average Reward : -14.69
+Episode : 21304 		 Timestep : 2498400 		 Average Reward : -13.07
+--------------------------------------------------------------------------------------------
+saving model at : PPO_preTrained\RichDog\PPO_RichDog_0_20250603-183515.pth
+model savedElapsed Time  : 6:58:52
+--------------------------------------------------------------------------------------------
+std : 0.475
+--------------------------------------------------------------------------------------------
+Start episode logging
+Episode : 21331 		 Timestep : 2502000 		 Average Reward : -13.44
+Episode : 21358 		 Timestep : 2505600 		 Average Reward : -23.76
+Episode : 21400 		 Timestep : 2509200 		 Average Reward : -10.72
+Episode : 21431 		 Timestep : 2512800 		 Average Reward : -12.7
+Episode : 21459 		 Timestep : 2516400 		 Average Reward : -13.3
+Episode : 21490 		 Timestep : 2520000 		 Average Reward : -12.19
+Episode : 21527 		 Timestep : 2523600 		 Average Reward : -11.22
+Episode : 21558 		 Timestep : 2527200 		 Average Reward : -13.06
+Episode : 21587 		 Timestep : 2530800 		 Average Reward : -13.6
+Episode : 21605 		 Timestep : 2534400 		 Average Reward : -17.52
+Episode : 21629 		 Timestep : 2538000 		 Average Reward : -18.82
+Episode : 21655 		 Timestep : 2541600 		 Average Reward : -14.46
+Episode : 21678 		 Timestep : 2545200 		 Average Reward : -17.0
+Episode : 21710 		 Timestep : 2548800 		 Average Reward : -11.53
+Episode : 21728 		 Timestep : 2552400 		 Average Reward : -18.75
+Episode : 21759 		 Timestep : 2556000 		 Average Reward : -13.09
+Episode : 21781 		 Timestep : 2559600 		 Average Reward : -15.69
+Episode : 21811 		 Timestep : 2563200 		 Average Reward : -14.35
+Episode : 21850 		 Timestep : 2566800 		 Average Reward : -10.02
+Episode : 21875 		 Timestep : 2570400 		 Average Reward : -13.45
+Episode : 21904 		 Timestep : 2574000 		 Average Reward : -20.75
+Episode : 21936 		 Timestep : 2577600 		 Average Reward : -12.39
+Episode : 21959 		 Timestep : 2581200 		 Average Reward : -15.09
+Episode : 21977 		 Timestep : 2584800 		 Average Reward : -20.08
+Episode : 22000 		 Timestep : 2588400 		 Average Reward : -15.27
+Episode : 22027 		 Timestep : 2592000 		 Average Reward : -14.78
+Episode : 22062 		 Timestep : 2595600 		 Average Reward : -12.09
+Episode : 22094 		 Timestep : 2599200 		 Average Reward : -11.46
+--------------------------------------------------------------------------------------------
+saving model at : PPO_preTrained\RichDog\PPO_RichDog_0_20250603-183515.pth
+model savedElapsed Time  : 7:15:25
+--------------------------------------------------------------------------------------------
+std : 0.47
+--------------------------------------------------------------------------------------------
+Start episode logging
+Episode : 22119 		 Timestep : 2602800 		 Average Reward : -15.55
+Episode : 22143 		 Timestep : 2606400 		 Average Reward : -14.83
+Episode : 22175 		 Timestep : 2610000 		 Average Reward : -12.81
+Episode : 22199 		 Timestep : 2613600 		 Average Reward : -17.12
+Episode : 22220 		 Timestep : 2617200 		 Average Reward : -17.28
+Episode : 22239 		 Timestep : 2620800 		 Average Reward : -19.31
+Episode : 22267 		 Timestep : 2624400 		 Average Reward : -12.68
+Episode : 22293 		 Timestep : 2628000 		 Average Reward : -14.63
+Episode : 22332 		 Timestep : 2631600 		 Average Reward : -11.91
+Episode : 22371 		 Timestep : 2635200 		 Average Reward : -10.7
+Episode : 22401 		 Timestep : 2638800 		 Average Reward : -12.13
+Episode : 22435 		 Timestep : 2642400 		 Average Reward : -12.08
+Episode : 22470 		 Timestep : 2646000 		 Average Reward : -12.97
+Episode : 22495 		 Timestep : 2649600 		 Average Reward : -14.62
+Episode : 22517 		 Timestep : 2653200 		 Average Reward : -20.5
+Episode : 22544 		 Timestep : 2656800 		 Average Reward : -21.09
+Episode : 22569 		 Timestep : 2660400 		 Average Reward : -14.89
+Episode : 22605 		 Timestep : 2664000 		 Average Reward : -13.11
+Episode : 22625 		 Timestep : 2667600 		 Average Reward : -17.5
+Episode : 22647 		 Timestep : 2671200 		 Average Reward : -14.24
+Episode : 22673 		 Timestep : 2674800 		 Average Reward : -14.01
+Episode : 22698 		 Timestep : 2678400 		 Average Reward : -13.72
+Episode : 22730 		 Timestep : 2682000 		 Average Reward : -12.72
+Episode : 22753 		 Timestep : 2685600 		 Average Reward : -15.49
+Episode : 22776 		 Timestep : 2689200 		 Average Reward : -13.69
+Episode : 22800 		 Timestep : 2692800 		 Average Reward : -17.26
+Episode : 22828 		 Timestep : 2696400 		 Average Reward : -11.87
+Episode : 22870 		 Timestep : 2700000 		 Average Reward : -9.76
+--------------------------------------------------------------------------------------------
+saving model at : PPO_preTrained\RichDog\PPO_RichDog_0_20250603-183515.pth
+model savedElapsed Time  : 7:31:57
+--------------------------------------------------------------------------------------------
+std : 0.465
+--------------------------------------------------------------------------------------------
+Start episode logging
+Episode : 22899 		 Timestep : 2703600 		 Average Reward : -12.75
+Episode : 22928 		 Timestep : 2707200 		 Average Reward : -13.63
+Episode : 22953 		 Timestep : 2710800 		 Average Reward : -14.25
+Episode : 22992 		 Timestep : 2714400 		 Average Reward : -10.39
+Episode : 23027 		 Timestep : 2718000 		 Average Reward : -11.73
+Episode : 23054 		 Timestep : 2721600 		 Average Reward : -14.49
+Episode : 23078 		 Timestep : 2725200 		 Average Reward : -14.49
+Episode : 23099 		 Timestep : 2728800 		 Average Reward : -17.85
+Episode : 23124 		 Timestep : 2732400 		 Average Reward : -15.4
+Episode : 23147 		 Timestep : 2736000 		 Average Reward : -13.25
+Episode : 23187 		 Timestep : 2739600 		 Average Reward : -10.34
+Episode : 23216 		 Timestep : 2743200 		 Average Reward : -11.64
+Episode : 23249 		 Timestep : 2746800 		 Average Reward : -13.43
+Episode : 23279 		 Timestep : 2750400 		 Average Reward : -12.02
+Episode : 23304 		 Timestep : 2754000 		 Average Reward : -14.29
+Episode : 23328 		 Timestep : 2757600 		 Average Reward : -16.29
+Episode : 23357 		 Timestep : 2761200 		 Average Reward : -12.75
+Episode : 23383 		 Timestep : 2764800 		 Average Reward : -15.26
+Episode : 23409 		 Timestep : 2768400 		 Average Reward : -12.3
+Episode : 23439 		 Timestep : 2772000 		 Average Reward : -16.97
+Episode : 23465 		 Timestep : 2775600 		 Average Reward : -12.97
+Episode : 23493 		 Timestep : 2779200 		 Average Reward : -12.85
+Episode : 23519 		 Timestep : 2782800 		 Average Reward : -13.07
+Episode : 23548 		 Timestep : 2786400 		 Average Reward : -12.15
+Episode : 23580 		 Timestep : 2790000 		 Average Reward : -11.65
+Episode : 23612 		 Timestep : 2793600 		 Average Reward : -11.4
+Episode : 23641 		 Timestep : 2797200 		 Average Reward : -13.24
+--------------------------------------------------------------------------------------------
+saving model at : PPO_preTrained\RichDog\PPO_RichDog_0_20250603-183515.pth
+model savedElapsed Time  : 7:48:28
+--------------------------------------------------------------------------------------------
+std : 0.46
+--------------------------------------------------------------------------------------------
+Start episode logging
+Episode : 23662 		 Timestep : 2800800 		 Average Reward : -15.94
+Episode : 23686 		 Timestep : 2804400 		 Average Reward : -14.63
+Episode : 23711 		 Timestep : 2808000 		 Average Reward : -12.88
+Episode : 23745 		 Timestep : 2811600 		 Average Reward : -11.58
+Episode : 23770 		 Timestep : 2815200 		 Average Reward : -14.48
+Episode : 23811 		 Timestep : 2818800 		 Average Reward : -9.59
+Episode : 23840 		 Timestep : 2822400 		 Average Reward : -13.4
+Episode : 23863 		 Timestep : 2826000 		 Average Reward : -13.39
+Episode : 23895 		 Timestep : 2829600 		 Average Reward : -13.93
+Episode : 23924 		 Timestep : 2833200 		 Average Reward : -12.09
+Episode : 23955 		 Timestep : 2836800 		 Average Reward : -13.33
+Episode : 23985 		 Timestep : 2840400 		 Average Reward : -11.16
+Episode : 24014 		 Timestep : 2844000 		 Average Reward : -13.71
+Episode : 24046 		 Timestep : 2847600 		 Average Reward : -13.34
+Episode : 24071 		 Timestep : 2851200 		 Average Reward : -15.07
+Episode : 24104 		 Timestep : 2854800 		 Average Reward : -12.44
+Episode : 24135 		 Timestep : 2858400 		 Average Reward : -11.32
+Episode : 24157 		 Timestep : 2862000 		 Average Reward : -17.45
+Episode : 24189 		 Timestep : 2865600 		 Average Reward : -10.75
+Episode : 24206 		 Timestep : 2869200 		 Average Reward : -18.11
+Episode : 24237 		 Timestep : 2872800 		 Average Reward : -11.67
+Episode : 24267 		 Timestep : 2876400 		 Average Reward : -11.45
+Episode : 24297 		 Timestep : 2880000 		 Average Reward : -12.41
+Episode : 24326 		 Timestep : 2883600 		 Average Reward : -11.32
+Episode : 24369 		 Timestep : 2887200 		 Average Reward : -9.37
+Episode : 24397 		 Timestep : 2890800 		 Average Reward : -12.41
+Episode : 24425 		 Timestep : 2894400 		 Average Reward : -13.39
+Episode : 24453 		 Timestep : 2898000 		 Average Reward : -13.07
+--------------------------------------------------------------------------------------------
+saving model at : PPO_preTrained\RichDog\PPO_RichDog_0_20250603-183515.pth
+model savedElapsed Time  : 8:05:02
+--------------------------------------------------------------------------------------------
+std : 0.4551
+--------------------------------------------------------------------------------------------
+Start episode logging
+Episode : 24482 		 Timestep : 2901600 		 Average Reward : -13.51
+Episode : 24513 		 Timestep : 2905200 		 Average Reward : -11.44
+Episode : 24536 		 Timestep : 2908800 		 Average Reward : -16.03
+Episode : 24560 		 Timestep : 2912400 		 Average Reward : -14.04
+Episode : 24587 		 Timestep : 2916000 		 Average Reward : -13.68
+Episode : 24618 		 Timestep : 2919600 		 Average Reward : -10.87
+Episode : 24636 		 Timestep : 2923200 		 Average Reward : -17.79
+Episode : 24659 		 Timestep : 2926800 		 Average Reward : -13.46
+Episode : 24696 		 Timestep : 2930400 		 Average Reward : -10.48
+Episode : 24727 		 Timestep : 2934000 		 Average Reward : -11.22
+Episode : 24752 		 Timestep : 2937600 		 Average Reward : -12.22
+Episode : 24788 		 Timestep : 2941200 		 Average Reward : -11.25
+Episode : 24817 		 Timestep : 2944800 		 Average Reward : -11.82
+Episode : 24854 		 Timestep : 2948400 		 Average Reward : -9.45
+Episode : 24880 		 Timestep : 2952000 		 Average Reward : -13.41
+Episode : 24905 		 Timestep : 2955600 		 Average Reward : -13.0
+Episode : 24929 		 Timestep : 2959200 		 Average Reward : -14.42
+Episode : 24952 		 Timestep : 2962800 		 Average Reward : -14.17
+Episode : 24984 		 Timestep : 2966400 		 Average Reward : -11.97
+Episode : 25005 		 Timestep : 2970000 		 Average Reward : -17.2
+Episode : 25034 		 Timestep : 2973600 		 Average Reward : -13.59
+Episode : 25059 		 Timestep : 2977200 		 Average Reward : -13.91
+Episode : 25094 		 Timestep : 2980800 		 Average Reward : -11.03
+Episode : 25122 		 Timestep : 2984400 		 Average Reward : -14.03
+Episode : 25147 		 Timestep : 2988000 		 Average Reward : -16.25
+Episode : 25177 		 Timestep : 2991600 		 Average Reward : -10.56
+Episode : 25214 		 Timestep : 2995200 		 Average Reward : -11.1
+Episode : 25237 		 Timestep : 2998800 		 Average Reward : -12.77
+--------------------------------------------------------------------------------------------
+saving model at : PPO_preTrained\RichDog\PPO_RichDog_0_20250603-183515.pth
+model savedElapsed Time  : 8:21:34
+--------------------------------------------------------------------------------------------
+std : 0.45
+--------------------------------------------------------------------------------------------
+Start episode logging
+Episode : 25267 		 Timestep : 3002400 		 Average Reward : -10.85
+Episode : 25294 		 Timestep : 3006000 		 Average Reward : -11.46
+Episode : 25314 		 Timestep : 3009600 		 Average Reward : -17.2
+Episode : 25350 		 Timestep : 3013200 		 Average Reward : -10.62
+Episode : 25373 		 Timestep : 3016800 		 Average Reward : -16.68
+Episode : 25400 		 Timestep : 3020400 		 Average Reward : -13.28
+Episode : 25440 		 Timestep : 3024000 		 Average Reward : -9.08
+Episode : 25466 		 Timestep : 3027600 		 Average Reward : -13.18
+Episode : 25497 		 Timestep : 3031200 		 Average Reward : -11.43
+Episode : 25524 		 Timestep : 3034800 		 Average Reward : -13.42
+Episode : 25551 		 Timestep : 3038400 		 Average Reward : -14.42
+Episode : 25582 		 Timestep : 3042000 		 Average Reward : -11.08
+Episode : 25612 		 Timestep : 3045600 		 Average Reward : -13.29
+Episode : 25643 		 Timestep : 3049200 		 Average Reward : -10.91
+Episode : 25674 		 Timestep : 3052800 		 Average Reward : -12.23
+Episode : 25706 		 Timestep : 3056400 		 Average Reward : -13.5
+Episode : 25734 		 Timestep : 3060000 		 Average Reward : -12.52
+Episode : 25760 		 Timestep : 3063600 		 Average Reward : -14.7
+Episode : 25785 		 Timestep : 3067200 		 Average Reward : -12.93
+Episode : 25810 		 Timestep : 3070800 		 Average Reward : -14.39
+Episode : 25832 		 Timestep : 3074400 		 Average Reward : -15.75
+Episode : 25864 		 Timestep : 3078000 		 Average Reward : -12.25
+Episode : 25887 		 Timestep : 3081600 		 Average Reward : -14.8
+Episode : 25920 		 Timestep : 3085200 		 Average Reward : -12.16
+Episode : 25942 		 Timestep : 3088800 		 Average Reward : -13.13
+Episode : 25977 		 Timestep : 3092400 		 Average Reward : -11.12
+Episode : 26004 		 Timestep : 3096000 		 Average Reward : -12.99
+Episode : 26025 		 Timestep : 3099600 		 Average Reward : -14.13
+--------------------------------------------------------------------------------------------
+saving model at : PPO_preTrained\RichDog\PPO_RichDog_0_20250603-183515.pth
+model savedElapsed Time  : 8:38:05
+--------------------------------------------------------------------------------------------
+std : 0.4451
+--------------------------------------------------------------------------------------------
+Start episode logging
+Episode : 26047 		 Timestep : 3103200 		 Average Reward : -14.86
+Episode : 26078 		 Timestep : 3106800 		 Average Reward : -10.8
+Episode : 26106 		 Timestep : 3110400 		 Average Reward : -12.7
+Episode : 26123 		 Timestep : 3114000 		 Average Reward : -15.28
+Episode : 26151 		 Timestep : 3117600 		 Average Reward : -12.8
+Episode : 26175 		 Timestep : 3121200 		 Average Reward : -13.01
+Episode : 26212 		 Timestep : 3124800 		 Average Reward : -10.72
+Episode : 26244 		 Timestep : 3128400 		 Average Reward : -12.07
+Episode : 26269 		 Timestep : 3132000 		 Average Reward : -11.99
+Episode : 26301 		 Timestep : 3135600 		 Average Reward : -9.79
+Episode : 26330 		 Timestep : 3139200 		 Average Reward : -12.54
+Episode : 26359 		 Timestep : 3142800 		 Average Reward : -13.09
+Episode : 26386 		 Timestep : 3146400 		 Average Reward : -12.71
+Episode : 26408 		 Timestep : 3150000 		 Average Reward : -15.88
+Episode : 26434 		 Timestep : 3153600 		 Average Reward : -11.98
+Episode : 26457 		 Timestep : 3157200 		 Average Reward : -14.74
+Episode : 26497 		 Timestep : 3160800 		 Average Reward : -10.32
+Episode : 26515 		 Timestep : 3164400 		 Average Reward : -14.55
+Episode : 26541 		 Timestep : 3168000 		 Average Reward : -11.73
+Episode : 26567 		 Timestep : 3171600 		 Average Reward : -12.58
+Episode : 26594 		 Timestep : 3175200 		 Average Reward : -13.42
+Episode : 26627 		 Timestep : 3178800 		 Average Reward : -10.69
+Episode : 26649 		 Timestep : 3182400 		 Average Reward : -14.07
+Episode : 26682 		 Timestep : 3186000 		 Average Reward : -10.21
+Episode : 26712 		 Timestep : 3189600 		 Average Reward : -11.26
+Episode : 26731 		 Timestep : 3193200 		 Average Reward : -15.56
+Episode : 26757 		 Timestep : 3196800 		 Average Reward : -14.36
+--------------------------------------------------------------------------------------------
+saving model at : PPO_preTrained\RichDog\PPO_RichDog_0_20250603-183515.pth
+model savedElapsed Time  : 8:54:40
+--------------------------------------------------------------------------------------------
+std : 0.44
+--------------------------------------------------------------------------------------------
+Start episode logging
+Episode : 26779 		 Timestep : 3200400 		 Average Reward : -13.01
+Episode : 26802 		 Timestep : 3204000 		 Average Reward : -13.17
+Episode : 26830 		 Timestep : 3207600 		 Average Reward : -11.11
+Episode : 26856 		 Timestep : 3211200 		 Average Reward : -13.95
+Episode : 26878 		 Timestep : 3214800 		 Average Reward : -14.12
+Episode : 26896 		 Timestep : 3218400 		 Average Reward : -16.66
+Episode : 26920 		 Timestep : 3222000 		 Average Reward : -14.27
+Episode : 26948 		 Timestep : 3225600 		 Average Reward : -11.54
+Episode : 26975 		 Timestep : 3229200 		 Average Reward : -10.13
+Episode : 26994 		 Timestep : 3232800 		 Average Reward : -16.68
+Episode : 27016 		 Timestep : 3236400 		 Average Reward : -12.5
+Episode : 27037 		 Timestep : 3240000 		 Average Reward : -16.35
+Episode : 27062 		 Timestep : 3243600 		 Average Reward : -13.94
+Episode : 27087 		 Timestep : 3247200 		 Average Reward : -14.9
+Episode : 27109 		 Timestep : 3250800 		 Average Reward : -15.45
+Episode : 27133 		 Timestep : 3254400 		 Average Reward : -14.68
+Episode : 27169 		 Timestep : 3258000 		 Average Reward : -10.62
+Episode : 27188 		 Timestep : 3261600 		 Average Reward : -15.13
+Episode : 27211 		 Timestep : 3265200 		 Average Reward : -10.79
+Episode : 27237 		 Timestep : 3268800 		 Average Reward : -12.37
+Episode : 27260 		 Timestep : 3272400 		 Average Reward : -13.76
+Episode : 27283 		 Timestep : 3276000 		 Average Reward : -15.79
+Episode : 27313 		 Timestep : 3279600 		 Average Reward : -11.92
+Episode : 27339 		 Timestep : 3283200 		 Average Reward : -12.74
+Episode : 27364 		 Timestep : 3286800 		 Average Reward : -13.25
+Episode : 27393 		 Timestep : 3290400 		 Average Reward : -12.67
+Episode : 27422 		 Timestep : 3294000 		 Average Reward : -11.28
+Episode : 27446 		 Timestep : 3297600 		 Average Reward : -10.99
+--------------------------------------------------------------------------------------------
+saving model at : PPO_preTrained\RichDog\PPO_RichDog_0_20250603-183515.pth
+model savedElapsed Time  : 9:11:09
+--------------------------------------------------------------------------------------------
+std : 0.435
+--------------------------------------------------------------------------------------------
+Start episode logging
+Episode : 27470 		 Timestep : 3301200 		 Average Reward : -11.71
+Episode : 27499 		 Timestep : 3304800 		 Average Reward : -11.85
+Episode : 27524 		 Timestep : 3308400 		 Average Reward : -11.66
+Episode : 27549 		 Timestep : 3312000 		 Average Reward : -11.59
+Episode : 27576 		 Timestep : 3315600 		 Average Reward : -13.19
+Episode : 27598 		 Timestep : 3319200 		 Average Reward : -14.73
+Episode : 27623 		 Timestep : 3322800 		 Average Reward : -13.67
+Episode : 27649 		 Timestep : 3326400 		 Average Reward : -13.35
+Episode : 27677 		 Timestep : 3330000 		 Average Reward : -12.89
+Episode : 27711 		 Timestep : 3333600 		 Average Reward : -11.52
+Episode : 27736 		 Timestep : 3337200 		 Average Reward : -13.24
+Episode : 27772 		 Timestep : 3340800 		 Average Reward : -10.66
+Episode : 27798 		 Timestep : 3344400 		 Average Reward : -10.17
+Episode : 27828 		 Timestep : 3348000 		 Average Reward : -10.67
+Episode : 27855 		 Timestep : 3351600 		 Average Reward : -13.47
+Episode : 27884 		 Timestep : 3355200 		 Average Reward : -10.97
+Episode : 27903 		 Timestep : 3358800 		 Average Reward : -13.92
+Episode : 27923 		 Timestep : 3362400 		 Average Reward : -13.35
+Episode : 27951 		 Timestep : 3366000 		 Average Reward : -11.77
+Episode : 27976 		 Timestep : 3369600 		 Average Reward : -14.36
+Episode : 28008 		 Timestep : 3373200 		 Average Reward : -10.24
+Episode : 28033 		 Timestep : 3376800 		 Average Reward : -11.96
+Episode : 28064 		 Timestep : 3380400 		 Average Reward : -12.21
+Episode : 28093 		 Timestep : 3384000 		 Average Reward : -13.15
+Episode : 28122 		 Timestep : 3387600 		 Average Reward : -9.94
+Episode : 28141 		 Timestep : 3391200 		 Average Reward : -14.52
+Episode : 28168 		 Timestep : 3394800 		 Average Reward : -11.57
+Episode : 28190 		 Timestep : 3398400 		 Average Reward : -11.03
+--------------------------------------------------------------------------------------------
+saving model at : PPO_preTrained\RichDog\PPO_RichDog_0_20250603-183515.pth
+model savedElapsed Time  : 9:27:42
+--------------------------------------------------------------------------------------------
+std : 0.43
+--------------------------------------------------------------------------------------------
+Start episode logging
+Episode : 28228 		 Timestep : 3402000 		 Average Reward : -9.69
+Episode : 28258 		 Timestep : 3405600 		 Average Reward : -10.32
+Episode : 28289 		 Timestep : 3409200 		 Average Reward : -10.93
+Episode : 28319 		 Timestep : 3412800 		 Average Reward : -10.43
+Episode : 28341 		 Timestep : 3416400 		 Average Reward : -13.2
+Episode : 28359 		 Timestep : 3420000 		 Average Reward : -16.58
+Episode : 28388 		 Timestep : 3423600 		 Average Reward : -9.46
+Episode : 28410 		 Timestep : 3427200 		 Average Reward : -13.78
+Episode : 28434 		 Timestep : 3430800 		 Average Reward : -13.18
+Episode : 28458 		 Timestep : 3434400 		 Average Reward : -13.64
+Episode : 28488 		 Timestep : 3438000 		 Average Reward : -11.91
+Episode : 28520 		 Timestep : 3441600 		 Average Reward : -10.11
+Episode : 28547 		 Timestep : 3445200 		 Average Reward : -12.65
+Episode : 28581 		 Timestep : 3448800 		 Average Reward : -9.92
+Episode : 28611 		 Timestep : 3452400 		 Average Reward : -10.2
+Episode : 28631 		 Timestep : 3456000 		 Average Reward : -15.61
+Episode : 28665 		 Timestep : 3459600 		 Average Reward : -11.12
+Episode : 28683 		 Timestep : 3463200 		 Average Reward : -15.15
+Episode : 28711 		 Timestep : 3466800 		 Average Reward : -12.09
+Episode : 28733 		 Timestep : 3470400 		 Average Reward : -13.13
+Episode : 28760 		 Timestep : 3474000 		 Average Reward : -11.14
+Episode : 28783 		 Timestep : 3477600 		 Average Reward : -12.69
+Episode : 28808 		 Timestep : 3481200 		 Average Reward : -12.21
+Episode : 28840 		 Timestep : 3484800 		 Average Reward : -8.35
+Episode : 28872 		 Timestep : 3488400 		 Average Reward : -11.87
+Episode : 28893 		 Timestep : 3492000 		 Average Reward : -12.35
+Episode : 28916 		 Timestep : 3495600 		 Average Reward : -12.65
+Episode : 28946 		 Timestep : 3499200 		 Average Reward : -10.42
+--------------------------------------------------------------------------------------------
+saving model at : PPO_preTrained\RichDog\PPO_RichDog_0_20250603-183515.pth
+model savedElapsed Time  : 9:44:13
+--------------------------------------------------------------------------------------------
+std : 0.425
+--------------------------------------------------------------------------------------------
+Start episode logging
+Episode : 28969 		 Timestep : 3502800 		 Average Reward : -11.53
+Episode : 28999 		 Timestep : 3506400 		 Average Reward : -10.98
+Episode : 29032 		 Timestep : 3510000 		 Average Reward : -9.21
+Episode : 29072 		 Timestep : 3513600 		 Average Reward : -8.51
+Episode : 29101 		 Timestep : 3517200 		 Average Reward : -10.12
+Episode : 29124 		 Timestep : 3520800 		 Average Reward : -12.49
+Episode : 29144 		 Timestep : 3524400 		 Average Reward : -14.63
+Episode : 29163 		 Timestep : 3528000 		 Average Reward : -14.34
+Episode : 29187 		 Timestep : 3531600 		 Average Reward : -12.64
+Episode : 29205 		 Timestep : 3535200 		 Average Reward : -16.42
+Episode : 29227 		 Timestep : 3538800 		 Average Reward : -12.58
+Episode : 29255 		 Timestep : 3542400 		 Average Reward : -10.9
+Episode : 29289 		 Timestep : 3546000 		 Average Reward : -9.18
+Episode : 29310 		 Timestep : 3549600 		 Average Reward : -13.96
+Episode : 29329 		 Timestep : 3553200 		 Average Reward : -15.71
+Episode : 29356 		 Timestep : 3556800 		 Average Reward : -10.66
+Episode : 29384 		 Timestep : 3560400 		 Average Reward : -11.88
+Episode : 29417 		 Timestep : 3564000 		 Average Reward : -10.78
+Episode : 29448 		 Timestep : 3567600 		 Average Reward : -9.63
+Episode : 29484 		 Timestep : 3571200 		 Average Reward : -9.11
+Episode : 29506 		 Timestep : 3574800 		 Average Reward : -12.48
+Episode : 29528 		 Timestep : 3578400 		 Average Reward : -14.2
+Episode : 29549 		 Timestep : 3582000 		 Average Reward : -12.91
+Episode : 29572 		 Timestep : 3585600 		 Average Reward : -13.73
+Episode : 29600 		 Timestep : 3589200 		 Average Reward : -10.58
+Episode : 29623 		 Timestep : 3592800 		 Average Reward : -15.2
+Episode : 29662 		 Timestep : 3596400 		 Average Reward : -8.11
+Episode : 29691 		 Timestep : 3600000 		 Average Reward : -11.87
+--------------------------------------------------------------------------------------------
+saving model at : PPO_preTrained\RichDog\PPO_RichDog_0_20250603-183515.pth
+model savedElapsed Time  : 10:00:49
+--------------------------------------------------------------------------------------------
+std : 0.42
+--------------------------------------------------------------------------------------------
+Start episode logging
+Episode : 29715 		 Timestep : 3603600 		 Average Reward : -10.51
+Episode : 29747 		 Timestep : 3607200 		 Average Reward : -12.34
+Episode : 29772 		 Timestep : 3610800 		 Average Reward : -12.07
+Episode : 29794 		 Timestep : 3614400 		 Average Reward : -14.12
+Episode : 29818 		 Timestep : 3618000 		 Average Reward : -13.45
+Episode : 29843 		 Timestep : 3621600 		 Average Reward : -10.69
+Episode : 29871 		 Timestep : 3625200 		 Average Reward : -10.93
+Episode : 29891 		 Timestep : 3628800 		 Average Reward : -11.69
+Episode : 29917 		 Timestep : 3632400 		 Average Reward : -10.36
+Episode : 29942 		 Timestep : 3636000 		 Average Reward : -12.67
+Episode : 29965 		 Timestep : 3639600 		 Average Reward : -13.24
+Episode : 29984 		 Timestep : 3643200 		 Average Reward : -12.95
+Episode : 30009 		 Timestep : 3646800 		 Average Reward : -11.29
+Episode : 30038 		 Timestep : 3650400 		 Average Reward : -10.95
+Episode : 30056 		 Timestep : 3654000 		 Average Reward : -14.47
+Episode : 30086 		 Timestep : 3657600 		 Average Reward : -9.48
+Episode : 30109 		 Timestep : 3661200 		 Average Reward : -12.03
+Episode : 30140 		 Timestep : 3664800 		 Average Reward : -9.37
+Episode : 30169 		 Timestep : 3668400 		 Average Reward : -10.56
+Episode : 30196 		 Timestep : 3672000 		 Average Reward : -9.49
+Episode : 30221 		 Timestep : 3675600 		 Average Reward : -11.63
+Episode : 30250 		 Timestep : 3679200 		 Average Reward : -11.2
+Episode : 30276 		 Timestep : 3682800 		 Average Reward : -11.59
+Episode : 30301 		 Timestep : 3686400 		 Average Reward : -12.32
+Episode : 30324 		 Timestep : 3690000 		 Average Reward : -12.71
+Episode : 30348 		 Timestep : 3693600 		 Average Reward : -11.78
+Episode : 30378 		 Timestep : 3697200 		 Average Reward : -11.45
+--------------------------------------------------------------------------------------------
+saving model at : PPO_preTrained\RichDog\PPO_RichDog_0_20250603-183515.pth
+model savedElapsed Time  : 10:17:18
+--------------------------------------------------------------------------------------------
+std : 0.415
+--------------------------------------------------------------------------------------------
+Start episode logging
+Episode : 30398 		 Timestep : 3700800 		 Average Reward : -13.03
+Episode : 30419 		 Timestep : 3704400 		 Average Reward : -12.75
+Episode : 30442 		 Timestep : 3708000 		 Average Reward : -12.98
+Episode : 30471 		 Timestep : 3711600 		 Average Reward : -10.44
+Episode : 30497 		 Timestep : 3715200 		 Average Reward : -12.82
+Episode : 30522 		 Timestep : 3718800 		 Average Reward : -10.78
+Episode : 30548 		 Timestep : 3722400 		 Average Reward : -11.82
+Episode : 30572 		 Timestep : 3726000 		 Average Reward : -14.3
+Episode : 30589 		 Timestep : 3729600 		 Average Reward : -16.17
+Episode : 30615 		 Timestep : 3733200 		 Average Reward : -10.92
+Episode : 30647 		 Timestep : 3736800 		 Average Reward : -9.99
+Episode : 30669 		 Timestep : 3740400 		 Average Reward : -13.45
+Episode : 30698 		 Timestep : 3744000 		 Average Reward : -10.24
+Episode : 30726 		 Timestep : 3747600 		 Average Reward : -11.25
+Episode : 30755 		 Timestep : 3751200 		 Average Reward : -11.24
+Episode : 30777 		 Timestep : 3754800 		 Average Reward : -13.06
+Episode : 30796 		 Timestep : 3758400 		 Average Reward : -14.5
+Episode : 30827 		 Timestep : 3762000 		 Average Reward : -16.21
+Episode : 30859 		 Timestep : 3765600 		 Average Reward : -10.16
+Episode : 30883 		 Timestep : 3769200 		 Average Reward : -9.69
+Episode : 30912 		 Timestep : 3772800 		 Average Reward : -10.83
+Episode : 30942 		 Timestep : 3776400 		 Average Reward : -10.18
+Episode : 30971 		 Timestep : 3780000 		 Average Reward : -10.24
+Episode : 30991 		 Timestep : 3783600 		 Average Reward : -13.81
+Episode : 31015 		 Timestep : 3787200 		 Average Reward : -13.54
+Episode : 31039 		 Timestep : 3790800 		 Average Reward : -11.11
+Episode : 31061 		 Timestep : 3794400 		 Average Reward : -12.01
+Episode : 31092 		 Timestep : 3798000 		 Average Reward : -8.44
+--------------------------------------------------------------------------------------------
+saving model at : PPO_preTrained\RichDog\PPO_RichDog_0_20250603-183515.pth
+model savedElapsed Time  : 10:33:49
+--------------------------------------------------------------------------------------------
+std : 0.4101
+--------------------------------------------------------------------------------------------
+Start episode logging
+Episode : 31115 		 Timestep : 3801600 		 Average Reward : -14.23
+Episode : 31142 		 Timestep : 3805200 		 Average Reward : -9.68
+Episode : 31182 		 Timestep : 3808800 		 Average Reward : -7.33
+Episode : 31207 		 Timestep : 3812400 		 Average Reward : -12.04
+Episode : 31236 		 Timestep : 3816000 		 Average Reward : -10.09
+Episode : 31253 		 Timestep : 3819600 		 Average Reward : -12.08
+Episode : 31279 		 Timestep : 3823200 		 Average Reward : -11.2
+Episode : 31304 		 Timestep : 3826800 		 Average Reward : -11.23
+Episode : 31325 		 Timestep : 3830400 		 Average Reward : -10.99
+Episode : 31354 		 Timestep : 3834000 		 Average Reward : -11.39
+Episode : 31376 		 Timestep : 3837600 		 Average Reward : -12.65
+Episode : 31408 		 Timestep : 3841200 		 Average Reward : -9.06
+Episode : 31433 		 Timestep : 3844800 		 Average Reward : -12.88
+Episode : 31459 		 Timestep : 3848400 		 Average Reward : -11.18
+Episode : 31479 		 Timestep : 3852000 		 Average Reward : -14.04
+Episode : 31511 		 Timestep : 3855600 		 Average Reward : -9.75
+Episode : 31534 		 Timestep : 3859200 		 Average Reward : -11.83
+Episode : 31558 		 Timestep : 3862800 		 Average Reward : -12.43
+Episode : 31584 		 Timestep : 3866400 		 Average Reward : -10.4
+Episode : 31602 		 Timestep : 3870000 		 Average Reward : -14.05
+Episode : 31620 		 Timestep : 3873600 		 Average Reward : -11.01
+Episode : 31648 		 Timestep : 3877200 		 Average Reward : -11.29
+Episode : 31666 		 Timestep : 3880800 		 Average Reward : -14.16
+Episode : 31691 		 Timestep : 3884400 		 Average Reward : -10.62
+Episode : 31715 		 Timestep : 3888000 		 Average Reward : -15.0
+Episode : 31741 		 Timestep : 3891600 		 Average Reward : -12.02
+Episode : 31766 		 Timestep : 3895200 		 Average Reward : -10.49
+Episode : 31798 		 Timestep : 3898800 		 Average Reward : -10.5
+--------------------------------------------------------------------------------------------
+saving model at : PPO_preTrained\RichDog\PPO_RichDog_0_20250603-183515.pth
+model savedElapsed Time  : 10:50:21
+--------------------------------------------------------------------------------------------
+std : 0.405
+--------------------------------------------------------------------------------------------
+Start episode logging
+Episode : 31825 		 Timestep : 3902400 		 Average Reward : -9.13
+Episode : 31843 		 Timestep : 3906000 		 Average Reward : -12.74
+Episode : 31875 		 Timestep : 3909600 		 Average Reward : -10.1
+Episode : 31893 		 Timestep : 3913200 		 Average Reward : -13.52
+Episode : 31917 		 Timestep : 3916800 		 Average Reward : -11.6
+Episode : 31946 		 Timestep : 3920400 		 Average Reward : -10.13
+Episode : 31970 		 Timestep : 3924000 		 Average Reward : -10.71
+Episode : 31999 		 Timestep : 3927600 		 Average Reward : -10.15
+Episode : 32027 		 Timestep : 3931200 		 Average Reward : -8.79
+Episode : 32052 		 Timestep : 3934800 		 Average Reward : -11.5
+Episode : 32078 		 Timestep : 3938400 		 Average Reward : -9.81
+Episode : 32103 		 Timestep : 3942000 		 Average Reward : -11.53
+Episode : 32125 		 Timestep : 3945600 		 Average Reward : -14.33
+Episode : 32145 		 Timestep : 3949200 		 Average Reward : -15.0
+Episode : 32163 		 Timestep : 3952800 		 Average Reward : -13.29
+Episode : 32183 		 Timestep : 3956400 		 Average Reward : -11.47
+Episode : 32210 		 Timestep : 3960000 		 Average Reward : -11.79
+Episode : 32228 		 Timestep : 3963600 		 Average Reward : -17.06
+Episode : 32252 		 Timestep : 3967200 		 Average Reward : -9.97
+Episode : 32271 		 Timestep : 3970800 		 Average Reward : -11.76
+Episode : 32295 		 Timestep : 3974400 		 Average Reward : -10.37
+Episode : 32319 		 Timestep : 3978000 		 Average Reward : -11.83
+Episode : 32340 		 Timestep : 3981600 		 Average Reward : -13.51
+Episode : 32359 		 Timestep : 3985200 		 Average Reward : -10.45
+Episode : 32382 		 Timestep : 3988800 		 Average Reward : -12.04
+Episode : 32404 		 Timestep : 3992400 		 Average Reward : -11.4
+Episode : 32429 		 Timestep : 3996000 		 Average Reward : -9.65
+Episode : 32456 		 Timestep : 3999600 		 Average Reward : -10.61
+--------------------------------------------------------------------------------------------
+saving model at : PPO_preTrained\RichDog\PPO_RichDog_0_20250603-183515.pth
+model savedElapsed Time  : 11:06:50
+--------------------------------------------------------------------------------------------
+std : 0.4001
+--------------------------------------------------------------------------------------------
+Start episode logging
+Episode : 32490 		 Timestep : 4003200 		 Average Reward : -9.02
+Episode : 32516 		 Timestep : 4006800 		 Average Reward : -13.52
+Episode : 32538 		 Timestep : 4010400 		 Average Reward : -13.2
+Episode : 32564 		 Timestep : 4014000 		 Average Reward : -10.48
+Episode : 32586 		 Timestep : 4017600 		 Average Reward : -13.02
+Episode : 32611 		 Timestep : 4021200 		 Average Reward : -12.3
+Episode : 32634 		 Timestep : 4024800 		 Average Reward : -12.59
+Episode : 32655 		 Timestep : 4028400 		 Average Reward : -12.37
+Episode : 32676 		 Timestep : 4032000 		 Average Reward : -11.23
+Episode : 32699 		 Timestep : 4035600 		 Average Reward : -9.76
+Episode : 32719 		 Timestep : 4039200 		 Average Reward : -10.54
+Episode : 32740 		 Timestep : 4042800 		 Average Reward : -12.23
+Episode : 32761 		 Timestep : 4046400 		 Average Reward : -11.23
+Episode : 32784 		 Timestep : 4050000 		 Average Reward : -10.79
+Episode : 32804 		 Timestep : 4053600 		 Average Reward : -13.37
+Episode : 32830 		 Timestep : 4057200 		 Average Reward : -10.08
+Episode : 32861 		 Timestep : 4060800 		 Average Reward : -8.85
+Episode : 32887 		 Timestep : 4064400 		 Average Reward : -11.04
+Episode : 32908 		 Timestep : 4068000 		 Average Reward : -12.53
+Episode : 32937 		 Timestep : 4071600 		 Average Reward : -9.03
+Episode : 32957 		 Timestep : 4075200 		 Average Reward : -13.99
+Episode : 32981 		 Timestep : 4078800 		 Average Reward : -10.07
+Episode : 33002 		 Timestep : 4082400 		 Average Reward : -12.73
+Episode : 33026 		 Timestep : 4086000 		 Average Reward : -9.78
+Episode : 33048 		 Timestep : 4089600 		 Average Reward : -11.04
+Episode : 33070 		 Timestep : 4093200 		 Average Reward : -10.35
+Episode : 33096 		 Timestep : 4096800 		 Average Reward : -12.05
+--------------------------------------------------------------------------------------------
+saving model at : PPO_preTrained\RichDog\PPO_RichDog_0_20250603-183515.pth
+model savedElapsed Time  : 11:23:21
+--------------------------------------------------------------------------------------------
+std : 0.395
+--------------------------------------------------------------------------------------------
+Start episode logging
+Episode : 33111 		 Timestep : 4100400 		 Average Reward : -14.95
+Episode : 33136 		 Timestep : 4104000 		 Average Reward : -10.69
+Episode : 33163 		 Timestep : 4107600 		 Average Reward : -9.77
+Episode : 33185 		 Timestep : 4111200 		 Average Reward : -19.25
+Episode : 33209 		 Timestep : 4114800 		 Average Reward : -12.1
+Episode : 33231 		 Timestep : 4118400 		 Average Reward : -8.91
+Episode : 33244 		 Timestep : 4122000 		 Average Reward : -19.59
+Episode : 33268 		 Timestep : 4125600 		 Average Reward : -10.87
+Episode : 33289 		 Timestep : 4129200 		 Average Reward : -10.6
+Episode : 33312 		 Timestep : 4132800 		 Average Reward : -11.55
+Episode : 33332 		 Timestep : 4136400 		 Average Reward : -12.92
+Episode : 33358 		 Timestep : 4140000 		 Average Reward : -10.62
+Episode : 33379 		 Timestep : 4143600 		 Average Reward : -10.12
+Episode : 33406 		 Timestep : 4147200 		 Average Reward : -10.1
+Episode : 33425 		 Timestep : 4150800 		 Average Reward : -12.5
+Episode : 33442 		 Timestep : 4154400 		 Average Reward : -14.19
+Episode : 33471 		 Timestep : 4158000 		 Average Reward : -9.69
+Episode : 33491 		 Timestep : 4161600 		 Average Reward : -10.27
+Episode : 33516 		 Timestep : 4165200 		 Average Reward : -11.78
+Episode : 33541 		 Timestep : 4168800 		 Average Reward : -10.27
+Episode : 33570 		 Timestep : 4172400 		 Average Reward : -8.51
+Episode : 33595 		 Timestep : 4176000 		 Average Reward : -10.17
+Episode : 33627 		 Timestep : 4179600 		 Average Reward : -10.22
+Episode : 33649 		 Timestep : 4183200 		 Average Reward : -12.08
+Episode : 33673 		 Timestep : 4186800 		 Average Reward : -9.36
+Episode : 33693 		 Timestep : 4190400 		 Average Reward : -12.22
+Episode : 33717 		 Timestep : 4194000 		 Average Reward : -10.56
+Episode : 33751 		 Timestep : 4197600 		 Average Reward : -8.87
+--------------------------------------------------------------------------------------------
+saving model at : PPO_preTrained\RichDog\PPO_RichDog_0_20250603-183515.pth
+model savedElapsed Time  : 11:39:51
+--------------------------------------------------------------------------------------------
+std : 0.39
+--------------------------------------------------------------------------------------------
+Start episode logging
+Episode : 33778 		 Timestep : 4201200 		 Average Reward : -10.26
+Episode : 33810 		 Timestep : 4204800 		 Average Reward : -9.32
+Episode : 33837 		 Timestep : 4208400 		 Average Reward : -9.47
+Episode : 33859 		 Timestep : 4212000 		 Average Reward : -10.73
+Episode : 33880 		 Timestep : 4215600 		 Average Reward : -12.51
+Episode : 33904 		 Timestep : 4219200 		 Average Reward : -12.1
+Episode : 33924 		 Timestep : 4222800 		 Average Reward : -13.24
+Episode : 33955 		 Timestep : 4226400 		 Average Reward : -7.93
+Episode : 33982 		 Timestep : 4230000 		 Average Reward : -9.27
+Episode : 34007 		 Timestep : 4233600 		 Average Reward : -11.63
+Episode : 34028 		 Timestep : 4237200 		 Average Reward : -11.85
+Episode : 34050 		 Timestep : 4240800 		 Average Reward : -11.64
+Episode : 34077 		 Timestep : 4244400 		 Average Reward : -8.99
+Episode : 34103 		 Timestep : 4248000 		 Average Reward : -10.81
+Episode : 34120 		 Timestep : 4251600 		 Average Reward : -14.57
+Episode : 34144 		 Timestep : 4255200 		 Average Reward : -10.27
+Episode : 34177 		 Timestep : 4258800 		 Average Reward : -7.68
+Episode : 34198 		 Timestep : 4262400 		 Average Reward : -12.34
+Episode : 34224 		 Timestep : 4266000 		 Average Reward : -8.97
+Episode : 34254 		 Timestep : 4269600 		 Average Reward : -9.54
+Episode : 34274 		 Timestep : 4273200 		 Average Reward : -12.34
+Episode : 34294 		 Timestep : 4276800 		 Average Reward : -12.2
+Episode : 34318 		 Timestep : 4280400 		 Average Reward : -9.01
+Episode : 34346 		 Timestep : 4284000 		 Average Reward : -15.98
+Episode : 34369 		 Timestep : 4287600 		 Average Reward : -9.2
+Episode : 34400 		 Timestep : 4291200 		 Average Reward : -9.17
+Episode : 34429 		 Timestep : 4294800 		 Average Reward : -9.97
+Episode : 34453 		 Timestep : 4298400 		 Average Reward : -12.14
+--------------------------------------------------------------------------------------------
+saving model at : PPO_preTrained\RichDog\PPO_RichDog_0_20250603-183515.pth
+model savedElapsed Time  : 11:56:22
+--------------------------------------------------------------------------------------------
+std : 0.385
+--------------------------------------------------------------------------------------------
+Start episode logging
+Episode : 34474 		 Timestep : 4302000 		 Average Reward : -10.7
+Episode : 34502 		 Timestep : 4305600 		 Average Reward : -9.56
+Episode : 34528 		 Timestep : 4309200 		 Average Reward : -10.48
+Episode : 34546 		 Timestep : 4312800 		 Average Reward : -10.16
+Episode : 34570 		 Timestep : 4316400 		 Average Reward : -9.59
+Episode : 34590 		 Timestep : 4320000 		 Average Reward : -12.37
+Episode : 34612 		 Timestep : 4323600 		 Average Reward : -10.68
+Episode : 34629 		 Timestep : 4327200 		 Average Reward : -13.14
+Episode : 34650 		 Timestep : 4330800 		 Average Reward : -12.65
+Episode : 34670 		 Timestep : 4334400 		 Average Reward : -11.77
+Episode : 34694 		 Timestep : 4338000 		 Average Reward : -10.59
+Episode : 34719 		 Timestep : 4341600 		 Average Reward : -8.51
+Episode : 34741 		 Timestep : 4345200 		 Average Reward : -11.49
+Episode : 34763 		 Timestep : 4348800 		 Average Reward : -9.93
+Episode : 34781 		 Timestep : 4352400 		 Average Reward : -9.11
+Episode : 34806 		 Timestep : 4356000 		 Average Reward : -11.09
+Episode : 34831 		 Timestep : 4359600 		 Average Reward : -8.71
+Episode : 34857 		 Timestep : 4363200 		 Average Reward : -10.85
+Episode : 34886 		 Timestep : 4366800 		 Average Reward : -8.86
+Episode : 34911 		 Timestep : 4370400 		 Average Reward : -8.75
+Episode : 34938 		 Timestep : 4374000 		 Average Reward : -10.23
+Episode : 34958 		 Timestep : 4377600 		 Average Reward : -10.65
+Episode : 34985 		 Timestep : 4381200 		 Average Reward : -10.51
+Episode : 35006 		 Timestep : 4384800 		 Average Reward : -12.43
+Episode : 35026 		 Timestep : 4388400 		 Average Reward : -10.05
+Episode : 35054 		 Timestep : 4392000 		 Average Reward : -10.56
+Episode : 35070 		 Timestep : 4395600 		 Average Reward : -11.91
+Episode : 35097 		 Timestep : 4399200 		 Average Reward : -8.7
+--------------------------------------------------------------------------------------------
+saving model at : PPO_preTrained\RichDog\PPO_RichDog_0_20250603-183515.pth
+model savedElapsed Time  : 12:12:52
+--------------------------------------------------------------------------------------------
+std : 0.38
+--------------------------------------------------------------------------------------------
+Start episode logging
+Episode : 35113 		 Timestep : 4402800 		 Average Reward : -9.67
+Episode : 35145 		 Timestep : 4406400 		 Average Reward : -9.77
+Episode : 35164 		 Timestep : 4410000 		 Average Reward : -12.28
+Episode : 35188 		 Timestep : 4413600 		 Average Reward : -12.16
+Episode : 35210 		 Timestep : 4417200 		 Average Reward : -10.05
+Episode : 35233 		 Timestep : 4420800 		 Average Reward : -11.44
+Episode : 35260 		 Timestep : 4424400 		 Average Reward : -8.84
+Episode : 35285 		 Timestep : 4428000 		 Average Reward : -11.23
+Episode : 35309 		 Timestep : 4431600 		 Average Reward : -11.28
+Episode : 35332 		 Timestep : 4435200 		 Average Reward : -10.63
+Episode : 35353 		 Timestep : 4438800 		 Average Reward : -12.72
+Episode : 35374 		 Timestep : 4442400 		 Average Reward : -10.55
+Episode : 35397 		 Timestep : 4446000 		 Average Reward : -10.37
+Episode : 35422 		 Timestep : 4449600 		 Average Reward : -8.5
+Episode : 35450 		 Timestep : 4453200 		 Average Reward : -9.27
+Episode : 35465 		 Timestep : 4456800 		 Average Reward : -13.72
+Episode : 35482 		 Timestep : 4460400 		 Average Reward : -11.68
+Episode : 35508 		 Timestep : 4464000 		 Average Reward : -9.84
+Episode : 35535 		 Timestep : 4467600 		 Average Reward : -8.5
+Episode : 35562 		 Timestep : 4471200 		 Average Reward : -8.92
+Episode : 35589 		 Timestep : 4474800 		 Average Reward : -9.49
+Episode : 35621 		 Timestep : 4478400 		 Average Reward : -8.88
+Episode : 35637 		 Timestep : 4482000 		 Average Reward : -12.48
+Episode : 35660 		 Timestep : 4485600 		 Average Reward : -10.44
+Episode : 35677 		 Timestep : 4489200 		 Average Reward : -12.09
+Episode : 35692 		 Timestep : 4492800 		 Average Reward : -13.3
+Episode : 35707 		 Timestep : 4496400 		 Average Reward : -11.66
+Episode : 35731 		 Timestep : 4500000 		 Average Reward : -8.24
+--------------------------------------------------------------------------------------------
+saving model at : PPO_preTrained\RichDog\PPO_RichDog_0_20250603-183515.pth
+model savedElapsed Time  : 12:29:22
+--------------------------------------------------------------------------------------------
+std : 0.375
+--------------------------------------------------------------------------------------------
+Start episode logging
+Episode : 35754 		 Timestep : 4503600 		 Average Reward : -9.71
+Episode : 35781 		 Timestep : 4507200 		 Average Reward : -7.79
+Episode : 35801 		 Timestep : 4510800 		 Average Reward : -9.26
+Episode : 35824 		 Timestep : 4514400 		 Average Reward : -10.84
+Episode : 35844 		 Timestep : 4518000 		 Average Reward : -11.16
+Episode : 35864 		 Timestep : 4521600 		 Average Reward : -11.74
+Episode : 35882 		 Timestep : 4525200 		 Average Reward : -15.17
+Episode : 35907 		 Timestep : 4528800 		 Average Reward : -8.69
+Episode : 35934 		 Timestep : 4532400 		 Average Reward : -9.55
+Episode : 35954 		 Timestep : 4536000 		 Average Reward : -10.45
+Episode : 35975 		 Timestep : 4539600 		 Average Reward : -9.0
+Episode : 35998 		 Timestep : 4543200 		 Average Reward : -9.88
+Episode : 36021 		 Timestep : 4546800 		 Average Reward : -11.21
+Episode : 36036 		 Timestep : 4550400 		 Average Reward : -13.1
+Episode : 36058 		 Timestep : 4554000 		 Average Reward : -10.54
+Episode : 36085 		 Timestep : 4557600 		 Average Reward : -16.94
+Episode : 36108 		 Timestep : 4561200 		 Average Reward : -11.26
+Episode : 36126 		 Timestep : 4564800 		 Average Reward : -12.25
+Episode : 36144 		 Timestep : 4568400 		 Average Reward : -13.92
+Episode : 36165 		 Timestep : 4572000 		 Average Reward : -11.44
+Episode : 36185 		 Timestep : 4575600 		 Average Reward : -9.92
+Episode : 36205 		 Timestep : 4579200 		 Average Reward : -12.52
+Episode : 36226 		 Timestep : 4582800 		 Average Reward : -12.7
+Episode : 36244 		 Timestep : 4586400 		 Average Reward : -11.9
+Episode : 36269 		 Timestep : 4590000 		 Average Reward : -11.92
+Episode : 36290 		 Timestep : 4593600 		 Average Reward : -10.99
+Episode : 36318 		 Timestep : 4597200 		 Average Reward : -10.03
+--------------------------------------------------------------------------------------------
+saving model at : PPO_preTrained\RichDog\PPO_RichDog_0_20250603-183515.pth
+model savedElapsed Time  : 12:45:51
+--------------------------------------------------------------------------------------------
+std : 0.37
+--------------------------------------------------------------------------------------------
+Start episode logging
+Episode : 36341 		 Timestep : 4600800 		 Average Reward : -9.8
+Episode : 36365 		 Timestep : 4604400 		 Average Reward : -10.39
+Episode : 36385 		 Timestep : 4608000 		 Average Reward : -10.97
+Episode : 36415 		 Timestep : 4611600 		 Average Reward : -7.33
+Episode : 36437 		 Timestep : 4615200 		 Average Reward : -10.35
+Episode : 36457 		 Timestep : 4618800 		 Average Reward : -12.15
+Episode : 36485 		 Timestep : 4622400 		 Average Reward : -9.43
+Episode : 36504 		 Timestep : 4626000 		 Average Reward : -10.27
+Episode : 36525 		 Timestep : 4629600 		 Average Reward : -11.31
+Episode : 36542 		 Timestep : 4633200 		 Average Reward : -10.33
+Episode : 36559 		 Timestep : 4636800 		 Average Reward : -10.47
+Episode : 36586 		 Timestep : 4640400 		 Average Reward : -10.32
+Episode : 36608 		 Timestep : 4644000 		 Average Reward : -9.77
+Episode : 36626 		 Timestep : 4647600 		 Average Reward : -12.1
+Episode : 36648 		 Timestep : 4651200 		 Average Reward : -10.35
+Episode : 36669 		 Timestep : 4654800 		 Average Reward : -9.2
+Episode : 36695 		 Timestep : 4658400 		 Average Reward : -8.74
+Episode : 36714 		 Timestep : 4662000 		 Average Reward : -11.09
+Episode : 36738 		 Timestep : 4665600 		 Average Reward : -8.7
+Episode : 36758 		 Timestep : 4669200 		 Average Reward : -14.96
+Episode : 36784 		 Timestep : 4672800 		 Average Reward : -10.02
+Episode : 36805 		 Timestep : 4676400 		 Average Reward : -7.9
+Episode : 36824 		 Timestep : 4680000 		 Average Reward : -12.12
+Episode : 36843 		 Timestep : 4683600 		 Average Reward : -10.39
+Episode : 36857 		 Timestep : 4687200 		 Average Reward : -12.61
+Episode : 36883 		 Timestep : 4690800 		 Average Reward : -8.35
+Episode : 36897 		 Timestep : 4694400 		 Average Reward : -14.42
+Episode : 36920 		 Timestep : 4698000 		 Average Reward : -8.47
+--------------------------------------------------------------------------------------------
+saving model at : PPO_preTrained\RichDog\PPO_RichDog_0_20250603-183515.pth
+model savedElapsed Time  : 13:02:21
+--------------------------------------------------------------------------------------------
+std : 0.3651
+--------------------------------------------------------------------------------------------
+Start episode logging
+Episode : 36948 		 Timestep : 4701600 		 Average Reward : -9.52
+Episode : 36968 		 Timestep : 4705200 		 Average Reward : -10.75
+Episode : 36985 		 Timestep : 4708800 		 Average Reward : -11.55
+Episode : 37004 		 Timestep : 4712400 		 Average Reward : -11.18
+Episode : 37018 		 Timestep : 4716000 		 Average Reward : -13.45
+Episode : 37034 		 Timestep : 4719600 		 Average Reward : -12.11
+Episode : 37054 		 Timestep : 4723200 		 Average Reward : -9.51
+Episode : 37074 		 Timestep : 4726800 		 Average Reward : -10.75
+Episode : 37098 		 Timestep : 4730400 		 Average Reward : -8.13
+Episode : 37119 		 Timestep : 4734000 		 Average Reward : -11.55
+Episode : 37139 		 Timestep : 4737600 		 Average Reward : -7.92
+Episode : 37156 		 Timestep : 4741200 		 Average Reward : -10.99
+Episode : 37172 		 Timestep : 4744800 		 Average Reward : -32.65
+Episode : 37194 		 Timestep : 4748400 		 Average Reward : -10.09
+Episode : 37219 		 Timestep : 4752000 		 Average Reward : -9.96
+Episode : 37246 		 Timestep : 4755600 		 Average Reward : -9.18
+Episode : 37270 		 Timestep : 4759200 		 Average Reward : -9.43
+Episode : 37291 		 Timestep : 4762800 		 Average Reward : -10.08
+Episode : 37311 		 Timestep : 4766400 		 Average Reward : -10.4
+Episode : 37328 		 Timestep : 4770000 		 Average Reward : -11.44
+Episode : 37345 		 Timestep : 4773600 		 Average Reward : -13.67
+Episode : 37364 		 Timestep : 4777200 		 Average Reward : -9.79
+Episode : 37390 		 Timestep : 4780800 		 Average Reward : -9.38
+Episode : 37410 		 Timestep : 4784400 		 Average Reward : -11.44
+Episode : 37426 		 Timestep : 4788000 		 Average Reward : -11.45
+Episode : 37452 		 Timestep : 4791600 		 Average Reward : -8.58
+Episode : 37470 		 Timestep : 4795200 		 Average Reward : -9.05
+Episode : 37489 		 Timestep : 4798800 		 Average Reward : -10.2
+--------------------------------------------------------------------------------------------
+saving model at : PPO_preTrained\RichDog\PPO_RichDog_0_20250603-183515.pth
+model savedElapsed Time  : 13:18:49
+--------------------------------------------------------------------------------------------
+std : 0.36
+--------------------------------------------------------------------------------------------
+Start episode logging
+Episode : 37514 		 Timestep : 4802400 		 Average Reward : -10.25
+Episode : 37530 		 Timestep : 4806000 		 Average Reward : -9.47
+Episode : 37550 		 Timestep : 4809600 		 Average Reward : -11.02
+Episode : 37572 		 Timestep : 4813200 		 Average Reward : -8.68
+Episode : 37594 		 Timestep : 4816800 		 Average Reward : -11.15
+Episode : 37617 		 Timestep : 4820400 		 Average Reward : -8.82
+Episode : 37635 		 Timestep : 4824000 		 Average Reward : -11.35
+Episode : 37657 		 Timestep : 4827600 		 Average Reward : -9.94
+Episode : 37677 		 Timestep : 4831200 		 Average Reward : -12.85
+Episode : 37700 		 Timestep : 4834800 		 Average Reward : -11.66
+Episode : 37723 		 Timestep : 4838400 		 Average Reward : -7.78
+Episode : 37744 		 Timestep : 4842000 		 Average Reward : -10.52
+Episode : 37764 		 Timestep : 4845600 		 Average Reward : -8.44
+Episode : 37784 		 Timestep : 4849200 		 Average Reward : -26.3
+Episode : 37802 		 Timestep : 4852800 		 Average Reward : -10.08
+Episode : 37821 		 Timestep : 4856400 		 Average Reward : -11.58
+Episode : 37843 		 Timestep : 4860000 		 Average Reward : -8.8
+Episode : 37865 		 Timestep : 4863600 		 Average Reward : -23.89
+Episode : 37883 		 Timestep : 4867200 		 Average Reward : -9.36
+Episode : 37903 		 Timestep : 4870800 		 Average Reward : -11.57
+Episode : 37920 		 Timestep : 4874400 		 Average Reward : -11.82
+Episode : 37939 		 Timestep : 4878000 		 Average Reward : -9.84
+Episode : 37956 		 Timestep : 4881600 		 Average Reward : -10.9
+Episode : 37984 		 Timestep : 4885200 		 Average Reward : -7.12
+Episode : 38005 		 Timestep : 4888800 		 Average Reward : -7.77
+Episode : 38028 		 Timestep : 4892400 		 Average Reward : -9.19
+Episode : 38052 		 Timestep : 4896000 		 Average Reward : -7.97
+Episode : 38068 		 Timestep : 4899600 		 Average Reward : -9.96
+--------------------------------------------------------------------------------------------
+saving model at : PPO_preTrained\RichDog\PPO_RichDog_0_20250603-183515.pth
+model savedElapsed Time  : 13:35:19
+--------------------------------------------------------------------------------------------
+std : 0.3551
+--------------------------------------------------------------------------------------------
+Start episode logging
+Episode : 38091 		 Timestep : 4903200 		 Average Reward : -9.21
+Episode : 38115 		 Timestep : 4906800 		 Average Reward : -9.59
+Episode : 38136 		 Timestep : 4910400 		 Average Reward : -9.94
+Episode : 38158 		 Timestep : 4914000 		 Average Reward : -9.74
+Episode : 38171 		 Timestep : 4917600 		 Average Reward : -12.12
+Episode : 38190 		 Timestep : 4921200 		 Average Reward : -10.49
+Episode : 38211 		 Timestep : 4924800 		 Average Reward : -9.56
+Episode : 38235 		 Timestep : 4928400 		 Average Reward : -7.5
+Episode : 38256 		 Timestep : 4932000 		 Average Reward : -9.05
+Episode : 38272 		 Timestep : 4935600 		 Average Reward : -12.81
+Episode : 38298 		 Timestep : 4939200 		 Average Reward : -7.81
+Episode : 38317 		 Timestep : 4942800 		 Average Reward : -9.64
+Episode : 38339 		 Timestep : 4946400 		 Average Reward : -8.71
+Episode : 38356 		 Timestep : 4950000 		 Average Reward : -10.87
+Episode : 38380 		 Timestep : 4953600 		 Average Reward : -8.99
+Episode : 38401 		 Timestep : 4957200 		 Average Reward : -9.56
+Episode : 38418 		 Timestep : 4960800 		 Average Reward : -11.53
+Episode : 38441 		 Timestep : 4964400 		 Average Reward : -10.73
+Episode : 38467 		 Timestep : 4968000 		 Average Reward : -8.1
+Episode : 38486 		 Timestep : 4971600 		 Average Reward : -10.33
+Episode : 38506 		 Timestep : 4975200 		 Average Reward : -11.11
+Episode : 38526 		 Timestep : 4978800 		 Average Reward : -10.79
+Episode : 38549 		 Timestep : 4982400 		 Average Reward : -8.48
+Episode : 38563 		 Timestep : 4986000 		 Average Reward : -8.35
+Episode : 38576 		 Timestep : 4989600 		 Average Reward : -10.9
+Episode : 38598 		 Timestep : 4993200 		 Average Reward : -8.99
+Episode : 38622 		 Timestep : 4996800 		 Average Reward : -10.4
+--------------------------------------------------------------------------------------------
+saving model at : PPO_preTrained\RichDog\PPO_RichDog_0_20250603-183515.pth
+model savedElapsed Time  : 13:51:49
+--------------------------------------------------------------------------------------------
+std : 0.35
+--------------------------------------------------------------------------------------------
+Start episode logging
+Episode : 38645 		 Timestep : 5000400 		 Average Reward : -8.6
+Episode : 38668 		 Timestep : 5004000 		 Average Reward : -8.57
+Episode : 38685 		 Timestep : 5007600 		 Average Reward : -11.8
+Episode : 38703 		 Timestep : 5011200 		 Average Reward : -11.05
+Episode : 38720 		 Timestep : 5014800 		 Average Reward : -10.79
+Episode : 38740 		 Timestep : 5018400 		 Average Reward : -8.62
+Episode : 38756 		 Timestep : 5022000 		 Average Reward : -10.27
+Episode : 38773 		 Timestep : 5025600 		 Average Reward : -16.61
+Episode : 38788 		 Timestep : 5029200 		 Average Reward : -21.66
+Episode : 38812 		 Timestep : 5032800 		 Average Reward : -7.43
+Episode : 38831 		 Timestep : 5036400 		 Average Reward : -9.55
+Episode : 38847 		 Timestep : 5040000 		 Average Reward : -8.89
+Episode : 38870 		 Timestep : 5043600 		 Average Reward : -8.98
+Episode : 38900 		 Timestep : 5047200 		 Average Reward : -8.82
+Episode : 38924 		 Timestep : 5050800 		 Average Reward : -8.67
+Episode : 38946 		 Timestep : 5054400 		 Average Reward : -8.74
+Episode : 38968 		 Timestep : 5058000 		 Average Reward : -12.49
+Episode : 38992 		 Timestep : 5061600 		 Average Reward : -9.93
+Episode : 39013 		 Timestep : 5065200 		 Average Reward : -8.01
+Episode : 39025 		 Timestep : 5068800 		 Average Reward : -14.91
+Episode : 39046 		 Timestep : 5072400 		 Average Reward : -9.84
+Episode : 39075 		 Timestep : 5076000 		 Average Reward : -8.81
+Episode : 39096 		 Timestep : 5079600 		 Average Reward : -10.12
+Episode : 39112 		 Timestep : 5083200 		 Average Reward : -10.06
+Episode : 39130 		 Timestep : 5086800 		 Average Reward : -8.93
+Episode : 39147 		 Timestep : 5090400 		 Average Reward : -8.39
+Episode : 39176 		 Timestep : 5094000 		 Average Reward : -9.68
+Episode : 39194 		 Timestep : 5097600 		 Average Reward : -10.41
+--------------------------------------------------------------------------------------------
+saving model at : PPO_preTrained\RichDog\PPO_RichDog_0_20250603-183515.pth
+model savedElapsed Time  : 14:08:19
+--------------------------------------------------------------------------------------------
+std : 0.345
+--------------------------------------------------------------------------------------------
+Start episode logging
+Episode : 39213 		 Timestep : 5101200 		 Average Reward : -10.69
+Episode : 39240 		 Timestep : 5104800 		 Average Reward : -7.48
+Episode : 39259 		 Timestep : 5108400 		 Average Reward : -9.82
+Episode : 39281 		 Timestep : 5112000 		 Average Reward : -9.43
+Episode : 39301 		 Timestep : 5115600 		 Average Reward : -9.15
+Episode : 39326 		 Timestep : 5119200 		 Average Reward : -6.82
+Episode : 39347 		 Timestep : 5122800 		 Average Reward : -7.35
+Episode : 39366 		 Timestep : 5126400 		 Average Reward : -10.96
+Episode : 39382 		 Timestep : 5130000 		 Average Reward : -9.45
+Episode : 39405 		 Timestep : 5133600 		 Average Reward : -9.14
+Episode : 39423 		 Timestep : 5137200 		 Average Reward : -9.38
+Episode : 39444 		 Timestep : 5140800 		 Average Reward : -7.39
+Episode : 39465 		 Timestep : 5144400 		 Average Reward : -8.69
+Episode : 39485 		 Timestep : 5148000 		 Average Reward : -9.26
+Episode : 39506 		 Timestep : 5151600 		 Average Reward : -6.87
+Episode : 39523 		 Timestep : 5155200 		 Average Reward : -11.03
+Episode : 39545 		 Timestep : 5158800 		 Average Reward : -9.77
+Episode : 39564 		 Timestep : 5162400 		 Average Reward : -9.16
+Episode : 39587 		 Timestep : 5166000 		 Average Reward : -10.18
+Episode : 39608 		 Timestep : 5169600 		 Average Reward : -6.69
+Episode : 39625 		 Timestep : 5173200 		 Average Reward : -10.21
+Episode : 39642 		 Timestep : 5176800 		 Average Reward : -8.18
+Episode : 39662 		 Timestep : 5180400 		 Average Reward : -7.78
+Episode : 39679 		 Timestep : 5184000 		 Average Reward : -8.59
+Episode : 39697 		 Timestep : 5187600 		 Average Reward : -10.87
+Episode : 39723 		 Timestep : 5191200 		 Average Reward : -6.9
+Episode : 39740 		 Timestep : 5194800 		 Average Reward : -11.63
+Episode : 39758 		 Timestep : 5198400 		 Average Reward : -12.81
+--------------------------------------------------------------------------------------------
+saving model at : PPO_preTrained\RichDog\PPO_RichDog_0_20250603-183515.pth
+model savedElapsed Time  : 14:25:20
+--------------------------------------------------------------------------------------------
+std : 0.34
+--------------------------------------------------------------------------------------------
+Start episode logging
+Episode : 39780 		 Timestep : 5202000 		 Average Reward : -8.09
+Episode : 39799 		 Timestep : 5205600 		 Average Reward : -11.91
+Episode : 39823 		 Timestep : 5209200 		 Average Reward : -8.91
+Episode : 39838 		 Timestep : 5212800 		 Average Reward : -10.58
+Episode : 39855 		 Timestep : 5216400 		 Average Reward : -10.51
+Episode : 39884 		 Timestep : 5220000 		 Average Reward : -7.86
+Episode : 39898 		 Timestep : 5223600 		 Average Reward : -10.72
+Episode : 39913 		 Timestep : 5227200 		 Average Reward : -10.33
+Episode : 39934 		 Timestep : 5230800 		 Average Reward : -11.12
+Episode : 39954 		 Timestep : 5234400 		 Average Reward : -10.29
+Episode : 39973 		 Timestep : 5238000 		 Average Reward : -10.92
+Episode : 39985 		 Timestep : 5241600 		 Average Reward : -15.73
+Episode : 40004 		 Timestep : 5245200 		 Average Reward : -9.29
+Episode : 40024 		 Timestep : 5248800 		 Average Reward : -8.81
+Episode : 40042 		 Timestep : 5252400 		 Average Reward : -9.18
+Episode : 40059 		 Timestep : 5256000 		 Average Reward : -7.42
+Episode : 40077 		 Timestep : 5259600 		 Average Reward : -10.05
+Episode : 40099 		 Timestep : 5263200 		 Average Reward : -10.22
+Episode : 40116 		 Timestep : 5266800 		 Average Reward : -12.81
+Episode : 40133 		 Timestep : 5270400 		 Average Reward : -8.82
+Episode : 40155 		 Timestep : 5274000 		 Average Reward : -9.15
+Episode : 40176 		 Timestep : 5277600 		 Average Reward : -9.73
+Episode : 40196 		 Timestep : 5281200 		 Average Reward : -9.46
+Episode : 40213 		 Timestep : 5284800 		 Average Reward : -10.1
+Episode : 40230 		 Timestep : 5288400 		 Average Reward : -7.46
+Episode : 40248 		 Timestep : 5292000 		 Average Reward : -10.88
+Episode : 40266 		 Timestep : 5295600 		 Average Reward : -10.33
+Episode : 40287 		 Timestep : 5299200 		 Average Reward : -7.0
+--------------------------------------------------------------------------------------------
+saving model at : PPO_preTrained\RichDog\PPO_RichDog_0_20250603-183515.pth
+model savedElapsed Time  : 14:43:15
+--------------------------------------------------------------------------------------------
+std : 0.335
+--------------------------------------------------------------------------------------------
+Start episode logging
+Episode : 40312 		 Timestep : 5302800 		 Average Reward : -8.41
+Episode : 40328 		 Timestep : 5306400 		 Average Reward : -9.32
+Episode : 40342 		 Timestep : 5310000 		 Average Reward : -13.33
+Episode : 40356 		 Timestep : 5313600 		 Average Reward : -12.8
+Episode : 40372 		 Timestep : 5317200 		 Average Reward : -12.25
+Episode : 40399 		 Timestep : 5320800 		 Average Reward : -7.19
+Episode : 40411 		 Timestep : 5324400 		 Average Reward : -11.7
+Episode : 40437 		 Timestep : 5328000 		 Average Reward : -10.19
+Episode : 40452 		 Timestep : 5331600 		 Average Reward : -8.91
+Episode : 40474 		 Timestep : 5335200 		 Average Reward : -9.63
+Episode : 40487 		 Timestep : 5338800 		 Average Reward : -10.42
+Episode : 40508 		 Timestep : 5342400 		 Average Reward : -10.78
+Episode : 40527 		 Timestep : 5346000 		 Average Reward : -10.0
+Episode : 40542 		 Timestep : 5349600 		 Average Reward : -10.28
+Episode : 40564 		 Timestep : 5353200 		 Average Reward : -12.46
+Episode : 40579 		 Timestep : 5356800 		 Average Reward : -11.28
+Episode : 40598 		 Timestep : 5360400 		 Average Reward : -9.68
+Episode : 40614 		 Timestep : 5364000 		 Average Reward : -11.09
+Episode : 40632 		 Timestep : 5367600 		 Average Reward : -10.95
+Episode : 40651 		 Timestep : 5371200 		 Average Reward : -7.75
+Episode : 40669 		 Timestep : 5374800 		 Average Reward : -9.77
+Episode : 40689 		 Timestep : 5378400 		 Average Reward : -8.04
+Episode : 40706 		 Timestep : 5382000 		 Average Reward : -8.57
+Episode : 40730 		 Timestep : 5385600 		 Average Reward : -8.89
+Episode : 40745 		 Timestep : 5389200 		 Average Reward : -8.25
+Episode : 40759 		 Timestep : 5392800 		 Average Reward : -9.14
+Episode : 40783 		 Timestep : 5396400 		 Average Reward : -8.72
+Episode : 40806 		 Timestep : 5400000 		 Average Reward : -9.16
+--------------------------------------------------------------------------------------------
+saving model at : PPO_preTrained\RichDog\PPO_RichDog_0_20250603-183515.pth
+model savedElapsed Time  : 15:00:22
+--------------------------------------------------------------------------------------------
+std : 0.33
+--------------------------------------------------------------------------------------------
+Start episode logging
+Episode : 40820 		 Timestep : 5403600 		 Average Reward : -8.3
+Episode : 40839 		 Timestep : 5407200 		 Average Reward : -9.32
+Episode : 40854 		 Timestep : 5410800 		 Average Reward : -9.72
+Episode : 40871 		 Timestep : 5414400 		 Average Reward : -9.45
+Episode : 40885 		 Timestep : 5418000 		 Average Reward : -13.02
+Episode : 40907 		 Timestep : 5421600 		 Average Reward : -10.8
+Episode : 40926 		 Timestep : 5425200 		 Average Reward : -12.11
+Episode : 40940 		 Timestep : 5428800 		 Average Reward : -13.69
+Episode : 40953 		 Timestep : 5432400 		 Average Reward : -12.77
+Episode : 40970 		 Timestep : 5436000 		 Average Reward : -8.87
+Episode : 40994 		 Timestep : 5439600 		 Average Reward : -7.63
+Episode : 41015 		 Timestep : 5443200 		 Average Reward : -9.96
+Episode : 41032 		 Timestep : 5446800 		 Average Reward : -9.05
+Episode : 41050 		 Timestep : 5450400 		 Average Reward : -8.33
+Episode : 41069 		 Timestep : 5454000 		 Average Reward : -12.21
+Episode : 41081 		 Timestep : 5457600 		 Average Reward : -11.9
+Episode : 41095 		 Timestep : 5461200 		 Average Reward : -9.15
+Episode : 41112 		 Timestep : 5464800 		 Average Reward : -10.21
+Episode : 41130 		 Timestep : 5468400 		 Average Reward : -12.21
+Episode : 41150 		 Timestep : 5472000 		 Average Reward : -8.45
+Episode : 41167 		 Timestep : 5475600 		 Average Reward : -7.6
+Episode : 41183 		 Timestep : 5479200 		 Average Reward : -11.13
+Episode : 41198 		 Timestep : 5482800 		 Average Reward : -9.96
+Episode : 41210 		 Timestep : 5486400 		 Average Reward : -40.34
+Episode : 41225 		 Timestep : 5490000 		 Average Reward : -10.74
+Episode : 41245 		 Timestep : 5493600 		 Average Reward : -9.98
+Episode : 41263 		 Timestep : 5497200 		 Average Reward : -9.01
+--------------------------------------------------------------------------------------------
+saving model at : PPO_preTrained\RichDog\PPO_RichDog_0_20250603-183515.pth
+model savedElapsed Time  : 15:17:04
+--------------------------------------------------------------------------------------------
+std : 0.325
+--------------------------------------------------------------------------------------------
+Start episode logging
+Episode : 41280 		 Timestep : 5500800 		 Average Reward : -10.14
+Episode : 41296 		 Timestep : 5504400 		 Average Reward : -7.92
+Episode : 41314 		 Timestep : 5508000 		 Average Reward : -8.78
+Episode : 41330 		 Timestep : 5511600 		 Average Reward : -13.1
+Episode : 41347 		 Timestep : 5515200 		 Average Reward : -8.46
+Episode : 41362 		 Timestep : 5518800 		 Average Reward : -11.47
+Episode : 41379 		 Timestep : 5522400 		 Average Reward : -9.94
+Episode : 41394 		 Timestep : 5526000 		 Average Reward : -13.47
+Episode : 41415 		 Timestep : 5529600 		 Average Reward : -7.7
+Episode : 41437 		 Timestep : 5533200 		 Average Reward : -9.38
+Episode : 41458 		 Timestep : 5536800 		 Average Reward : -9.05
+Episode : 41475 		 Timestep : 5540400 		 Average Reward : -10.33
+Episode : 41493 		 Timestep : 5544000 		 Average Reward : -8.01
+Episode : 41515 		 Timestep : 5547600 		 Average Reward : -7.72
+Episode : 41534 		 Timestep : 5551200 		 Average Reward : -11.25
+Episode : 41551 		 Timestep : 5554800 		 Average Reward : -9.54
+Episode : 41565 		 Timestep : 5558400 		 Average Reward : -8.75
+Episode : 41578 		 Timestep : 5562000 		 Average Reward : -10.69
+Episode : 41597 		 Timestep : 5565600 		 Average Reward : -9.29
+Episode : 41614 		 Timestep : 5569200 		 Average Reward : -11.32
+Episode : 41633 		 Timestep : 5572800 		 Average Reward : -9.02
+Episode : 41655 		 Timestep : 5576400 		 Average Reward : -10.39
+Episode : 41671 		 Timestep : 5580000 		 Average Reward : -8.73
+Episode : 41686 		 Timestep : 5583600 		 Average Reward : -11.65
+Episode : 41702 		 Timestep : 5587200 		 Average Reward : -6.49
+Episode : 41719 		 Timestep : 5590800 		 Average Reward : -10.51
+Episode : 41733 		 Timestep : 5594400 		 Average Reward : -11.37
+Episode : 41746 		 Timestep : 5598000 		 Average Reward : -11.02
+--------------------------------------------------------------------------------------------
+saving model at : PPO_preTrained\RichDog\PPO_RichDog_0_20250603-183515.pth
+model savedElapsed Time  : 15:34:17
+--------------------------------------------------------------------------------------------
+std : 0.3201
+--------------------------------------------------------------------------------------------
+Start episode logging
+Episode : 41767 		 Timestep : 5601600 		 Average Reward : -8.92
+Episode : 41787 		 Timestep : 5605200 		 Average Reward : -8.12
+Episode : 41805 		 Timestep : 5608800 		 Average Reward : -8.6
+Episode : 41822 		 Timestep : 5612400 		 Average Reward : -8.09
+Episode : 41843 		 Timestep : 5616000 		 Average Reward : -8.71
+Episode : 41862 		 Timestep : 5619600 		 Average Reward : -10.66
+Episode : 41882 		 Timestep : 5623200 		 Average Reward : -9.68
+Episode : 41901 		 Timestep : 5626800 		 Average Reward : -10.02
+Episode : 41918 		 Timestep : 5630400 		 Average Reward : -8.86
+Episode : 41933 		 Timestep : 5634000 		 Average Reward : -8.0
+Episode : 41949 		 Timestep : 5637600 		 Average Reward : -7.0
+Episode : 41964 		 Timestep : 5641200 		 Average Reward : -11.0
+Episode : 41984 		 Timestep : 5644800 		 Average Reward : -9.44
+Episode : 42005 		 Timestep : 5648400 		 Average Reward : -8.27
+Episode : 42023 		 Timestep : 5652000 		 Average Reward : -9.46
+Episode : 42037 		 Timestep : 5655600 		 Average Reward : -11.32
+Episode : 42058 		 Timestep : 5659200 		 Average Reward : -7.5
+Episode : 42070 		 Timestep : 5662800 		 Average Reward : -10.31
+Episode : 42089 		 Timestep : 5666400 		 Average Reward : -9.59
+Episode : 42108 		 Timestep : 5670000 		 Average Reward : -10.44
+Episode : 42120 		 Timestep : 5673600 		 Average Reward : -31.67
+Episode : 42138 		 Timestep : 5677200 		 Average Reward : -9.15
+Episode : 42154 		 Timestep : 5680800 		 Average Reward : -8.67
+Episode : 42175 		 Timestep : 5684400 		 Average Reward : -10.43
+Episode : 42194 		 Timestep : 5688000 		 Average Reward : -8.07
+Episode : 42212 		 Timestep : 5691600 		 Average Reward : -9.8
+Episode : 42225 		 Timestep : 5695200 		 Average Reward : -10.6
+Episode : 42240 		 Timestep : 5698800 		 Average Reward : -9.6
+--------------------------------------------------------------------------------------------
+saving model at : PPO_preTrained\RichDog\PPO_RichDog_0_20250603-183515.pth
+model savedElapsed Time  : 15:51:07
+--------------------------------------------------------------------------------------------
+std : 0.315
+--------------------------------------------------------------------------------------------
+Start episode logging
+Episode : 42256 		 Timestep : 5702400 		 Average Reward : -10.92
+Episode : 42269 		 Timestep : 5706000 		 Average Reward : -10.63
+Episode : 42289 		 Timestep : 5709600 		 Average Reward : -8.09
+Episode : 42306 		 Timestep : 5713200 		 Average Reward : -8.29
+Episode : 42322 		 Timestep : 5716800 		 Average Reward : -8.51
+Episode : 42344 		 Timestep : 5720400 		 Average Reward : -8.96
+Episode : 42370 		 Timestep : 5724000 		 Average Reward : -19.33
+Episode : 42388 		 Timestep : 5727600 		 Average Reward : -7.75
+Episode : 42409 		 Timestep : 5731200 		 Average Reward : -7.92
+Episode : 42425 		 Timestep : 5734800 		 Average Reward : -10.42
+Episode : 42438 		 Timestep : 5738400 		 Average Reward : -10.67
+Episode : 42459 		 Timestep : 5742000 		 Average Reward : -8.33
+Episode : 42473 		 Timestep : 5745600 		 Average Reward : -7.12
+Episode : 42491 		 Timestep : 5749200 		 Average Reward : -10.58
+Episode : 42511 		 Timestep : 5752800 		 Average Reward : -10.14
+Episode : 42533 		 Timestep : 5756400 		 Average Reward : -7.91
+Episode : 42548 		 Timestep : 5760000 		 Average Reward : -12.74
+Episode : 42562 		 Timestep : 5763600 		 Average Reward : -9.56
+Episode : 42580 		 Timestep : 5767200 		 Average Reward : -11.8
+Episode : 42598 		 Timestep : 5770800 		 Average Reward : -9.2
+Episode : 42617 		 Timestep : 5774400 		 Average Reward : -7.19
+Episode : 42637 		 Timestep : 5778000 		 Average Reward : -10.76
+Episode : 42656 		 Timestep : 5781600 		 Average Reward : -8.6
+Episode : 42675 		 Timestep : 5785200 		 Average Reward : -9.19
+Episode : 42691 		 Timestep : 5788800 		 Average Reward : -8.38
+Episode : 42707 		 Timestep : 5792400 		 Average Reward : -7.14
+Episode : 42719 		 Timestep : 5796000 		 Average Reward : -11.87
+Episode : 42732 		 Timestep : 5799600 		 Average Reward : -12.93
+--------------------------------------------------------------------------------------------
+saving model at : PPO_preTrained\RichDog\PPO_RichDog_0_20250603-183515.pth
+model savedElapsed Time  : 16:07:40
+--------------------------------------------------------------------------------------------
+std : 0.3101
+--------------------------------------------------------------------------------------------
+Start episode logging
+Episode : 42749 		 Timestep : 5803200 		 Average Reward : -9.37
+Episode : 42767 		 Timestep : 5806800 		 Average Reward : -8.18
+Episode : 42783 		 Timestep : 5810400 		 Average Reward : -9.66
+Episode : 42802 		 Timestep : 5814000 		 Average Reward : -7.69
+Episode : 42816 		 Timestep : 5817600 		 Average Reward : -11.65
+Episode : 42831 		 Timestep : 5821200 		 Average Reward : -7.91
+Episode : 42846 		 Timestep : 5824800 		 Average Reward : -11.56
+Episode : 42866 		 Timestep : 5828400 		 Average Reward : -6.82
+Episode : 42890 		 Timestep : 5832000 		 Average Reward : -7.43
+Episode : 42909 		 Timestep : 5835600 		 Average Reward : -9.3
+Episode : 42926 		 Timestep : 5839200 		 Average Reward : -11.75
+Episode : 42943 		 Timestep : 5842800 		 Average Reward : -7.54
+Episode : 42961 		 Timestep : 5846400 		 Average Reward : -8.02
+Episode : 42979 		 Timestep : 5850000 		 Average Reward : -7.78
+Episode : 42997 		 Timestep : 5853600 		 Average Reward : -9.66
+Episode : 43013 		 Timestep : 5857200 		 Average Reward : -7.59
+Episode : 43032 		 Timestep : 5860800 		 Average Reward : -6.75
+Episode : 43047 		 Timestep : 5864400 		 Average Reward : -8.56
+Episode : 43065 		 Timestep : 5868000 		 Average Reward : -8.51
+Episode : 43090 		 Timestep : 5871600 		 Average Reward : -7.6
+Episode : 43105 		 Timestep : 5875200 		 Average Reward : -8.95
+Episode : 43125 		 Timestep : 5878800 		 Average Reward : -7.81
+Episode : 43143 		 Timestep : 5882400 		 Average Reward : -8.79
+Episode : 43160 		 Timestep : 5886000 		 Average Reward : -9.14
+Episode : 43179 		 Timestep : 5889600 		 Average Reward : -7.56
+Episode : 43197 		 Timestep : 5893200 		 Average Reward : -9.61
+Episode : 43214 		 Timestep : 5896800 		 Average Reward : -8.82
+--------------------------------------------------------------------------------------------
+saving model at : PPO_preTrained\RichDog\PPO_RichDog_0_20250603-183515.pth
+model savedElapsed Time  : 16:24:15
+--------------------------------------------------------------------------------------------
+std : 0.305
+--------------------------------------------------------------------------------------------
+Start episode logging
+Episode : 43232 		 Timestep : 5900400 		 Average Reward : -7.88
+Episode : 43250 		 Timestep : 5904000 		 Average Reward : -8.86
+Episode : 43268 		 Timestep : 5907600 		 Average Reward : -7.89
+Episode : 43284 		 Timestep : 5911200 		 Average Reward : -9.23
+Episode : 43298 		 Timestep : 5914800 		 Average Reward : -9.49
+Episode : 43314 		 Timestep : 5918400 		 Average Reward : -8.36
+Episode : 43329 		 Timestep : 5922000 		 Average Reward : -6.0
+Episode : 43347 		 Timestep : 5925600 		 Average Reward : -9.14
+Episode : 43365 		 Timestep : 5929200 		 Average Reward : -8.83
+Episode : 43379 		 Timestep : 5932800 		 Average Reward : -8.45
+Episode : 43393 		 Timestep : 5936400 		 Average Reward : -7.71
+Episode : 43407 		 Timestep : 5940000 		 Average Reward : -27.28
+Episode : 43420 		 Timestep : 5943600 		 Average Reward : -9.49
+Episode : 43435 		 Timestep : 5947200 		 Average Reward : -10.76
+Episode : 43454 		 Timestep : 5950800 		 Average Reward : -6.32
+Episode : 43472 		 Timestep : 5954400 		 Average Reward : -8.08
+Episode : 43495 		 Timestep : 5958000 		 Average Reward : -7.15
+Episode : 43514 		 Timestep : 5961600 		 Average Reward : -8.45
+Episode : 43529 		 Timestep : 5965200 		 Average Reward : -11.15
+Episode : 43544 		 Timestep : 5968800 		 Average Reward : -9.22
+Episode : 43558 		 Timestep : 5972400 		 Average Reward : -9.28
+Episode : 43570 		 Timestep : 5976000 		 Average Reward : -10.41
+Episode : 43586 		 Timestep : 5979600 		 Average Reward : -7.87
+Episode : 43607 		 Timestep : 5983200 		 Average Reward : -8.63
+Episode : 43626 		 Timestep : 5986800 		 Average Reward : -7.29
+Episode : 43645 		 Timestep : 5990400 		 Average Reward : -7.77
+Episode : 43656 		 Timestep : 5994000 		 Average Reward : -8.95
+Episode : 43672 		 Timestep : 5997600 		 Average Reward : -9.04
+--------------------------------------------------------------------------------------------
+saving model at : PPO_preTrained\RichDog\PPO_RichDog_0_20250603-183515.pth
+model savedElapsed Time  : 16:40:50
+--------------------------------------------------------------------------------------------
+std : 0.3
+--------------------------------------------------------------------------------------------
+Start episode logging
+Episode : 43685 		 Timestep : 6001200 		 Average Reward : -8.39
+Episode : 43700 		 Timestep : 6004800 		 Average Reward : -8.92
+Episode : 43718 		 Timestep : 6008400 		 Average Reward : -9.93
+Episode : 43741 		 Timestep : 6012000 		 Average Reward : -6.79
+Episode : 43761 		 Timestep : 6015600 		 Average Reward : -8.75
+Episode : 43777 		 Timestep : 6019200 		 Average Reward : -7.75

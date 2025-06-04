@@ -262,7 +262,7 @@ class Stock:
             print(move_line_data)
             datas.append(move_line_data)
 
-        if "rst" in info_list:        
+        if "rsi" in info_list:        
             # RSI
             rsi_data = self.get_rsi(stock_data=stock_data,days=self.rsi_days)
             print(rsi_data)

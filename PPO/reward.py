@@ -192,7 +192,7 @@ class ExpReward(Reward):
         daily_evlu_rate = self.get_daily_evlu_rate(current_total_amt) # 거래당 자산 증감 비율 (현재 기준)
         wait_see_rate = self.get_wait_see_next_day_evlu_rate(price, next_price) # 만약 관망 했을 때 수익률
         
-        next_total_evlu_rate = self.get_total_evlu_rate(next_day_total_amt) # 다음날 총자산 증감률
+        next_total_evlu_rate = self.get_total_evlu_rate(next_day_total_amt) # 다음날 초기 자산 대비 총자산 증감률
         next_day_evlu_rate = self.get_next_day_evlu_rate(next_day_total_amt, current_total_amt) # 다음날 자산 증감률
         rate_reward = self.get_rate_reward(order_percent, order_qty, wait_see_rate, price_rate, next_day_evlu_rate) # 수익 증감 보상
         
@@ -214,7 +214,6 @@ class ExpReward(Reward):
             reward = 0.8 * rate_reward_exp + 0.2 * next_day_evlu_rate_exp; 
         else:
             reward = -1.0
-
 
         reward_log = self.get_reward_log(order_percent, is_order, order_qty) # 보상 로그
         
