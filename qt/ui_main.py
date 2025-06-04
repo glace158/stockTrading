@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'mainDHzePg.ui'
+## Form generated from reading UI file 'mainFxEBAX.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.8.2
 ##
@@ -1275,8 +1275,11 @@ class Ui_MainWindow(object):
         __qtablewidgetitem23 = QTableWidgetItem()
         self.tableWidget_2.setItem(0, 4, __qtablewidgetitem23)
         self.tableWidget_2.setObjectName(u"tableWidget_2")
-        sizePolicy3.setHeightForWidth(self.tableWidget_2.sizePolicy().hasHeightForWidth())
-        self.tableWidget_2.setSizePolicy(sizePolicy3)
+        sizePolicy6 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Minimum)
+        sizePolicy6.setHorizontalStretch(0)
+        sizePolicy6.setVerticalStretch(0)
+        sizePolicy6.setHeightForWidth(self.tableWidget_2.sizePolicy().hasHeightForWidth())
+        self.tableWidget_2.setSizePolicy(sizePolicy6)
         self.tableWidget_2.setMinimumSize(QSize(0, 0))
         self.tableWidget_2.setMaximumSize(QSize(16777215, 300))
         palette = QPalette()
@@ -1464,8 +1467,8 @@ class Ui_MainWindow(object):
         __qtablewidgetitem47 = QTableWidgetItem()
         self.tableWidget_3.setItem(0, 4, __qtablewidgetitem47)
         self.tableWidget_3.setObjectName(u"tableWidget_3")
-        sizePolicy3.setHeightForWidth(self.tableWidget_3.sizePolicy().hasHeightForWidth())
-        self.tableWidget_3.setSizePolicy(sizePolicy3)
+        sizePolicy6.setHeightForWidth(self.tableWidget_3.sizePolicy().hasHeightForWidth())
+        self.tableWidget_3.setSizePolicy(sizePolicy6)
         self.tableWidget_3.setMinimumSize(QSize(0, 0))
         self.tableWidget_3.setMaximumSize(QSize(16777215, 300))
         palette1 = QPalette()
@@ -1611,6 +1614,8 @@ class Ui_MainWindow(object):
         self.verticalLayout_12.setObjectName(u"verticalLayout_12")
         self.frame_21 = QFrame(self.download_page)
         self.frame_21.setObjectName(u"frame_21")
+        sizePolicy3.setHeightForWidth(self.frame_21.sizePolicy().hasHeightForWidth())
+        self.frame_21.setSizePolicy(sizePolicy3)
         self.frame_21.setFrameShape(QFrame.Shape.StyledPanel)
         self.frame_21.setFrameShadow(QFrame.Shadow.Raised)
         self.horizontalLayout_32 = QHBoxLayout(self.frame_21)
@@ -1747,75 +1752,11 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_32.addWidget(self.stocklistFrame_2)
 
-
-        self.verticalLayout_12.addWidget(self.frame_21)
-
-        self.frame_17 = QFrame(self.download_page)
-        self.frame_17.setObjectName(u"frame_17")
-        self.frame_17.setFrameShape(QFrame.Shape.StyledPanel)
-        self.frame_17.setFrameShadow(QFrame.Shadow.Raised)
-        self.horizontalLayout_31 = QHBoxLayout(self.frame_17)
-        self.horizontalLayout_31.setSpacing(0)
-        self.horizontalLayout_31.setObjectName(u"horizontalLayout_31")
-        self.horizontalLayout_31.setContentsMargins(0, 0, 0, 0)
-        self.frame_24 = QFrame(self.frame_17)
-        self.frame_24.setObjectName(u"frame_24")
-        self.frame_24.setFrameShape(QFrame.Shape.StyledPanel)
-        self.frame_24.setFrameShadow(QFrame.Shadow.Raised)
-        self.verticalLayout_45 = QVBoxLayout(self.frame_24)
-        self.verticalLayout_45.setSpacing(0)
-        self.verticalLayout_45.setObjectName(u"verticalLayout_45")
-        self.verticalLayout_45.setContentsMargins(0, 0, 0, 0)
-        self.dateEditFrame = QFrame(self.frame_24)
-        self.dateEditFrame.setObjectName(u"dateEditFrame")
-        self.dateEditFrame.setFrameShape(QFrame.Shape.StyledPanel)
-        self.dateEditFrame.setFrameShadow(QFrame.Shadow.Raised)
-        self.horizontalLayout_27 = QHBoxLayout(self.dateEditFrame)
-        self.horizontalLayout_27.setObjectName(u"horizontalLayout_27")
-        self.label_16 = QLabel(self.dateEditFrame)
-        self.label_16.setObjectName(u"label_16")
-        self.label_16.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
-
-        self.horizontalLayout_27.addWidget(self.label_16)
-
-        self.LastDateEdit = QDateEdit(self.dateEditFrame)
-        self.LastDateEdit.setObjectName(u"LastDateEdit")
-        self.LastDateEdit.setStyleSheet(u"background-color: rgb(33, 37, 43);")
-        self.LastDateEdit.setDateTime(QDateTime(QDate(2025, 1, 27), QTime(15, 0, 0)))
-
-        self.horizontalLayout_27.addWidget(self.LastDateEdit)
-
-
-        self.verticalLayout_45.addWidget(self.dateEditFrame)
-
-        self.countFrame = QFrame(self.frame_24)
-        self.countFrame.setObjectName(u"countFrame")
-        self.countFrame.setFrameShape(QFrame.Shape.StyledPanel)
-        self.countFrame.setFrameShadow(QFrame.Shadow.Raised)
-        self.horizontalLayout_28 = QHBoxLayout(self.countFrame)
-        self.horizontalLayout_28.setObjectName(u"horizontalLayout_28")
-        self.label_15 = QLabel(self.countFrame)
-        self.label_15.setObjectName(u"label_15")
-        self.label_15.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
-
-        self.horizontalLayout_28.addWidget(self.label_15)
-
-        self.countSpinBox = QSpinBox(self.countFrame)
-        self.countSpinBox.setObjectName(u"countSpinBox")
-        self.countSpinBox.setStyleSheet(u"background-color: rgb(33, 37, 43);")
-        self.countSpinBox.setMaximum(9999)
-        self.countSpinBox.setValue(1500)
-
-        self.horizontalLayout_28.addWidget(self.countSpinBox)
-
-
-        self.verticalLayout_45.addWidget(self.countFrame)
-
-
-        self.horizontalLayout_31.addWidget(self.frame_24)
-
-        self.frame_23 = QFrame(self.frame_17)
+        self.frame_23 = QFrame(self.frame_21)
         self.frame_23.setObjectName(u"frame_23")
+        sizePolicy4.setHeightForWidth(self.frame_23.sizePolicy().hasHeightForWidth())
+        self.frame_23.setSizePolicy(sizePolicy4)
+        self.frame_23.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
         self.frame_23.setFrameShape(QFrame.Shape.StyledPanel)
         self.frame_23.setFrameShadow(QFrame.Shadow.Raised)
         self.verticalLayout_44 = QVBoxLayout(self.frame_23)
@@ -1833,35 +1774,98 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_44.addWidget(self.stockCodeListWidget_5)
 
+        self.dateEditFrame = QFrame(self.frame_23)
+        self.dateEditFrame.setObjectName(u"dateEditFrame")
+        self.dateEditFrame.setFrameShape(QFrame.Shape.StyledPanel)
+        self.dateEditFrame.setFrameShadow(QFrame.Shadow.Raised)
+        self.horizontalLayout_27 = QHBoxLayout(self.dateEditFrame)
+        self.horizontalLayout_27.setSpacing(10)
+        self.horizontalLayout_27.setObjectName(u"horizontalLayout_27")
+        self.horizontalLayout_27.setContentsMargins(0, 0, 0, 0)
+        self.label_16 = QLabel(self.dateEditFrame)
+        self.label_16.setObjectName(u"label_16")
+        self.label_16.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
-        self.horizontalLayout_31.addWidget(self.frame_23)
+        self.horizontalLayout_27.addWidget(self.label_16)
 
-        self.frame_14 = QFrame(self.frame_17)
-        self.frame_14.setObjectName(u"frame_14")
-        self.frame_14.setFrameShape(QFrame.Shape.StyledPanel)
-        self.frame_14.setFrameShadow(QFrame.Shadow.Raised)
-        self.horizontalLayout_30 = QHBoxLayout(self.frame_14)
-        self.horizontalLayout_30.setObjectName(u"horizontalLayout_30")
-        self.isDataFileRemoveCheckBox = QCheckBox(self.frame_14)
+        self.LastDateEdit = QDateEdit(self.dateEditFrame)
+        self.LastDateEdit.setObjectName(u"LastDateEdit")
+        self.LastDateEdit.setStyleSheet(u"background-color: rgb(33, 37, 43);")
+        self.LastDateEdit.setDateTime(QDateTime(QDate(2025, 6, 3), QTime(6, 0, 0)))
+        self.LastDateEdit.setDate(QDate(2025, 6, 3))
+
+        self.horizontalLayout_27.addWidget(self.LastDateEdit)
+
+
+        self.verticalLayout_44.addWidget(self.dateEditFrame)
+
+        self.frame_24 = QFrame(self.frame_23)
+        self.frame_24.setObjectName(u"frame_24")
+        self.frame_24.setFrameShape(QFrame.Shape.StyledPanel)
+        self.frame_24.setFrameShadow(QFrame.Shadow.Raised)
+        self.verticalLayout_45 = QVBoxLayout(self.frame_24)
+        self.verticalLayout_45.setSpacing(0)
+        self.verticalLayout_45.setObjectName(u"verticalLayout_45")
+        self.verticalLayout_45.setContentsMargins(0, 0, 0, 0)
+        self.countFrame = QFrame(self.frame_24)
+        self.countFrame.setObjectName(u"countFrame")
+        self.countFrame.setFrameShape(QFrame.Shape.StyledPanel)
+        self.countFrame.setFrameShadow(QFrame.Shadow.Raised)
+        self.horizontalLayout_28 = QHBoxLayout(self.countFrame)
+        self.horizontalLayout_28.setSpacing(10)
+        self.horizontalLayout_28.setObjectName(u"horizontalLayout_28")
+        self.horizontalLayout_28.setContentsMargins(0, 0, 0, 0)
+        self.label_15 = QLabel(self.countFrame)
+        self.label_15.setObjectName(u"label_15")
+        self.label_15.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
+
+        self.horizontalLayout_28.addWidget(self.label_15)
+
+        self.countSpinBox = QSpinBox(self.countFrame)
+        self.countSpinBox.setObjectName(u"countSpinBox")
+        self.countSpinBox.setStyleSheet(u"background-color: rgb(33, 37, 43);")
+        self.countSpinBox.setMaximum(9999)
+        self.countSpinBox.setValue(2500)
+
+        self.horizontalLayout_28.addWidget(self.countSpinBox)
+
+
+        self.verticalLayout_45.addWidget(self.countFrame)
+
+
+        self.verticalLayout_44.addWidget(self.frame_24)
+
+        self.isDataFileRemoveCheckBox = QCheckBox(self.frame_23)
         self.isDataFileRemoveCheckBox.setObjectName(u"isDataFileRemoveCheckBox")
         self.isDataFileRemoveCheckBox.setAutoFillBackground(False)
         self.isDataFileRemoveCheckBox.setStyleSheet(u"")
         self.isDataFileRemoveCheckBox.setChecked(True)
         self.isDataFileRemoveCheckBox.setTristate(False)
 
-        self.horizontalLayout_30.addWidget(self.isDataFileRemoveCheckBox)
+        self.verticalLayout_44.addWidget(self.isDataFileRemoveCheckBox)
 
-
-        self.horizontalLayout_31.addWidget(self.frame_14)
-
-        self.DownloadPushButton = QPushButton(self.frame_17)
+        self.DownloadPushButton = QPushButton(self.frame_23)
         self.DownloadPushButton.setObjectName(u"DownloadPushButton")
-        sizePolicy5.setHeightForWidth(self.DownloadPushButton.sizePolicy().hasHeightForWidth())
-        self.DownloadPushButton.setSizePolicy(sizePolicy5)
+        sizePolicy3.setHeightForWidth(self.DownloadPushButton.sizePolicy().hasHeightForWidth())
+        self.DownloadPushButton.setSizePolicy(sizePolicy3)
         self.DownloadPushButton.setStyleSheet(u"background-color: rgb(52, 59, 72);")
 
-        self.horizontalLayout_31.addWidget(self.DownloadPushButton)
+        self.verticalLayout_44.addWidget(self.DownloadPushButton)
 
+
+        self.horizontalLayout_32.addWidget(self.frame_23)
+
+
+        self.verticalLayout_12.addWidget(self.frame_21)
+
+        self.frame_17 = QFrame(self.download_page)
+        self.frame_17.setObjectName(u"frame_17")
+        self.frame_17.setFrameShape(QFrame.Shape.StyledPanel)
+        self.frame_17.setFrameShadow(QFrame.Shadow.Raised)
+        self.horizontalLayout_31 = QHBoxLayout(self.frame_17)
+        self.horizontalLayout_31.setSpacing(0)
+        self.horizontalLayout_31.setObjectName(u"horizontalLayout_31")
+        self.horizontalLayout_31.setContentsMargins(0, 0, 0, 0)
 
         self.verticalLayout_12.addWidget(self.frame_17)
 
@@ -1981,9 +1985,6 @@ class Ui_MainWindow(object):
 
         self.frame_5 = QFrame(self.kis_devlp_page)
         self.frame_5.setObjectName(u"frame_5")
-        sizePolicy6 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Minimum)
-        sizePolicy6.setHorizontalStretch(0)
-        sizePolicy6.setVerticalStretch(0)
         sizePolicy6.setHeightForWidth(self.frame_5.sizePolicy().hasHeightForWidth())
         self.frame_5.setSizePolicy(sizePolicy6)
         self.frame_5.setStyleSheet(u"QFrame{\n"
@@ -2270,7 +2271,7 @@ class Ui_MainWindow(object):
         self.scrollArea_3.setWidgetResizable(True)
         self.scrollAreaWidgetContents_3 = QWidget()
         self.scrollAreaWidgetContents_3.setObjectName(u"scrollAreaWidgetContents_3")
-        self.scrollAreaWidgetContents_3.setGeometry(QRect(0, 0, 862, 675))
+        self.scrollAreaWidgetContents_3.setGeometry(QRect(0, 0, 105, 64))
         self.horizontalLayout_15 = QHBoxLayout(self.scrollAreaWidgetContents_3)
         self.horizontalLayout_15.setObjectName(u"horizontalLayout_15")
         self.frame_16 = QFrame(self.scrollAreaWidgetContents_3)
@@ -2341,7 +2342,7 @@ class Ui_MainWindow(object):
         self.scrollArea_2.setWidgetResizable(True)
         self.scrollAreaWidgetContents_2 = QWidget()
         self.scrollAreaWidgetContents_2.setObjectName(u"scrollAreaWidgetContents_2")
-        self.scrollAreaWidgetContents_2.setGeometry(QRect(0, 0, 222, 40))
+        self.scrollAreaWidgetContents_2.setGeometry(QRect(0, 0, 222, 46))
         sizePolicy5.setHeightForWidth(self.scrollAreaWidgetContents_2.sizePolicy().hasHeightForWidth())
         self.scrollAreaWidgetContents_2.setSizePolicy(sizePolicy5)
         self.scrollAreaWidgetContents_2.setStyleSheet(u" QScrollBar:vertical {\n"
@@ -2542,7 +2543,7 @@ class Ui_MainWindow(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 323, 218))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 224, 224))
         self.scrollAreaWidgetContents.setStyleSheet(u" QScrollBar:vertical {\n"
 "	border: none;\n"
 "    background: rgb(52, 59, 72);\n"
@@ -2790,7 +2791,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.stackedWidget.setCurrentIndex(2)
+        self.stackedWidget.setCurrentIndex(1)
 
 
         QMetaObject.connectSlotsByName(MainWindow)
@@ -2947,9 +2948,9 @@ class Ui_MainWindow(object):
         self.label_21.setText(QCoreApplication.translate("MainWindow", u"Stock Code", None))
         self.addStockCodePushButton_2.setText(QCoreApplication.translate("MainWindow", u"Add", None))
         self.removeStockCodePushButton_2.setText(QCoreApplication.translate("MainWindow", u"Remove", None))
+        self.label_24.setText(QCoreApplication.translate("MainWindow", u"Extra Info", None))
         self.label_16.setText(QCoreApplication.translate("MainWindow", u"Last Date", None))
         self.label_15.setText(QCoreApplication.translate("MainWindow", u"count", None))
-        self.label_24.setText(QCoreApplication.translate("MainWindow", u"Extra Info", None))
         self.isDataFileRemoveCheckBox.setText(QCoreApplication.translate("MainWindow", u"Is data File Remove", None))
         self.DownloadPushButton.setText(QCoreApplication.translate("MainWindow", u"Download", None))
         self.labelBoxBlenderInstalation_4.setText(QCoreApplication.translate("MainWindow", u"kis_devlp file", None))

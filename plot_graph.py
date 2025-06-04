@@ -3,8 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from common.fileManager import Config, File
 
-
-def save_graph(log_path, env_name = 'Richdog', fig_num = 0):
+def save_log_graph(log_path, save_path="./PPO_figs/",env_name = 'Richdog', fig_num = 0):
     print("============================================================================================")
     
 
@@ -26,20 +25,9 @@ def save_graph(log_path, env_name = 'Richdog', fig_num = 0):
 
     colors = ['red', 'blue', 'green', 'orange', 'purple', 'olive', 'brown', 'magenta', 'cyan', 'crimson','gray', 'black']
 
-    path = str(os.path.dirname(__file__)) + "/" 
+    fig_directory = save_path + env_name + '/'
 
-    # get number of log files in directory
-    #log_directory = "C:/Users/11/Desktop/save/20250422-131323/" 
-    #log_directory = "PPO_logs/Richdog/20250501-010212/" 
-    #log_directory = path + "PPO_logs" + '/' + env_name + '/'
-    #log_file_list = next(os.walk(log_directory))[2]
-    #log_path = log_directory + "PPO_Richdog_log_20250501-010212" + ".csv"
-
-    #fig_num = log_file_list[-1].split('_')[-1]
-
-    fig_directory = path + "PPO_figs" + '/' + env_name + '/'
-
-    fig_save_path =  '/PPO_' + env_name + '_fig_' + str(fig_num) + '.png'
+    fig_save_path =  'PPO_' + env_name + '_fig_' + str(fig_num) + '.png'
 
     fig_file = File(fig_directory , fig_save_path)
 
@@ -107,13 +95,70 @@ def save_graph(log_path, env_name = 'Richdog', fig_num = 0):
     plt.savefig(fig_file.get_file_path())
     print("figure saved at : ", fig_file.get_file_path())
     print("============================================================================================")
+
+    #plt.show()
+    return fig_file.get_file_path()
+
+# 행동 그래프 그리기
+def save_action_graph(action_path, save_path ="./Data_graph/" ,env_name = 'Richdog', fig_num = 0):
+
+    save_path = save_path + env_name + '/'
+    file_name =  '/PPO_' + env_name + '_action_fig_' + str(fig_num) + '.png'
     
-    plt.show()
+    data = pd.read_csv(action_path)
 
+    # 그래프 그리기
+    fig, ax1 = plt.subplots(figsize=(30, 10))
 
+    # Reward 막대 그래프 (아래쪽 Y축 공유)
+    ax1.spines['right'].set_position(('outward', 60))  # 추가 Y축을 오른쪽으로 이동
+
+    reward_colors = ['red' if r < 0 else 'blue' for r in data['reward']]  # 음수는 빨간색, 양수는 파란색
+    ax1.bar(data['timestep'], data['reward'], width=0.4, alpha=0.8, label='Reward', color=reward_colors)
+
+    # y축 0에 선 추가
+    ax1.axhline(y=0, color='black', linestyle='--', linewidth=1, label='y = 0 Line')
+
+    ax1.set_ylabel('Reward and Daily Rate')
+    ax1.legend(loc='lower center')
+    
+    # Current Amount 선 그래프 (오른쪽 Y축)
+    ax2 = ax1.twinx()  # 오른쪽 Y축 추가
+    ax2.plot(data['timestep'], data['total_amt'], label='Total Amount', color='Orange')
+    ax2.set_ylabel('Total Amount')
+    ax2.legend(loc='upper right')
+    ax2.axhline(y=data['total_amt'][0], color='Orange', linestyle='--', linewidth=1, label='init Amount Line')
+    
+    # Price 선 그래프 (왼쪽 Y축)
+    ax3 = ax1.twinx()  # 새로운 Y축 추가
+    ax3.plot(data['timestep'], data['price'], label='Price', color='black')
+    
+    for index, row in data.iterrows():
+        if row['order_qty'] == 0:  # order_qty가 0인 경우 회색 점
+            ax3.scatter(row['timestep'], row['price'], color='gray', label='Order Qty = 0' if index == 0 else "")
+            ax3.annotate(f"{int(row['order_qty'])}", (row['timestep'], row['price']), textcoords="offset points", xytext=(-10, -10), color='gray')
+        elif row['action'] > 0:  # action이 음수인 경우 빨간 점
+            ax3.scatter(row['timestep'], row['price'], color='red', label='Action > 0' if index == 0 else "")
+            ax3.annotate(f"{int(row['order_qty'])}", (row['timestep'], row['price']), textcoords="offset points", xytext=(-10, -10), color='red')
+        elif row['action'] < 0:  # action이 양수인 경우 파란 점
+            ax3.scatter(row['timestep'], row['price'], color='blue', label='Action < 0' if index == 0 else "")
+            ax3.annotate(f"{int(row['order_qty'])}", (row['timestep'], row['price']), textcoords="offset points", xytext=(-10, 10), color='blue')
+    
+    ax3.set_xlabel('Timestep')
+    ax3.set_ylabel('Price')
+    ax3.set_xticks(data['timestep'])  # x축 간격을 timestep에 맞춤
+    ax3.legend(loc='upper left')
+    ax3.grid(True)
+
+    # 그래프 제목
+    plt.title('Action Graph')
+    
+    plt.savefig(save_path + file_name)
+
+    return save_path + file_name
 if __name__ == '__main__':
 
-    save_graph()
+    save_log_graph()
     
     
     
