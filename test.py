@@ -9,15 +9,21 @@ action_list = [-0.8825346,0.44341397,-1.0720923,-1.2481807,-1.5970774,0.12113419
 stock_config = Config.load_config("config/StockConfig.yaml")
 env = environment.StockEnvironment(stock_config)
 
- 
-state, info = env.reset()
-print(state["num"])
-print(info)
-print("=====================")
-for action in action_list:
-    next_state, reward, done, truncated, info = env.step(action)
+for i in range(1000):
+    print(i)
+    state, info = env.reset()
+    #print(state["num"])
+    #print(info)
+    #print("=====================")
+    for action in action_list:
+        next_state, reward, done, truncated, info = env.step(action)
+        
+        #print(next_state["num"])
+        #print(info)
+        #print("=====================")
+        state = next_state
+
+        if done or truncated:
+            break
     
-    print(next_state["num"])
-    print(info)
-    print("=====================")
-    state = next_state
+    

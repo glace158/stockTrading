@@ -197,7 +197,7 @@ class ExpReward(Reward):
         
         next_total_evlu_rate = self.get_total_evlu_rate(next_day_total_amt) # 다음날 초기 자산 대비 총자산 증감률
         next_day_evlu_rate = self.get_next_day_evlu_rate(next_day_total_amt, current_total_amt) # 다음날 자산 증감률
-        rate_reward = self.get_rate_reward(order_percent,order_qty, wait_see_rate, price_rate, next_day_evlu_rate) # 수익 증감 보상
+        rate_reward = self.get_rate_reward(qty, order_percent,order_qty, wait_see_rate, price_rate, next_day_evlu_rate) # 수익 증감 보상
         
         net_income_rate = self.get_net_income_rate(init_price_rate, next_total_evlu_rate) # 순이익 비률
 
@@ -243,22 +243,36 @@ class ExpReward(Reward):
                                             "reward_log" : reward_log
                                             }
     # 거래 행동 보상
-    def get_rate_reward(self, order_percent, order_qty, wait_see_rate, price_rate, next_day_rate):
+    def get_rate_reward(self, qty, order_percent, order_qty, wait_see_rate, price_rate, next_day_rate):
         rate_reward = 0
         if price_rate > 0: # 주가 상승 예상 (또는 실제 상승)
             if order_percent > 0 and order_qty != 0:
-                rate_reward = (next_day_rate - wait_see_rate)  # 잘했음 (작은 보너스)
+                rate_reward = next_day_rate  # 잘했음 (작은 보너스)
             elif order_percent < 0 and order_qty != 0: # 매도
-                rate_reward = (next_day_rate - wait_see_rate) # 잘못했음 (기회비용 손실)
+                rate_reward = 0.1
+                #rate_reward = (next_day_rate - wait_see_rate) # 잘못했음 (기회비용 손실)
             else: # HOLD는 중립 또는 약간의 보상/페널티
-                rate_reward = wait_see_rate
+                if qty != 0:
+                    rate_reward = wait_see_rate
+                else: # 수량이 없을 때
+                    rate_reward = -0.1
         elif price_rate < 0: # 주가 하락 예상 (또는 실제 하락)
             if order_percent < 0 and order_qty != 0:
                 rate_reward = (next_day_rate - wait_see_rate)  # 잘했음 (손실 회피)
             elif order_percent > 0 and order_qty != 0:
-                rate_reward = next_day_rate # 잘못했음 (손실 발생)
+                rate_reward = 0.1
+                #rate_reward = next_day_rate # 잘못했음 (손실 발생)
             else : # HOLD는 중립 또는 약간의 보상/페널티
-                rate_reward = wait_see_rate
+                if qty != 0:
+                    rate_reward = wait_see_rate
+                else: # 수량이 없을 때
+                    rate_reward = 0.1
+        elif price_rate == 0: # 주가가 그대로 일 때 
+            if order_percent != 0 and order_qty != 0: # 매수 또는 매도를 했을 경우
+                rate_reward = -0.5
+            else: 
+                rate_reward = 0.5
+
 
         return self._np_to_float(rate_reward)
 

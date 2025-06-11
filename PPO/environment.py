@@ -133,14 +133,17 @@ class StockEnvironment(Environment): # 주식 환경
 
         data, extra_datas, done, info = self._get_observation_datas() # 주식 정보 가져오기
 
+        total_amt = self.wallet.get_total_amt(self.price)
+        current_amt = self.wallet.get_current_amt()
+        qty = self.wallet.get_qty()
         order_info = {
             "current_date":self.current_date,
             "price": self.price,
             "next_price": self.next_price,
-            "total_amt":self.wallet.get_total_amt(self.price),
-            "current_amt":self.wallet.get_current_amt(), 
+            "total_amt":total_amt,
+            "current_amt":current_amt, 
             "order_qty":0.0, 
-            "qty":self.wallet.get_qty(),
+            "qty":qty,
             "is_order":True
                       }
 
@@ -151,15 +154,16 @@ class StockEnvironment(Environment): # 주식 환경
                                                          0.0, 
                                                          self.price, 
                                                          self.next_price, 
-                                                         self.wallet.get_total_amt(self.price), 
-                                                         self.wallet.get_current_amt(), 
-                                                         self.wallet.get_qty(),
+                                                         total_amt, 
+                                                         current_amt, 
+                                                         qty,
                                                          0.0
                                                          )
 
         return (data, {**{"stock_code" :info["stock_code"]}, **order_info, **reward_info}) # 데이터 반환
     
     def step(self, action) -> Tuple[Any, float, bool, bool, dict]: # (nextstate, reward, terminated, truncated, info) 
+        action = np.clip(action, -1, 1)
 
         total_amt, current_amt, order_qty, qty, is_order = self.wallet.order(self.stock_code, action, self.price)
         
@@ -186,10 +190,10 @@ class StockEnvironment(Environment): # 주식 환경
                                                          order_qty
                                                          ) # 보상
         
-        nextstate, extra_datas, terminated, info = self._get_observation_datas() # 다음 주식 정보 가져오기
+        nextstate, extra_datas, terminated, info = self._get_observation_datas(reward_info["init_total_evlu_rate"]) # 다음 주식 정보 가져오기
         
         truncated = False
-        if reward_info["next_total_evlu_rate"] < -5.0:
+        if reward_info["init_total_evlu_rate"] <= -5.0:
             reward = -1.0
             truncated = True
 
@@ -223,8 +227,12 @@ class StockEnvironment(Environment): # 주식 환경
     def _get_random_balance(self):
         return random.randrange(300000, 100000001,100000)
     
-    def _get_observation_datas(self):
+    def _get_observation_datas(self, init_total_evlu_rate = 0.0):
         datas, extra_datas, done, info = self.stock.get_info() # 다음 주식 정보 가져오기
+
+        if extra_datas.shape[0] != self.extra_count: 
+            raise IndexError(f"extra_datas Not Matched datas count {self.extra_count - extra_datas.shape}")
+        
         datas = datas.values # 데이터프레임에서 값만 가져오기
         self.price = info["price"]
         self.next_price = info["next_price"]
@@ -234,9 +242,11 @@ class StockEnvironment(Environment): # 주식 환경
         current_amt = self.wallet.get_current_amt()
         total_amt = self.wallet.get_total_amt(info["price"])
 
-        datas = np.insert(datas, 0, qty)
-        datas = np.insert(datas, 0, current_amt)
-        datas = np.insert(datas, 0, total_amt)
+        # 상태 데이터 추가
+        datas = np.insert(datas, 0, init_total_evlu_rate) # 초기 자산 대비 현재 총자산 증감률
+        datas = np.insert(datas, 0, qty) # 현재 보유 수량
+        datas = np.insert(datas, 0, current_amt) # 현재 현금 보유 수량
+        datas = np.insert(datas, 0, total_amt) # 현재 총 자산
 
         if not extra_datas.empty:
             time_series_images = self._get_visualization_data(self.visualization_columns, extra_datas) # 시계열 데이터 생성
