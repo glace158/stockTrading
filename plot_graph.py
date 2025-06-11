@@ -108,13 +108,14 @@ def save_action_graph(action_path, save_path ="./Data_graph/" ,env_name = 'Richd
     data = pd.read_csv(action_path)
 
     # 그래프 그리기
-    fig, ax1 = plt.subplots(figsize=(30, 10))
+    fig, ax1 = plt.subplots(figsize=(60, 10))
 
     # Reward 막대 그래프 (아래쪽 Y축 공유)
     ax1.spines['right'].set_position(('outward', 60))  # 추가 Y축을 오른쪽으로 이동
 
     reward_colors = ['red' if r < 0 else 'blue' for r in data['reward']]  # 음수는 빨간색, 양수는 파란색
     ax1.bar(data['timestep'], data['reward'], width=0.4, alpha=0.8, label='Reward', color=reward_colors)
+    ax1.tick_params(axis='x', rotation=90, labelsize=8)
 
     # y축 0에 선 추가
     ax1.axhline(y=0, color='black', linestyle='--', linewidth=1, label='y = 0 Line')
@@ -127,6 +128,7 @@ def save_action_graph(action_path, save_path ="./Data_graph/" ,env_name = 'Richd
     ax2.plot(data['timestep'], data['total_amt'], label='Total Amount', color='Orange')
     ax2.set_ylabel('Total Amount')
     ax2.legend(loc='upper right')
+    ax2.tick_params(axis='x', rotation=90, labelsize=8)
     ax2.axhline(y=data['total_amt'][0], color='Orange', linestyle='--', linewidth=1, label='init Amount Line')
     
     # Price 선 그래프 (왼쪽 Y축)
@@ -147,6 +149,7 @@ def save_action_graph(action_path, save_path ="./Data_graph/" ,env_name = 'Richd
     ax3.set_xlabel('Timestep')
     ax3.set_ylabel('Price')
     ax3.set_xticks(data['timestep'])  # x축 간격을 timestep에 맞춤
+    ax3.tick_params(axis='x', rotation=90, labelsize=8)
     ax3.legend(loc='upper left')
     ax3.grid(True)
 

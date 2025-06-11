@@ -439,23 +439,13 @@ class RichDogTest(RichDog):
         render = bool(self.config.render.value)              # render environment on screen
         frame_delay = float(self.config.frame_delay.value)   # if required; add delay b/w frames
 
-        self.action_std = float(self.config.min_action_std)
+        self.action_std = float(self.config.min_action_std.value)
         total_test_episodes = int(self.config.total_test_episodes.value)    # total num of testing episodes
         self.print_parameters()
         # print_parameters 출력을 문자열로 캡처하여 콘솔 로그에 기록
         param_str = self.capture_print_parameters()
         self.data_recorder.log_to_console(param_str)
         #####################################################
-
-        if self.env_name == "RichDog":
-            self.env = StockEnvironment(stock_config=self.stock_config)
-        else:
-            self.env = GymEnvironment(env_name=self.env_name, render_mode="human")
-
-        # state space dimension
-        self.observation_space = self.env.getObservation()
-        # action space dimension
-        self.action_space = self.env.getActon()
         
         # initialize a PPO agent
         ppo_agent = PPO(self.observation_space, self.action_space, self.lr_actor, self.lr_critic, 

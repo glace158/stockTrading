@@ -126,14 +126,25 @@ class StockEnvironment(Environment): # 주식 환경
         self.stock_code = self._get_random_stock_code() # 주식코드 설정
         self.count = self._get_random_count() # 에피소드 크기 설정
 
-        self.result = self.stock.load_datas(self.stock_code, count=self.count, extra_count=self.extra_count) # 주식 파일 로드
-        
-        data, extra_datas, done, info = self._get_observation_datas() # 주식 정보 가져오기
-
         start_amt = self._get_random_balance() 
         self.wallet.init_balance(start_amt)
-        self.reward_cls.init_datas(self.price, start_amt)
 
+        self.result = self.stock.load_datas(self.stock_code, count=self.count, extra_count=self.extra_count) # 주식 파일 로드
+
+        data, extra_datas, done, info = self._get_observation_datas() # 주식 정보 가져오기
+
+        order_info = {
+            "current_date":self.current_date,
+            "price": self.price,
+            "next_price": self.next_price,
+            "total_amt":self.wallet.get_total_amt(self.price),
+            "current_amt":self.wallet.get_current_amt(), 
+            "order_qty":0.0, 
+            "qty":self.wallet.get_qty(),
+            "is_order":True
+                      }
+
+        self.reward_cls.init_datas(self.price, start_amt)
         reward, reward_info = self.reward_cls.get_reward(
                                                          self.current_date, 
                                                          True,
@@ -146,12 +157,23 @@ class StockEnvironment(Environment): # 주식 환경
                                                          0.0
                                                          )
 
-        return (data, {**info, **{"order_qty" : 0}, **reward_info}) # 데이터 반환
+        return (data, {**{"stock_code" :info["stock_code"]}, **order_info, **reward_info}) # 데이터 반환
     
     def step(self, action) -> Tuple[Any, float, bool, bool, dict]: # (nextstate, reward, terminated, truncated, info) 
 
         total_amt, current_amt, order_qty, qty, is_order = self.wallet.order(self.stock_code, action, self.price)
         
+        order_info = {
+            "current_date":self.current_date,
+            "price": self.price,
+            "next_price": self.next_price,
+            "total_amt":total_amt,
+            "current_amt":current_amt, 
+            "order_qty":order_qty, 
+            "qty":qty,
+            "is_order":is_order
+                      }
+
         reward, reward_info = self.reward_cls.get_reward(
                                                          self.current_date, 
                                                          is_order, 
@@ -171,7 +193,7 @@ class StockEnvironment(Environment): # 주식 환경
             reward = -1.0
             truncated = True
 
-        return (nextstate, reward, terminated, truncated, {**info, **{"order_qty" : order_qty}, **reward_info})
+        return (nextstate, reward, terminated, truncated, {**{"stock_code" :info["stock_code"]}, **order_info, **reward_info})
     
     def getObservation(self) -> spaces.Space: # box
         return self.observation_space
@@ -210,7 +232,7 @@ class StockEnvironment(Environment): # 주식 환경
 
         qty = self.wallet.get_qty()
         current_amt = self.wallet.get_current_amt()
-        total_amt = self.wallet.get_total_amt(self.price)
+        total_amt = self.wallet.get_total_amt(info["price"])
 
         datas = np.insert(datas, 0, qty)
         datas = np.insert(datas, 0, current_amt)
