@@ -148,7 +148,7 @@ class StockEnvironment(Environment): # 주식 환경
                       }
 
         self.reward_cls.init_datas(self.price, start_amt)
-        reward, reward_info = self.reward_cls.get_reward(
+        reward, truncated, reward_info = self.reward_cls.get_reward(
                                                          self.current_date, 
                                                          True,
                                                          0.0, 
@@ -178,7 +178,7 @@ class StockEnvironment(Environment): # 주식 환경
             "is_order":is_order
                       }
 
-        reward, reward_info = self.reward_cls.get_reward(
+        reward, truncated, reward_info = self.reward_cls.get_reward(
                                                          self.current_date, 
                                                          is_order, 
                                                          action, 
@@ -192,10 +192,8 @@ class StockEnvironment(Environment): # 주식 환경
         
         nextstate, extra_datas, terminated, info = self._get_observation_datas(reward_info["init_total_evlu_rate"]) # 다음 주식 정보 가져오기
         
-        truncated = False
-        if reward_info["init_total_evlu_rate"] <= -5.0:
-            reward = -1.0
-            truncated = True
+        
+        
 
         return (nextstate, reward, terminated, truncated, {**{"stock_code" :info["stock_code"]}, **order_info, **reward_info})
     

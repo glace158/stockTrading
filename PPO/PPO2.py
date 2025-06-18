@@ -480,7 +480,7 @@ class PPO:
                 # take gradient step
                 self.optimizer.zero_grad()
                 loss.mean().backward()
-                #torch.nn.utils.clip_grad_norm_(self.policy.parameters(), max_norm=1.0) # 그래디언트 클래핑 0.5, 1.0, 5.0
+                torch.nn.utils.clip_grad_norm_(self.policy.parameters(), max_norm=1.0) # 그래디언트 클래핑 0.5, 1.0, 5.0
                 self.optimizer.step()
             
         # Copy new weights into old policy

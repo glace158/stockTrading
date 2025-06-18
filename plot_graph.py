@@ -96,7 +96,7 @@ def save_log_graph(log_path, save_path="./PPO_figs/",env_name = 'Richdog', fig_n
     print("figure saved at : ", fig_file.get_file_path())
     print("============================================================================================")
 
-    #plt.show()
+    plt.show()
     return fig_file.get_file_path()
 
 # 행동 그래프 그리기
@@ -154,14 +154,14 @@ def save_action_graph(action_path, save_path ="./Data_graph/" ,env_name = 'Richd
     ax3.grid(True)
 
     # 그래프 제목
-    plt.title('Action Graph')
+    plt.title(action_path)
     
     plt.savefig(save_path + file_name)
 
     return save_path + file_name
 if __name__ == '__main__':
 
-    save_log_graph()
+    save_log_graph("PPO_logs/Richdog/20250617-120641/PPO_RichDog_log_20250617-120641.csv")
     
     
     

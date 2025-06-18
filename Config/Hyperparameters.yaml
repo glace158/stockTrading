@@ -72,12 +72,12 @@ lr_actor:
   max: '0.0003'
   min: '0.00005'
   note: learning rate for actor network (액터의 학습률)
-  value: '0.0003'
+  value: '0.00001'
 lr_critic:
   max: '0.003'
   min: '0.00005'
   note: learning rate for critic network (크리틱 학습률)
-  value: '0.001'
+  value: '0.0001'
 action_std_method:
   max: 'None'
   min: 'None'
@@ -98,7 +98,7 @@ min_action_std:
   min: '0.05'
   note: minimum action_std (stop decay after action_std <= min_action_std) (0.05 ~
     0.1) (최소 행동 표준 편차 값)
-  value: '0.1'
+  value: '0.3'
 minibatchsize:
   max: '128'
   min: '32'

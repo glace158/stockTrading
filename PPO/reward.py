@@ -129,7 +129,7 @@ class Reward:
 
      # 미실현 수익 계산
     def get_unrealized_gain_loss(self, price, next_price, qty):
-        unrealized_gain_loss = ((next_price - price) * qty) * 0.00001
+        unrealized_gain_loss = ((next_price - price) * qty)
         return self._np_to_float(unrealized_gain_loss) 
         
     # 샤프 지수
@@ -184,10 +184,25 @@ class Reward:
 class ExpReward(Reward):
     def __init__(self, init_price=0, start_amt=0):
         super().__init__(init_price, start_amt)
+        self.order_list = []
+        self.total_buy_qty = 0
 
     def get_reward(self, current_date, is_order, order_percent, price, next_price, current_total_amt, current_money, qty, order_qty):
         init_price_rate = self.get_init_price_rate(next_price) # 초기 대비 가격 증감률
         price_rate = self.get_price_rate(price, next_price) # 다음날 주식 증감률 계산
+
+        average_price = 0
+        if qty != 0 and is_order and order_percent > 0:
+            self.total_buy_qty += order_qty
+            self.order_list.append(order_qty * price) # 평단가 구하기
+            average_price = sum(self.order_list) / self.total_buy_qty
+        elif qty == 0:
+            self.order_list = []
+            self.total_buy_qty = 0
+
+        average_price_rate = 0
+        if average_price !=0:
+            average_price_rate = self.get_price_rate(average_price, price)
 
         next_day_total_amt = current_money + (next_price * qty) # 다음날 예측 총자산
 
@@ -213,35 +228,39 @@ class ExpReward(Reward):
         sharp_data = self.sharpe_ratio(current_date, init_total_evlu_rate) # 샤프 지수
         sortino_data = self.sortino_ratio(current_date, init_total_evlu_rate) # 소르티노 지수
 
-        if is_order: # 보상 계산
-            reward = 0.8 * rate_reward_exp + 0.2 * next_day_evlu_rate_exp; 
-        else:
-            reward = -1.0
+        total_evlu_reward = next_total_evlu_rate if next_total_evlu_rate > 0 else 0
+
+        reward = rate_reward + next_day_evlu_rate + average_price_rate + total_evlu_reward + init_total_evlu_rate
+        #if is_order: # 보상 계산
+        #    reward = rate_reward + next_day_evlu_rate + average_price_rate + total_evlu_reward + init_total_evlu_rate 
+        #else:
+        #    reward = -100.0
 
         reward_log = self.get_reward_log(order_percent, is_order, order_qty) # 보상 로그
-        """
-        if self.step_count % 10 == 0:
-            total_amt_reward = init_total_evlu_rate
-            
-            reward += total_amt_reward if total_amt_reward > 0 else 0
-        """    
+
+        truncated = False
+        if init_total_evlu_rate <= -2.0: # 에피소드 종료
+            reward = -100.0
+            truncated = True
+
         reward = np.round(reward, 2)
         self.step_count += 1
-        return self._np_to_float(reward), {
-                                            "init_price_rate": init_price_rate,
-                                            "wait_see_rate" : wait_see_rate,
-                                            "init_total_evlu_rate" : init_total_evlu_rate,
-                                            "daily_evlu_rate" : daily_evlu_rate,
-                                            "rate_reward" : rate_reward,
-                                            "rate_reward_exp" : rate_reward_exp,
-                                            "net_income_rate" : net_income_rate,
-                                            "next_total_evlu_rate" : next_total_evlu_rate,
-                                            "next_day_evlu_rate" : next_day_evlu_rate,
-                                            "next_day_evlu_rate_exp": next_day_evlu_rate_exp,
-                                            "sharp_data" : sharp_data,
-                                            "sortino_data" : sortino_data,
-                                            "reward_log" : reward_log
-                                            }
+        return self._np_to_float(reward),  truncated, {
+                                                        "init_price_rate": init_price_rate,
+                                                        "wait_see_rate" : wait_see_rate,
+                                                        "init_total_evlu_rate" : init_total_evlu_rate,
+                                                        "daily_evlu_rate" : daily_evlu_rate,
+                                                        "average_price_rate" : average_price_rate,
+                                                        "rate_reward" : rate_reward,
+                                                        "rate_reward_exp" : rate_reward_exp,
+                                                        "net_income_rate" : net_income_rate,
+                                                        "next_total_evlu_rate" : next_total_evlu_rate,
+                                                        "next_day_evlu_rate" : next_day_evlu_rate,
+                                                        "next_day_evlu_rate_exp": next_day_evlu_rate_exp,
+                                                        "sharp_data" : sharp_data,
+                                                        "sortino_data" : sortino_data,
+                                                        "reward_log" : reward_log
+                                                        }
     # 거래 행동 보상
     def get_rate_reward(self, qty, order_percent, order_qty, wait_see_rate, price_rate, next_day_rate):
         rate_reward = 0
@@ -249,29 +268,21 @@ class ExpReward(Reward):
             if order_percent > 0 and order_qty != 0:
                 rate_reward = next_day_rate  # 잘했음 (작은 보너스)
             elif order_percent < 0 and order_qty != 0: # 매도
-                rate_reward = 0.1
-                #rate_reward = (next_day_rate - wait_see_rate) # 잘못했음 (기회비용 손실)
+                rate_reward = (next_day_rate - wait_see_rate) # 잘못했음 (기회비용 손실)
             else: # HOLD는 중립 또는 약간의 보상/페널티
-                if qty != 0:
-                    rate_reward = wait_see_rate
-                else: # 수량이 없을 때
-                    rate_reward = -0.1
+                rate_reward = 0
         elif price_rate < 0: # 주가 하락 예상 (또는 실제 하락)
             if order_percent < 0 and order_qty != 0:
                 rate_reward = (next_day_rate - wait_see_rate)  # 잘했음 (손실 회피)
             elif order_percent > 0 and order_qty != 0:
-                rate_reward = 0.1
-                #rate_reward = next_day_rate # 잘못했음 (손실 발생)
+                rate_reward = next_day_rate # 잘못했음 (손실 발생)
             else : # HOLD는 중립 또는 약간의 보상/페널티
-                if qty != 0:
-                    rate_reward = wait_see_rate
-                else: # 수량이 없을 때
-                    rate_reward = 0.1
+                rate_reward = 0
         elif price_rate == 0: # 주가가 그대로 일 때 
             if order_percent != 0 and order_qty != 0: # 매수 또는 매도를 했을 경우
-                rate_reward = -0.5
+                rate_reward = -1
             else: 
-                rate_reward = 0.5
+                rate_reward = 1
 
 
         return self._np_to_float(rate_reward)
