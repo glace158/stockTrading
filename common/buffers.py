@@ -1,3 +1,4 @@
+import gc
 
 class RolloutBuffer:
     def __init__(self):
@@ -15,6 +16,13 @@ class RolloutBuffer:
         del self.rewards[:]
         del self.state_values[:]
         del self.is_terminals[:]
+        self.actions = []
+        self.states = []
+        self.logprobs = []
+        self.rewards = []
+        self.state_values = []
+        self.is_terminals = []
+        gc.collect()
 
 class DictRolloutBuffer:
     def __init__(self, keys):

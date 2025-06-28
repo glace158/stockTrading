@@ -14,13 +14,13 @@ class CnnExtractor(nn.Module):
         
         self.cnn = nn.Sequential(
             nn.Conv2d(n_input_channels, 32, kernel_size=5, stride=1, padding=2), # Out: (B, 32, 60, 60)
-            nn.ReLU(),
+            nn.ELU(),
             nn.MaxPool2d(kernel_size=2, stride=2), # Out: (B, 32, 30, 30)
             nn.Conv2d(32, 64, kernel_size=3, stride=1, padding=1), # Out: (B, 64, 30, 30)
-            nn.ReLU(),
+            nn.ELU(),
             nn.MaxPool2d(kernel_size=2, stride=2), # Out: (B, 64, 15, 15)
             nn.Conv2d(64, 128, kernel_size=3, stride=1, padding=1), # Out: (B, 128, 15, 15)
-            nn.ReLU(),
+            nn.ELU(),
             nn.MaxPool2d(kernel_size=2, stride=2), # Out: (B, 128, 7, 7)
             nn.AdaptiveAvgPool2d((1, 1)), # Out: (B, 128, 1, 1)
             nn.Flatten(), # Out: (B, 128)
@@ -70,13 +70,13 @@ class MlpExtractor(nn.Module):
         input_dim = np.prod(observation_space.shape)
         self.linear = nn.Sequential(
             nn.Linear(input_dim, 64),
-            nn.ReLU(),
+            nn.ELU(),
             nn.Linear(64, 32),
-            nn.ReLU(),
+            nn.ELU(),
             nn.Linear(32, 32),
-            nn.ReLU(),
+            nn.ELU(),
             nn.Linear(32, features_dim),
-            nn.ReLU()
+            nn.ELU()
         )
         self._features_dim = features_dim
 

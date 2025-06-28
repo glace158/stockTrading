@@ -5,6 +5,8 @@ import pandas as pd
 import numpy as np
 import random
 from gym import spaces
+import torchvision.transforms as transforms
+import torch
 
 from typing import (
     TYPE_CHECKING,
@@ -15,6 +17,7 @@ from typing import (
 from PPO.reward import BuySellReward, ExpReward
 from common.fileManager import Config
 from common.image_tools import get_time_series_image,get_multiple_time_series_images
+from common.data_visualization import VisualGraphGenerator
 from stock.stock_adaptor import DailyStockAdaptor
 from stock.stock_wallet import TrainStockWallet
 from common.data_preprocessing import VectorL2Normalizer
@@ -114,7 +117,7 @@ class StockEnvironment(Environment): # 주식 환경
         
         if isinstance(observation, dict):
             self.observation_space = spaces.Dict({
-                "img": spaces.Box(low = 0, high= 1, shape= observation["img"].shape, dtype=np.float32),
+                "img": spaces.Box(low = -1, high= 1, shape= observation["img"].shape, dtype=np.float32),
                 "num": spaces.Box(low = -np.inf, high= np.inf, shape= observation["num"].shape, dtype=np.float32) 
                 })
         else:
@@ -124,7 +127,7 @@ class StockEnvironment(Environment): # 주식 환경
 
     def reset(self) -> Tuple[Any, dict]: # ndarray, {None}
         self.stock_code = self._get_random_stock_code() # 주식코드 설정
-        self.count = self._get_random_count() # 에피소드 크기 설정
+        self.count = self.defult_count # 에피소드 크기 설정
 
         start_amt = self._get_random_balance() 
         self.wallet.init_balance(start_amt)
@@ -215,13 +218,13 @@ class StockEnvironment(Environment): # 주식 환경
     def _get_random_stock_code(self):
         stock_file_list = next(os.walk(self.stock_code_path + '/'))[2]
         return random.choice(stock_file_list) # 주식 코드 랜덤 뽑기
-
+    """
     def _get_random_count(self):
         if random.random() > 0.001:
             return self.defult_count
         else:
             return random.randint(10,self.defult_count)
-        
+    """    
     def _get_random_balance(self):
         return random.randrange(300000, 100000001,100000)
     
@@ -258,8 +261,18 @@ class StockEnvironment(Environment): # 주식 환경
         return datas, extra_datas, done, {**info, **{"qty": qty, "current_amt": current_amt, "total_amt": total_amt}}
     
     def _get_visualization_data(self, target_column_list : list, extra_datas : pd.DataFrame): # 시계열 데이터로 변환
-        time_series_image = get_multiple_time_series_images(self.visualization_format, target_column_list, extra_datas)
-        return time_series_image 
+        if self.visualization_format == "graph":
+            transform = transforms.Compose([
+                transforms.ToTensor(),                # [0, 255] → [0.0, 1.0] & (HWC → CHW)
+                transforms.Normalize(mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5])  # [0, 1] → [-1, 1]
+            ])
+
+            graph_generator = VisualGraphGenerator()
+            tensor_img = np.array(transform(graph_generator.drawing_graph(extra_datas,resize=(128,128))))
+            return tensor_img
+        else:
+            time_series_image = get_multiple_time_series_images(self.visualization_format, target_column_list, extra_datas)
+            return time_series_image 
         
 
 if __name__ == '__main__':

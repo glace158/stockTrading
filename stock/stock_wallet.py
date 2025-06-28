@@ -121,10 +121,10 @@ class TrainStockWallet(Wallet):
         return self._np_to_float(order_qty), True
     
     def _calculate_fee(self, order_price):
-        return int(order_price * (self.fee / 100))
+        return int(order_price[0] * (self.fee / 100))
     
     def _calculate_tax(self, order_price):
-        return int(order_price * (self.tax / 100))
+        return int(order_price[0] * (self.tax / 100))
     
     def _np_to_float(self, x):
         if isinstance(x, np.ndarray): # numpy 자료형 바꾸기

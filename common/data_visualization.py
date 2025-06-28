@@ -1,10 +1,76 @@
 import numpy as np
 import pandas as pd
+import matplotlib
 import matplotlib.pyplot as plt
 from sklearn.preprocessing import MinMaxScaler
 from pyts.image import GramianAngularField, RecurrencePlot, MarkovTransitionField
 from scipy.signal import stft
 import pywt
+
+from PIL import Image
+from io import BytesIO
+
+class VisualGraphGenerator:
+    """
+    외부 Pandas DataFrame과 컬럼 이름을 입력받아 해당 컬럼을 이미지 데이터로 처리
+    """
+    def __init__(self):
+        matplotlib.use("agg")
+
+    def drawing_graph(self, df : pd.DataFrame, resize=(128, 128),labels : list = []):
+        # 그래프 그리기
+        fig, (ax1, ax2, ax3) = plt.subplots(3, 1, figsize=(15, 15), sharex=True, gridspec_kw={'height_ratios': [3, 1, 1]})
+
+        #fig = plt.figure(figsize=(12, 6))
+        df.index = np.arange(len(df.index))
+        ax1.plot(df.index, df["stck_clpr"], label="Price", color="black")
+
+        ax1.plot(df.index, df["bb_upper"], label="Bollinger Upper", color="red")
+        ax1.plot(df.index, df["bb_lower"], label="Bollinger Lower", color="red")
+        
+        ax1.plot(df.index, df["5"], label="Bollinger Lower", color="orange")
+        ax1.plot(df.index, df["20"], label="Bollinger Lower", color="green")
+        ax1.plot(df.index, df["60"], label="Bollinger Lower", color="yellow")
+
+        x = range(len(df))
+
+        ax1.vlines(
+            x=x,
+            ymin=df['stck_lwpr'],
+            ymax=df['stck_hgpr'],
+            color='gray',
+            linewidth=1
+        )
+        ax1.grid(True)
+
+        ax2.bar(range(len(df)), df['acml_vol'], color='k')
+        ax2.grid(True)
+
+        ax3.plot(df.index, df["rsi"], label="rsi", color="black")
+        ax2.grid(True)
+
+
+        ax3.plot(x, df['rsi'], color='purple', label='RSI')
+        ax3.axhline(70, color='red', linestyle='--', linewidth=1)
+        ax3.axhline(30, color='green', linestyle='--', linewidth=1)
+        ax3.grid(True)
+
+        plt.tight_layout()
+
+        #buf = BytesIO()
+        plt.savefig("./temp/img.png", dpi=100, bbox_inches='tight')
+        #buf.seek(0)
+        img = Image.open("./temp/img.png").convert("RGB")
+        img_resized = img.resize(resize)
+
+        #buf.truncate(0)
+        #buf.close()
+        #del buf
+        img.close()
+        plt.close('all') 
+        plt.clf()
+        
+        return img_resized
 
 class TimeSeriesDataGenerator:
     """

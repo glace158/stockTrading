@@ -42,11 +42,11 @@ class ActorCritic(nn.Module):
         if has_continuous_action_space :
             self.actor = nn.Sequential(
                             nn.Linear(self.input_dim, 128),
-                            nn.LeakyReLU(),
+                            nn.ELU(),
                             nn.Linear(128, 64),
-                            nn.LeakyReLU(),
+                            nn.ELU(),
                             nn.Linear(64, 64),
-                            nn.LeakyReLU(),
+                            nn.ELU(),
                             nn.Linear(64, self.action_dim),
                             nn.Tanh()
                         )
@@ -66,9 +66,9 @@ class ActorCritic(nn.Module):
         # critic
         self.critic = nn.Sequential(
                         nn.Linear(self.input_dim, 64),
-                        nn.LeakyReLU(),
+                        nn.ELU(),
                         nn.Linear(64, 64),
-                        nn.LeakyReLU(),
+                        nn.ELU(),
                         nn.Linear(64, 1)
                     )
         

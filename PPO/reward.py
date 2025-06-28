@@ -129,7 +129,7 @@ class Reward:
 
      # 미실현 수익 계산
     def get_unrealized_gain_loss(self, price, next_price, qty):
-        unrealized_gain_loss = ((next_price - price) * qty)
+        unrealized_gain_loss = ((next_price - price) * qty) * 0.0001
         return self._np_to_float(unrealized_gain_loss) 
         
     # 샤프 지수
@@ -209,7 +209,7 @@ class ExpReward(Reward):
         init_total_evlu_rate = self.get_total_evlu_rate(current_total_amt) # 초기 자산 대비 현재 총자산 증감률
         daily_evlu_rate = self.get_daily_evlu_rate(current_total_amt) # 거래당 자산 증감 비율 (현재 기준)
         wait_see_rate = self.get_wait_see_next_day_evlu_rate(price, next_price) # 만약 관망 했을 때 수익률
-        
+        unrealized_gain_loss = self.get_unrealized_gain_loss(price, next_price, qty) # 미실현 수익
         next_total_evlu_rate = self.get_total_evlu_rate(next_day_total_amt) # 다음날 초기 자산 대비 총자산 증감률
         next_day_evlu_rate = self.get_next_day_evlu_rate(next_day_total_amt, current_total_amt) # 다음날 자산 증감률
         rate_reward = self.get_rate_reward(qty, order_percent,order_qty, wait_see_rate, price_rate, next_day_evlu_rate) # 수익 증감 보상
@@ -228,20 +228,11 @@ class ExpReward(Reward):
         sharp_data = self.sharpe_ratio(current_date, init_total_evlu_rate) # 샤프 지수
         sortino_data = self.sortino_ratio(current_date, init_total_evlu_rate) # 소르티노 지수
 
-        total_evlu_reward = next_total_evlu_rate if next_total_evlu_rate > 0 else 0
-
-        reward = rate_reward + next_day_evlu_rate + average_price_rate + total_evlu_reward + init_total_evlu_rate
-        #if is_order: # 보상 계산
-        #    reward = rate_reward + next_day_evlu_rate + average_price_rate + total_evlu_reward + init_total_evlu_rate 
-        #else:
-        #    reward = -100.0
+        reward = unrealized_gain_loss + next_day_evlu_rate + average_price_rate
 
         reward_log = self.get_reward_log(order_percent, is_order, order_qty) # 보상 로그
 
         truncated = False
-        if init_total_evlu_rate <= -2.0: # 에피소드 종료
-            reward = -100.0
-            truncated = True
 
         reward = np.round(reward, 2)
         self.step_count += 1
@@ -257,6 +248,7 @@ class ExpReward(Reward):
                                                         "next_total_evlu_rate" : next_total_evlu_rate,
                                                         "next_day_evlu_rate" : next_day_evlu_rate,
                                                         "next_day_evlu_rate_exp": next_day_evlu_rate_exp,
+                                                        "unrealized_gain_loss" : unrealized_gain_loss,
                                                         "sharp_data" : sharp_data,
                                                         "sortino_data" : sortino_data,
                                                         "reward_log" : reward_log

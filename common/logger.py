@@ -34,7 +34,7 @@ class Logger:
 
 class DataRecorder:
     def __init__(self, env_name: str, random_seed: int, 
-                 base_log_dir_prefix: str = "PPO_logs",
+                 base_log_dir_prefix: str = "./PPO_logs",
                  cur_time=""):
         self.env_name = env_name
         self.random_seed = random_seed # 경로 일관성을 위해 설정 파일의 random_seed를 사용할 수 있음
@@ -99,7 +99,7 @@ class DataRecorder:
         self._console_logger.add_file("console", console_log_base_dir + "/", file_name) 
         print(f"Console log setup at : {os.path.join(console_log_base_dir, file_name)}")
 
-    def setup_run_data_logs(self, mode_dir_suffix: str, run_id: str, action_labels: list, state_labels: list):
+    def setup_run_data_logs(self, mode_dir_suffix: str, run_id: str, action_labels: list, state_labels: list = None):
         """
         특정 실행(예: 에피소드 또는 특정 타임스텝)에 대한 행동 및 상태 로그를 설정합니다.
         mode_dir_suffix: 예: "train_run_data" 또는 "test_run_data" (실행별 데이터 로그의 상위 폴더명)
@@ -113,15 +113,16 @@ class DataRecorder:
         action_file_name = f"PPO_{self.env_name}_action_{self.random_seed}_{self.cur_time}_{run_id}.csv"
         self._action_logger.add_file("action_log", action_log_dir + "/", action_file_name)
         self._action_logger.list_write_file("action_log", action_labels) # CSV 헤더
-
-        # 예: .../train_episode_data/PPO_state_logs/20231027-100000/
-        state_log_dir = os.path.join(base_data_log_path, "PPO_state_logs")
-        state_file_name = f"PPO_{self.env_name}_state_{self.random_seed}_{self.cur_time}_{run_id}.csv"
-        self._state_logger.add_file("state_log", state_log_dir + "/", state_file_name)
-        self._state_logger.list_write_file("state_log", state_labels) # CSV 헤더
-
         print(f"Action logs for run {run_id} setup at: {action_log_dir}")
-        print(f"State logs for run {run_id} setup at: {state_log_dir}")
+
+        if state_labels:
+            # 예: .../train_episode_data/PPO_state_logs/20231027-100000/
+            state_log_dir = os.path.join(base_data_log_path, "PPO_state_logs")
+            state_file_name = f"PPO_{self.env_name}_state_{self.random_seed}_{self.cur_time}_{run_id}.csv"
+            self._state_logger.add_file("state_log", state_log_dir + "/", state_file_name)
+            self._state_logger.list_write_file("state_log", state_labels) # CSV 헤더
+            print(f"State logs for run {run_id} setup at: {state_log_dir}")
+
         
     def log_to_training_file(self, data_list: list):
         """메인 훈련 로그 파일에 데이터를 기록합니다."""

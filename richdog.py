@@ -281,20 +281,21 @@ class RichDogTrain(RichDog):
             if is_action_log:
                 self.data_recorder.log_to_console("Start episode logging\n")
                 action_labels = ['timestep', "action", "reward"] + (list(info.keys()) if info else [])
-                state_labels = [f"state_{i}" for i in range(ppo_agent.policy.input_dim)]
+                #state_labels = [f"state_{i}" for i in range(ppo_agent.policy.input_dim)]
                 
                 self.data_recorder.setup_run_data_logs(
                     mode_dir_suffix="train_episode_data", # 훈련 중 에피소드 상세 데이터 저장용 하위폴더
                     run_id=f"{time_step}", # 이 특정 실행 데이터 로그를 위한 ID (예: "ts10000")
                     action_labels=action_labels,
-                    state_labels=state_labels
+                    state_labels=None
                 )
 
             for t in range(1, self.max_ep_len+1):
                 # select action with policy
                 action, action_logprob, state_val = ppo_agent.select_action(state)
-                
                 next_state, reward, done, truncated, info = self.env.step(action)
+                #self.data_recorder.log_to_console(f"step : {t}\n")
+
                 done = done or truncated # truncated도 에피소드 종료로 간주
 
                 # saving buffer
@@ -306,6 +307,7 @@ class RichDogTrain(RichDog):
 
                 # update PPO agent
                 if time_step % self.update_timestep == 0:
+                    #self.data_recorder.log_to_console("update..\n")
                     loss,policy_loss,value_loss,dist_entropy = ppo_agent.update()
                     # 서서히 액션 분포의 표준편차 감소
                     if self.action_std_method == "schedule":
@@ -321,7 +323,7 @@ class RichDogTrain(RichDog):
                     # log average reward till last episode
                     log_avg_reward = log_running_reward / log_running_episodes
                     log_avg_reward = np.round(log_avg_reward, 4)
-
+                    
                     self.data_recorder.log_to_training_file([i_episode, time_step, log_avg_reward, loss, policy_loss, value_loss, dist_entropy])
 
                     log_running_reward = 0
@@ -362,8 +364,8 @@ class RichDogTrain(RichDog):
                     self.data_recorder.log_to_action_file(action_data_to_log)
                     
                     # 에피소드의 스텝당 상태값 저장
-                    state_data_to_log = state.tolist() if isinstance(state, np.ndarray) else [state] # 리스트 형태 보장
-                    self.data_recorder.log_to_state_file(state_data_to_log)
+                    #state_data_to_log = state.tolist() if isinstance(state, np.ndarray) else [state] # 리스트 형태 보장
+                    #self.data_recorder.log_to_state_file(state_data_to_log)
                     
                     is_save_model = False
 
@@ -474,13 +476,13 @@ class RichDogTest(RichDog):
  
             # 각 테스트 에피소드별로 상세 행동/상태 로그 설정
             action_labels = ['timestep', "action", "reward"] + (list(info.keys()) if info else [])
-            state_labels = self.env.get_data_label() if hasattr(self.env, 'get_data_label') else [f"state_{i}" for i in range(ppo_agent.policy.input_dim)]
+            #state_labels = self.env.get_data_label() if hasattr(self.env, 'get_data_label') else [f"state_{i}" for i in range(ppo_agent.policy.input_dim)]
             
             self.data_recorder.setup_run_data_logs(
                 mode_dir_suffix="test_episode_data" + "/" + self.cur_time, # 테스트 중 에피소드 상세 데이터 저장용 하위폴더
                 run_id=f"ep{ep}", # 이 특정 테스트 에피소드 로그를 위한 ID (예: "ep1")
                 action_labels=action_labels,
-                state_labels=state_labels
+                state_labels=None
             )
             
             for t in range(1, self.max_ep_len+1):
@@ -503,8 +505,8 @@ class RichDogTest(RichDog):
                 self.data_recorder.log_to_action_file(action_data_to_log)
 
                 # 상태 로깅
-                state_data_to_log = state.tolist() if isinstance(state, np.ndarray) else [state]
-                self.data_recorder.log_to_state_file(state_data_to_log)
+                #state_data_to_log = state.tolist() if isinstance(state, np.ndarray) else [state]
+                #self.data_recorder.log_to_state_file(state_data_to_log)
 
                 state = next_state
 

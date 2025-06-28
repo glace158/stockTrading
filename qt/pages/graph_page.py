@@ -5,10 +5,6 @@ from PySide6.QtGui import *
 from plot_graph import save_log_graph, save_action_graph
 from qt.ui_main import Ui_MainWindow
 import csv
-import matplotlib.pyplot as plt
-import matplotlib.dates as dates
-import pandas as pd
-import numpy as np
 import os
 
 class GraphPage(QWidget):
@@ -166,8 +162,8 @@ class GraphPage(QWidget):
 
     # 기존에 있던 이미지 지우기
     def remove_graph_images(self):
-        action_fig_directory = "Data_graph/Richdog/"
-        state_fig_directory = "PPO_figs/Richdog/"
+        action_fig_directory = "./Data_graph/Richdog/"
+        state_fig_directory = "./PPO_figs/Richdog/"
 
         for fig_directory in [action_fig_directory, state_fig_directory]:
             for file in os.scandir(fig_directory): # 기존에 있던 이미지 지우기

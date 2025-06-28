@@ -18,7 +18,7 @@ parameters:
     max: None
     min: None
     note: visualization image format for extra datas
-    value: GASF
+    value: graph
 stock_codes:
 - 083650
 - '000720'
@@ -131,10 +131,10 @@ test_stock_codes:
 - '035420'
 visualization_columns:
 - stck_clpr
-- acml_vol
+- stck_hgpr
+- stck_lwpr
 - '5'
 - '20'
 - '60'
-- rsi
 - bb_upper
 - bb_lower

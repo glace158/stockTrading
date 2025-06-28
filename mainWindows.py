@@ -32,7 +32,7 @@ class MainWindow(QMainWindow):
         self.widgets.btn_setting.clicked.connect(self.menu_btns)
         self.widgets.btn_download.clicked.connect(self.menu_btns)
 
-        self.widgets.version.setText("v2.0.2")
+        self.widgets.version.setText("v2.0.5")
         
     def menu_btns(self):
         # GET BUTTON CLICKED

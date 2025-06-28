@@ -19,12 +19,12 @@ class ParameterPage(QWidget):
 
         # 파일 화면 초기화
         self.widgets.tableWidget_2.setColumnCount(5)
-        self.path = "config" + '/' + "Hyperparameters.yaml"
+        self.path = "./config" + '/' + "Hyperparameters.yaml"
         self.widgets.filepath_lineEdit.setText(self.path)
         self.config = Config.load_config(self.path)
         self.config = self.load_Hyperparameters_file(self.config, self.widgets.tableWidget_2)
         
-        self.stock_config_path = "config/StockConfig.yaml"
+        self.stock_config_path = "./config/StockConfig.yaml"
         self.widgets.filepath_lineEdit_6.setText(self.stock_config_path)
         self.stock_config = Config.load_config(self.stock_config_path)
         self.stock_config.parameters = self.load_Hyperparameters_file(self.stock_config.parameters, self.widgets.tableWidget_3)
