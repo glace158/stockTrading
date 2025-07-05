@@ -55,11 +55,11 @@ class ActorCritic(nn.Module):
         else:
             self.actor = nn.Sequential(
                             nn.Linear(self.input_dim, 128),
-                            nn.ReLU(),
+                            nn.ELU(),
                             nn.Linear(128, 64),
-                            nn.ReLU(),
+                            nn.ELU(),
                             nn.Linear(64, 64),
-                            nn.ReLU(),
+                            nn.ELU(),
                             nn.Linear(64, self.action_dim),
                             nn.Softmax(dim=-1)
                         )

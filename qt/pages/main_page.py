@@ -169,7 +169,7 @@ class PPOThread(QThread):
     # 모델 테스트
     def testStart(self):
         self.process = subprocess.Popen(
-        ['python3', 'main.py', 'test', self.model_path],  # 실행할 Python 스크립트
+        ['python', 'main.py', 'test', self.model_path],  # 실행할 Python 스크립트
         stdout=subprocess.PIPE,    # 표준 출력을 파이프로 전달
         stderr=subprocess.PIPE,    # 표준 오류를 파이프로 전달
         text=True                  # 출력 결과를 텍스트로 받기
@@ -182,7 +182,7 @@ class PPOThread(QThread):
     # 학습 시작하기
     def learningPPO(self):
         self.process = subprocess.Popen(
-        ['python3', 'main.py', 'train'],  # 실행할 Python 스크립트
+        ['python', 'main.py', 'train'],  # 실행할 Python 스크립트
         stdout=subprocess.PIPE,    # 표준 출력을 파이프로 전달
         stderr=subprocess.PIPE,    # 표준 오류를 파이프로 전달
         text=True                  # 출력 결과를 텍스트로 받기

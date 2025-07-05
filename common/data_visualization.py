@@ -17,6 +17,18 @@ class VisualGraphGenerator:
     def __init__(self):
         matplotlib.use("agg")
 
+    def road_graph(self, stock_code, date, resize=(128, 128)):
+        
+        save_path = f"./API/graph_images/{stock_code}/"
+        file_name = f"{stock_code}-{date}.png"
+
+        img = Image.open(save_path + file_name).convert("RGB")
+        img_resized = img.resize(resize)
+
+        img.close()
+        
+        return img_resized
+
     def drawing_graph(self, df : pd.DataFrame, resize=(128, 128),labels : list = []):
         # 그래프 그리기
         fig, (ax1, ax2, ax3) = plt.subplots(3, 1, figsize=(15, 15), sharex=True, gridspec_kw={'height_ratios': [3, 1, 1]})

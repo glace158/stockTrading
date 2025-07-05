@@ -35,12 +35,14 @@ class DailyStockAdaptor(Adaptor):
         self.index = extra_count
         self.extra_index = extra_count
         count += 1
-
+        
         self.stock_datas = pd.read_csv(self.path + "/" + stock_code, header=0, index_col=0)
         
         maxindex = len(self.stock_datas) - count - extra_count# 최대 인덱스 설정
-        print(f"maxindex : {maxindex} | stock_datas : {len(self.stock_datas)}")
+        
         silce_index = random.randint(0, maxindex) # 인덱스 추출
+        silce_index = 0
+
         self.silce_datas = self.stock_datas.iloc[silce_index : silce_index + count + extra_count] # 슬라이싱
         
         self.silce_datas.index = np.arange(len(self.silce_datas.index)) # 인덱스 재정렬
@@ -63,9 +65,10 @@ class DailyStockAdaptor(Adaptor):
         done = len(self.filtering_datas) - 2 == self.index # 환경 종료 여부
 
         extra_datas = self.filtering_datas.iloc[self.index - self.extra_index + 1 : self.index + 1] # 추가 데이터 슬라이싱
-        
+        #print(current_date)
+        #print(extra_datas.iloc[0])
         self.index += 1 # 다음 인덱스로 
-        
+
         return data, extra_datas, done, {
                             "current_date": current_date,
                             "stock_code": self.stock_code,

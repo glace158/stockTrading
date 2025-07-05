@@ -193,10 +193,7 @@ class StockEnvironment(Environment): # 주식 환경
                                                          order_qty
                                                          ) # 보상
         
-        nextstate, extra_datas, terminated, info = self._get_observation_datas(reward_info["init_total_evlu_rate"]) # 다음 주식 정보 가져오기
-        
-        
-        
+        nextstate, extra_datas, terminated, info = self._get_observation_datas(reward_info["average_price_rate"]) # 다음 주식 정보 가져오기
 
         return (nextstate, reward, terminated, truncated, {**{"stock_code" :info["stock_code"]}, **order_info, **reward_info})
     
@@ -228,7 +225,7 @@ class StockEnvironment(Environment): # 주식 환경
     def _get_random_balance(self):
         return random.randrange(300000, 100000001,100000)
     
-    def _get_observation_datas(self, init_total_evlu_rate = 0.0):
+    def _get_observation_datas(self, average_price_rate = 0.0):
         datas, extra_datas, done, info = self.stock.get_info() # 다음 주식 정보 가져오기
 
         if extra_datas.shape[0] != self.extra_count: 
@@ -244,7 +241,7 @@ class StockEnvironment(Environment): # 주식 환경
         total_amt = self.wallet.get_total_amt(info["price"])
 
         # 상태 데이터 추가
-        datas = np.insert(datas, 0, init_total_evlu_rate) # 초기 자산 대비 현재 총자산 증감률
+        datas = np.insert(datas, 0, average_price_rate) # 평단가 
         datas = np.insert(datas, 0, qty) # 현재 보유 수량
         datas = np.insert(datas, 0, current_amt) # 현재 현금 보유 수량
         datas = np.insert(datas, 0, total_amt) # 현재 총 자산
@@ -268,7 +265,7 @@ class StockEnvironment(Environment): # 주식 환경
             ])
 
             graph_generator = VisualGraphGenerator()
-            tensor_img = np.array(transform(graph_generator.drawing_graph(extra_datas,resize=(128,128))))
+            tensor_img = np.array(transform(graph_generator.road_graph(self.stock_code.split(".")[0], self.current_date, resize=(128,128))))
             return tensor_img
         else:
             time_series_image = get_multiple_time_series_images(self.visualization_format, target_column_list, extra_datas)
