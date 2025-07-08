@@ -138,10 +138,12 @@ class Reward:
     # 평단가 계산
     def get_average_price(self, qty, price, order_percent, order_qty, is_order):
         average_price = 0
-        if qty != 0 and is_order and order_percent > 0: # 현재 구매 한 이력이 있으면
+        if is_order and order_percent > 0:
             self.total_buy_qty += order_qty
-            self.order_list.append(order_qty * price) # 평단가 구하기
-            average_price = sum(self.order_list) / self.total_buy_qty
+            self.order_list.append(order_qty * price) 
+
+        if qty != 0 : # 현재 구매 한 이력이 있으면
+            average_price = sum(self.order_list) / self.total_buy_qty # 평단가 구하기
         elif qty == 0: # 현재 수량이 없으면
             self.order_list = []
             self.total_buy_qty = 0
@@ -163,20 +165,9 @@ class Reward:
         pre_datas = self.total_amt_list[-count - 1:-1]
         pre_average = sum(pre_datas) / len(pre_datas)
 
-        slope = average - pre_average
+        slope = ((average - pre_average) / pre_average) * 100 
 
         return self._np_to_float(average), self._np_to_float(slope)
-    
-    def get_realized_profit(self, price, order_qty, is_order, order_percent, average_price_rate):
-        realized_profit_reward = 0
-        if is_order and order_percent < 0: # 매도 주문이 있었을 경우에만
-            if average_price_rate > 0: # 수익 중 매도 (이익 실현)
-                realized_profit_reward = (price * order_qty) * 0.0001
-            else: # 손실 중 매도 (손절)
-                realized_profit_reward = 0
-
-        return self._np_to_float(realized_profit_reward)
-
 
     # 샤프 지수
     def sharpe_ratio(self, current_date, total_evlu_rate):
@@ -252,19 +243,17 @@ class ExpReward(Reward):
         rate_reward_exp = self.get_exp_reward2(alpha = 10.0 , reward=rate_reward) # 수익 증감 보상
         next_day_evlu_rate_exp = self.get_exp_reward2(5, next_day_evlu_rate) # 다음날 자산 증감률
         
-        realized_profit_reward = self.get_realized_profit(price, order_qty, is_order, order_percent, average_price_rate) # 매도 시 이익 실현
-
         # 현재 데이터 저장
         self.total_amt_list.append(current_total_amt)
         self.rate_list.append(daily_evlu_rate)
         self.current_money_list.append(current_money)
         self.qty_list.append(qty)
 
-        average_line, average_slope = self.get_average_line(count=5) # 전체 자산의 이동 평균 구하기
+        average_line, average_slope = self.get_average_line(count=14) # 전체 자산의 이동 평균 구하기
         sharp_data = self.sharpe_ratio(current_date, init_total_evlu_rate) # 샤프 지수
         sortino_data = self.sortino_ratio(current_date, init_total_evlu_rate) # 소르티노 지수
 
-        reward = unrealized_gain_loss + next_day_evlu_rate + average_price_rate + (average_line * average_slope) + realized_profit_reward
+        reward = next_day_evlu_rate + average_price_rate + average_slope
 
         reward_log = self.get_reward_log(order_percent, is_order, order_qty) # 보상 로그
 
@@ -278,7 +267,8 @@ class ExpReward(Reward):
                                                         "init_total_evlu_rate" : init_total_evlu_rate,
                                                         "daily_evlu_rate" : daily_evlu_rate,
                                                         "average_price_rate" : average_price_rate,
-                                                        "realized_profit_reward" : realized_profit_reward,
+                                                        "average_line" : average_line,
+                                                        "average_slope" : average_slope,
                                                         "rate_reward" : rate_reward,
                                                         "rate_reward_exp" : rate_reward_exp,
                                                         "net_income_rate" : net_income_rate,
