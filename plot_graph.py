@@ -161,7 +161,7 @@ def save_action_graph(action_path, save_path ="./Data_graph/" ,env_name = 'Richd
     return save_path + file_name
 if __name__ == '__main__':
 
-    save_log_graph("PPO_logs/RichDog/20250620-123752/PPO_RichDog_log_20250620-123752.csv")
+    save_log_graph("E:/save/20250528-020041/PPO_RichDog_log_20250528-020041.csv")
     
     
     
